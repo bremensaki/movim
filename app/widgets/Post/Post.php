@@ -32,7 +32,6 @@ class Post extends \Movim\Widget\Base
 {
     function load()
     {
-        $this->addjs('post.js');
         $this->registerEvent('microblog_commentsget_handle', 'onComments');
         $this->registerEvent('microblog_commentpublish_handle', 'onCommentPublished');
         $this->registerEvent('microblog_commentsget_error', 'onCommentsError');
@@ -108,7 +107,7 @@ class Post extends \Movim\Widget\Base
 
         $html = $this->preparePost($p);
 
-        RPC::call('movim_push_state', $this->route('news', $id));
+        RPC::call('MovimUtils.pushState', $this->route('news', $id));
 
         RPC::call('movim_fill', 'post_widget', $html);
         RPC::call('MovimTpl.scrollHeaders');
@@ -207,7 +206,7 @@ class Post extends \Movim\Widget\Base
             }
 
             $view->assign('post', $p);
-            $view->assign('attachements', $p->getAttachements());
+            $view->assign('attachments', $p->getAttachments());
             return $view->draw('_post', true);
         } elseif(!$external) {
             return $this->prepareEmpty();

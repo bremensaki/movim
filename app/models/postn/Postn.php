@@ -246,7 +246,7 @@ class Postn extends Model {
             }
         }
 
-        $this->setAttachements($entry->entry->link, $extra);
+        $this->setAttachments($entry->entry->link, $extra);
 
         if($entry->entry->geoloc) {
             if($entry->entry->geoloc->lat != 0)
@@ -266,7 +266,7 @@ class Postn extends Model {
         && Validator::url()->validate($link['href']));
     }
 
-    private function setAttachements($links, $extra = false) {
+    private function setAttachments($links, $extra = false) {
         $l = array();
 
         foreach($links as $attachment) {
@@ -297,28 +297,27 @@ class Postn extends Model {
             $this->links = serialize($l);
     }
 
-    public function getAttachements()
+    public function getAttachments()
     {
-        $attachements = null;
+        $attachments = null;
         $this->picture = null;
         $this->openlink = null;
 
         if(isset($this->links)) {
-            $attachements = array(
+            $attachments = array(
                 'pictures' => array(),
                 'files' => array(),
                 'links' => array()
             );
 
             $links = unserialize($this->links);
-
             foreach($links as $l) {
                 if(isset($l['type']) && $this->typeIsPicture($l['type'])) {
                     if($this->picture == null) {
                         $this->picture = $l['href'];
                     }
 
-                    array_push($attachements['pictures'], $l);
+                    array_push($attachments['pictures'], $l);
                 } elseif($this->typeIsLink($l)) {
                     if($this->youtube == null
                     && preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $l['href'], $match)) {
@@ -328,34 +327,50 @@ class Postn extends Model {
                     if($l['rel'] == 'alternate') {
                         $this->openlink = $l['href'];
                         if(!$this->isMicroblog()) {
-                            array_push($attachements['links'], array('href' => $l['href'], 'url' => parse_url($l['href'])));
+                            array_push(
+                                $attachments['links'],
+                                array(
+                                    'href' => $l['href'],
+                                    'url'  => parse_url($l['href']),
+                                    'rel'  => 'alternate'
+                                )
+                            );
                         }
                     }
-                } elseif(isset($l['rel'])
-                && $l['rel'] == 'enclosure') {
-                    array_push($attachements['files'], $l);
+                } elseif(isset($l['rel'])){
+                    if ($l['rel'] == 'enclosure')
+                        array_push($attachments['files'], $l);
+                    elseif ($l['rel'] == 'related')
+                        array_push(
+                            $attachments['links'],
+                            array(
+                                'href' => $l['href'],
+                                'url'  => parse_url($l['href']),
+                                'rel'  => 'related'
+                            )
+                        );
                 }
             }
         }
 
-        if(empty($attachements['pictures'])) unset($attachements['pictures']);
-        if(empty($attachements['files']))    unset($attachements['files']);
-        if(empty($attachements['links']))    unset($attachements['links']);
+        if(empty($attachments['pictures'])) unset($attachments['pictures']);
+        if(empty($attachments['files']))    unset($attachments['files']);
+        if(empty($attachments['links']))    unset($attachments['links']);
 
-        return $attachements;
+        return $attachments;
     }
 
-    public function getAttachement()
+    public function getAttachment()
     {
-        $attachements = $this->getAttachements();
-        if(isset($attachements['pictures']) && !isset($attachements['links'])) {
-            return $attachements['pictures'][0];
+        $attachments = $this->getAttachments();
+        if(isset($attachments['pictures']) && !isset($attachments['links'])) {
+            return $attachments['pictures'][0];
         }
-        if(isset($attachements['files'])) {
-            return $attachements['files'][0];
+        if(isset($attachments['files'])) {
+            return $attachments['files'][0];
         }
-        if(isset($attachements['links'])) {
-            return $attachements['links'][0];
+        if(isset($attachments['links'])) {
+            return $attachments['links'][0];
         }
         return false;
     }
@@ -399,7 +414,7 @@ class Postn extends Model {
 
     public function isEditable()
     {
-        return ($this->contentraw != null);
+        return ($this->contentraw != null || $this->links != null);
     }
 
     public function isShort()
