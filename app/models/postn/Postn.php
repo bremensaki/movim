@@ -261,8 +261,8 @@ class Postn extends Model {
     }
 
     private function typeIsLink($link) {
-        return (isset($link['type'])
-        && $link['type'] == 'text/html'
+        return (isset($link['rel'])
+        && in_array($link['rel'], ['related', 'alternate'])
         && Validator::url()->validate($link['href']));
     }
 

@@ -150,7 +150,6 @@
                 {$post->contentcleaned}
             </content>
         </section>
-
         <footer>
             {$tags = $post->getTags()}
             {if="isset($tags)"}
@@ -169,13 +168,13 @@
             <ul class="list middle divided spaced">
                 {if="isset($attachments.links)"}
                     {loop="$attachments.links"}
-                        {if="$value.rel != 'alternate'"}
+                        {if="$value.rel != 'alternate' && $post->picture != $value['href'] && $post->open != $value['href']"}
                             <li>
                                 <span class="primary icon">
                                     <img src="https://icons.duckduckgo.com/ip2/{$value.url.host}.ico"/>
                                 </span>
                                 <p class="normal line">
-                                    <a href="{$value.href}" class="alternate" target="_blank">
+                                    <a title="{$value.href|urldecode}" href="{$value.href}" class="alternate" target="_blank">
                                         {$value.href|urldecode}
                                     </a>
                                 </p>
@@ -230,7 +229,7 @@
                             {$c->__('post.public_yes')}
                         </p>
                         <p>
-                            <a target="_blank" href="{$post->getPublicUrl()}">
+                            <a title="{$post->getPublicUrl()}" target="_blank" href="{$post->getPublicUrl()}">
                                 {$c->__('post.public_url')}
                             </a>
                         </p>
