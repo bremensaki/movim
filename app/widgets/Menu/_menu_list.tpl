@@ -2,8 +2,15 @@
     <header>
         <ul class="list middle">
             <li>
-                <span id="menu" class="primary on_mobile icon active gray" onclick="MovimTpl.toggleMenu()"><i class="zmdi zmdi-menu"></i></span>
-                <span class="primary on_desktop icon gray"><i class="zmdi zmdi-filter-list"></i></span>
+                <span id="menu" class="primary on_mobile icon active gray" onclick="MovimTpl.toggleMenu()">
+                    <i class="zmdi zmdi-menu"></i>
+                </span>
+                <span class="primary on_desktop icon gray">
+                    <i class="zmdi zmdi-filter-list"></i>
+                </span>
+                <span class="control icon active gray on_mobile" onclick="MovimTpl.showPanel()">
+                    <i class="zmdi zmdi-eye"></i>
+                </span>
                 <p class="center line">{$c->__('page.news')}</p>
             </li>
         </ul>
@@ -98,8 +105,10 @@
     {/loop}
     {if="count($items) == $paging"}
     <li id="history" class="block large" onclick="{$history} this.parentNode.removeChild(this);">
-        <span class="icon primary"><i class="zmdi zmdi-time-restore"></i></span>
-        <p class="normal center">{$c->__('post.older')}</p>
+        <span class="icon primary gray">
+            <i class="zmdi zmdi-time-restore"></i>
+        </span>
+        <p class="normal center line">{$c->__('post.older')}</p>
     </li>
     {/if}
 

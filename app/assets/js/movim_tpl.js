@@ -165,9 +165,11 @@ var MovimTpl = {
         var cm = document.querySelector('ul.context_menu');
         if(cm != null && cm.className.includes('shown')) {
             MovimTpl.toggleContextMenu(document);
-        }
+        // If a drawer is show
+        } else if(Drawer.filled()) {
+            Drawer.clear();
         // If a dialog box is show
-        else if(Dialog.filled()) {
+        } else if(Dialog.filled()) {
             Dialog.clear();
         // If the menu is shown
         } else if(MovimUtils.hasClass('body > nav', 'active')) {
@@ -188,10 +190,4 @@ var MovimTpl = {
 movim_add_onload(function() {
     MovimTpl.init();
     document.body.addEventListener('click', MovimTpl.toggleContextMenu, false);
-    document.onkeydown = function(evt) {
-        evt = evt || window.event;
-        if (evt.keyCode == 27 && Dialog.filled()) {
-            Dialog.clear();
-        }
-    };
 });

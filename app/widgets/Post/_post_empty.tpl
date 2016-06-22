@@ -1,6 +1,10 @@
 <header>
     <ul class="list middle">
         <li>
+            <span class="primary icon active gray on_mobile" onclick="MovimTpl.hidePanel()">
+                <i class="zmdi zmdi-arrow-back"></i>
+            </span>
+            <span class="control"></span>
             <p>
                 {$c->__('post.hot')}
             </p>
@@ -163,7 +167,7 @@
                 <span class="control icon">
                     <i class="zmdi zmdi-chevron-right"></i>
                 </span>
-                <p class="normal">{$c->__('post.discover')}</p>
+                <p class="normal line">{$c->__('post.discover')}</p>
             </li>
         </a>
     </ul>

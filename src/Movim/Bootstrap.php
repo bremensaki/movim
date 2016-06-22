@@ -44,7 +44,7 @@ class Bootstrap
             DOCUMENT_ROOT.'/log/php.log',
             DOCUMENT_ROOT.'/cache/test.tmp',
         );
-        $errors = array();
+        $errors = [];
 
         if(!is_writable(DOCUMENT_ROOT))
             $errors[] = 'We\'re unable to write to folder '.DOCUMENT_ROOT.': check rights';
@@ -310,9 +310,9 @@ class Bootstrap
     {
         // Return a list of interesting widgets to load (to save memory)
         return["Account","AccountNext","Ack","AdHoc","Avatar","Bookmark","Chat",
-        "Chats","Config","Contact","Dialog","Group","Groups","Header","Init",
-        "Login","LoginAnonymous","Menu","Notifs","Post","Presence","Publish",
-        "Rooms","Roster","Stickers","Upload","Vcard4"];
+        "Chats","Config","Contact","Dialog","Drawer","Group","Groups","Header",
+        "Init","Login","LoginAnonymous","Menu","Notifs","Post","Presence",
+        "Publish","Rooms","Roster","Stickers","Upload","Vcard4"];
     }
 
     /**

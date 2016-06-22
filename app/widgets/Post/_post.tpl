@@ -56,13 +56,13 @@
                 {$url = $contact->getPhoto('s')}
                 {if="$url"}
                     <span class="icon primary bubble">
-                        <a href="{$c->route('contact', $contact->jid)}">
+                        <a href="#" onclick="Post_ajaxGetContact('{$contact->jid}')">
                             <img src="{$url}">
                         </a>
                     </span>
                 {else}
                     <span class="icon primary bubble color {$contact->jid|stringToColor}">
-                        <a href="{$c->route('contact', $contact->jid)}">
+                        <a href="#" onclick="Post_ajaxGetContact('{$contact->jid}')">
                             <i class="zmdi zmdi-account"></i>
                         </a>
                     </span>
@@ -93,7 +93,7 @@
             <p>
                 {if="$contact->getTrueName() != ''"}
                     {if="!$public"}
-                    <a href="{$c->route('contact', $contact->jid)}">
+                    <a href="#" onclick="Post_ajaxGetContact('{$contact->jid}')">
                     {/if}
                         <i class="zmdi zmdi-account"></i> {$contact->getTrueName()}
                     {if="!$public"}</a>{/if} –
@@ -153,7 +153,7 @@
         <footer>
             {$tags = $post->getTags()}
             {if="isset($tags)"}
-                <ul class="list middle">
+                <ul class="list thick">
                     <li>
                         <span class="primary icon zmdi zmdi-tag gray"></span>
                         <p></p>
@@ -220,7 +220,7 @@
                 </ul>
             {/if}
             {if="$post->isPublic() && !$public"}
-                <ul class="list active middle">
+                <ul class="list active middle thick">
                     <li>
                         <span class="primary icon gray">
                             <i class="zmdi zmdi-portable-wifi"></i>
