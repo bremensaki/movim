@@ -77,7 +77,7 @@ $stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &
                 } elseif($msg->func == 'unregister') {
                     \Moxl\Stanza\Stream::end();
                     $loop->addPeriodicTimer(5, function() use(&$conn, $loop) {
-                        $conn->close();
+                        if(isset($conn)) $conn->close();
                         $loop->stop();
                     });
                 } elseif($msg->func == 'register') {
@@ -96,7 +96,7 @@ $stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &
                     #fwrite(STDERR, colorize('open a socket to '.$domain, 'yellow')." : ".colorize('sent to XMPP', 'green')."\n");
 
                     $ip = \Moxl\Utils::resolveIp($msg->host);
-                    $ip = (!$ip) ? gethostbyname($msg->host) : $ip->address;
+                    $ip = (!$ip || !isset($ip->address)) ? gethostbyname($msg->host) : $ip->address;
 
                     fwrite(
                         STDERR,
