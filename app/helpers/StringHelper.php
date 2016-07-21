@@ -47,7 +47,7 @@ class MovimEmoji
 function addUrls($string, $preview = false) {
     // Add missing links
     return preg_replace_callback(
-        "/([\w\"'>]+\:\/\/[\w-?'&;!#+,%:~=\.\/\@\(\)]+)/u", function ($match) use($preview) {
+        "/([\w\"'>]+\:\/\/[\w-\*?'&;!#+,%:~=\.\/\@\(\)]+)/u", function ($match) use($preview) {
             if(!in_array(substr($match[0], 0, 1), array('>', '"', '\''))) {
                 $content = $match[0];
 
@@ -270,6 +270,14 @@ function purifyHTML($string)
  */
 function firstLetterCapitalize($string) {
     return ucfirst(strtolower(mb_substr($string, 0, 2)));
+}
+
+/** Return a clean string that can be used for HTML ids
+ * @param string
+ * @return string
+ */
+function cleanupId($string) {
+    return preg_replace('/([^a-z0-9]+)/i', '-', $string);
 }
 
 /**

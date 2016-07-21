@@ -65,7 +65,7 @@ class Rooms extends \Movim\Widget\Base
 
     private function refreshRooms()
     {
-        RPC::call('movim_fill', 'rooms_widget', $this->prepareRooms());
+        RPC::call('MovimTpl.fill', '#rooms_widget', $this->prepareRooms());
         RPC::call('Rooms.refresh');
     }
 
@@ -198,19 +198,19 @@ class Rooms extends \Movim\Widget\Base
     {
         if(!filter_var($form['jid'], FILTER_VALIDATE_EMAIL)) {
             Notification::append(null, $this->__('chatrooms.bad_id'));
-            //Notification::append(null, $this->__('chatrooms.bad_nickname'));
         } elseif(trim($form['name']) == '') {
             Notification::append(null, $this->__('chatrooms.empty_name'));
         } else {
             $cd = new \Modl\ConferenceDAO;
             $cd->deleteNode($form['jid']);
 
-            $item = array(
+            $item = [
                     'type'      => 'conference',
                     'name'      => $form['name'],
                     'autojoin'  => $form['autojoin'],
                     'nick'      => $form['nick'],
-                    'jid'       => $form['jid']);
+                    'jid'       => $form['jid']
+                    ];
             $this->setBookmark($item);
             RPC::call('Dialog_ajaxClear');
         }
@@ -228,29 +228,32 @@ class Rooms extends \Movim\Widget\Base
         $cd = new \Modl\ConferenceDAO;
         $session = Session::start();
 
-        if($sd->getSubscribed()) {
-            foreach($sd->getSubscribed() as $s) {
+        $subscribed = $sd->getSubscribed();
+        if($subscribed) {
+            foreach($subscribed as $s) {
                 array_push($arr,
-                    array(
+                    [
                         'type'      => 'subscription',
                         'server'    => $s->server,
                         'title'     => $s->title,
                         'subid'     => $s->subid,
                         'tags'      => unserialize($s->tags),
-                        'node'      => $s->node));
+                        'node'      => $s->node]);
             }
         }
 
-        foreach($cd->getAll() as $c) {
-            array_push($arr,
-                array(
-                    'type'      => 'conference',
-                    'name'      => $c->name,
-                    'autojoin'  => $c->autojoin,
-                    'nick'      => $c->nick,
-                    'jid'       => $c->conference));
+        $conferences = $cd->getAll();
+        if($conferences) {
+            foreach($conferences as $c) {
+                array_push($arr,
+                    [
+                        'type'      => 'conference',
+                        'name'      => $c->name,
+                        'autojoin'  => $c->autojoin,
+                        'nick'      => $c->nick,
+                        'jid'       => $c->conference]);
+            }
         }
-
 
         $b = new Set;
         $b->setArr($arr)

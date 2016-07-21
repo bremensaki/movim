@@ -3,13 +3,13 @@
     flex-flow: row wrap;
 }
 
-.flex .block {
+.flex .block:not(.subheader) {
     flex: 0 1 50%;
     overflow: hidden;
 }
 
-.flex .block.large,
-.flex.card .block.large {
+.flex .block.large:not(.subheader),
+.flex.card .block.large:not(.subheader) {
     flex: 0 1 100%;
 }
 /*
@@ -17,7 +17,7 @@
     padding: 0;
 }
 */
-.flex.card .block {
+.flex.card .block:not(.subheader) {
     margin: 1rem;
     flex: 0 1 calc(50% - 2rem);
     min-height: 5rem;
@@ -25,7 +25,7 @@
     padding-bottom: 1.5rem;
 }
 
-.flex.stacked .block {
+.flex.stacked .block:not(.subheader) {
     margin-bottom: 0;
 }
 
@@ -39,8 +39,8 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .flex.card .block,
-    .flex .block {
+    .flex.card .block:not(.subheader),
+    .flex .block:not(.subheader) {
         margin-bottom: 0;
         flex: 0 1 100%;
         max-width: 100%;

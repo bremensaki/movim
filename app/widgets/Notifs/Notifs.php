@@ -23,7 +23,8 @@ class Notifs extends \Movim\Widget\Base
     function onNotifs($from = false)
     {
         $html = $this->prepareNotifs();
-        RPC::call('movim_fill', 'notifs_widget', $html);
+        RPC::call('MovimTpl.fill', '#notifs_widget', $html);
+        RPC::call('Notifs.refresh');
 
         if(is_string($from)) {
             $cd = new \Modl\ContactDAO;
