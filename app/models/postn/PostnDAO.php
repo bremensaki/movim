@@ -654,18 +654,22 @@ class PostnDAO extends SQL {
         return $this->run('ContactPostn');
     }
 
-    function exist($id)
+    function exists($origin, $node, $id)
     {
         $this->_sql = '
             select count(*) from postn
-            where postn.nodeid = :nodeid
+            where origin = :origin
+            and node = :node
+            and nodeid = :nodeid
             ';
 
         $this->prepare(
             'Postn',
-            array(
+            [
+                'origin'    => $origin,
+                'node'      => $node,
                 'nodeid'    => $id
-            )
+            ]
         );
 
         $arr = $this->run(null, 'array');
