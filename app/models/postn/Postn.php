@@ -36,6 +36,7 @@ class Postn extends Model {
     private $youtube;
 
     public $open;
+    public $logo;
     private $openlink;
 
     public function __construct() {
@@ -336,7 +337,7 @@ class Postn extends Model {
                     case 'enclosure':
                         if($this->typeIsPicture($l['type'])) {
                             array_push($attachments['pictures'], $l);
-                        } else {
+                        } elseif($l['type'] != 'picture') {
                             array_push($attachments['files'], $l);
                         }
                         break;
@@ -411,6 +412,12 @@ class Postn extends Model {
     public function getPlace()
     {
         return (isset($this->lat, $this->lon) && $this->lat != '' && $this->lon != '');
+    }
+
+    public function getLogo()
+    {
+        $p = new \Picture;
+        return $p->get($this->origin.$this->node, 120);
     }
 
     public function isMine()

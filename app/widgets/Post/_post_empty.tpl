@@ -29,6 +29,15 @@
             <p>{$c->__('hello.menu_title')}</p>
             <p>{$c->__('hello.menu_paragraph')}</p>
         </li>
+        {if="$me->isEmpty()"}
+            <li>
+                <span class="primary icon gray">
+                    <i class="zmdi zmdi-settings"></i>
+                </span>
+                <p>{$c->__('hello.profile_title')}</p>
+                <p>{$c->__('hello.profile_paragraph')}</p>
+            </li>
+        {/if}
     </ul>
 {/if}
 
@@ -53,17 +62,21 @@
         data-node="{$value->node}">
         {$picture = $value->getPicture()}
         {if="$picture != null"}
-            <span class="primary icon thumb" style="background-image: url({$picture});"></span>
+            <span class="icon top" style="background-image: url({$picture});"></span>
         {else}
-            {$url = $value->getContact()->getPhoto('l')}
-            {if="$url"}
-                <span class="primary icon thumb" style="background-image: url({$url});">
-                </span>
-            {else}
-                <span class="primary icon thumb color {$value->getContact()->jid|stringToColor}">
-                    <i class="zmdi zmdi-account"></i>
-                </span>
-            {/if}
+            <span class="icon top color dark">
+                <i class="zmdi zmdi-edit"></i>
+            </span>
+        {/if}
+
+        {$url = $value->getContact()->getPhoto('l')}
+        {if="$url"}
+            <span class="primary icon bubble" style="background-image: url({$url});">
+            </span>
+        {else}
+            <span class="primary icon bubble color {$value->getContact()->jid|stringToColor}">
+                <i class="zmdi zmdi-account"></i>
+            </span>
         {/if}
         <p class="line">
         {if="isset($value->title)"}
@@ -125,16 +138,25 @@
             data-node="{$value->node}">
             {$picture = $value->getPicture()}
             {if="current(explode('.', $value->origin)) == 'nsfw'"}
-                <span class="primary icon thumb color red tiny">
+                <span class="icon top color red tiny">
                     +18
                 </span>
             {elseif="$picture != null"}
-                <span class="primary icon thumb" style="background-image: url({$picture});"></span>
+                <span class="icon top" style="background-image: url({$picture});"></span>
             {else}
-                <span class="primary icon thumb color {$value->node|stringToColor}">
+                <span class="icon top color dark">
                     {$value->node|firstLetterCapitalize}
                 </span>
             {/if}
+
+            {if="$value->logo"}
+                <span class="primary icon bubble">
+                    <img src="{$value->getLogo()}">
+                </span>
+            {else}
+                <span class="primary icon bubble color {$value->node|stringToColor}">{$value->node|firstLetterCapitalize}</span>
+            {/if}
+
             <p class="line">
             {if="isset($value->title)"}
                 {$value->title}
@@ -181,7 +203,7 @@
             <p>{$c->__('hello.share_text')}</p>
         </li>
         <li class="block">
-            <a class="button" href="javascript:(function(){location.href='{$c->route('share', '\'+escape(encodeURIComponent(location.href));')}})();"><i class="zmdi zmdi-share"></i> {$c->__('hello.share_button')}</a>
+            <a class="button" href="javascript:(function(){location.href='{$c->route('share', '\'+escape(encodeURIComponent(location.href));')}})();"><i class="zmdi zmdi-share"></i> {$c->__('button.share')}</a>
         </li>
     </ul>
 {/if}

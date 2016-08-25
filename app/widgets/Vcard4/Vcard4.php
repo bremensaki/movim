@@ -37,6 +37,8 @@ class Vcard4 extends \Movim\Widget\Base
         $vcardform->assign('marital',  getMarital());
         $vcardform->assign('countries',getCountries());
 
+        $me->isValidDate();
+
         $vcardform->assign(
             'submit',
             $this->call('ajaxVcardSubmit', "MovimUtils.formToJson('vcard4')")

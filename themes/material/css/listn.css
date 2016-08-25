@@ -46,20 +46,24 @@ ul.list li .primary {
     line-height: 5rem;
 }
 
-ul.list li .control:not(.bubble):not(.thumb),
-ul.list li .primary:not(.bubble):not(.thumb) {
+ul.list li .top + .primary {
+    top: 5rem;
+}
+
+ul.list li .control:not(.bubble):not(.thumb):not(.top),
+ul.list li .primary:not(.bubble):not(.thumb):not(.top) {
     margin-top: -3rem;
     padding: 0.5rem;
 }
 
-ul.list.middle li .control:not(.bubble):not(.thumb),
-ul.list.middle li .primary:not(.bubble):not(.thumb) {
+ul.list.middle li .control:not(.bubble):not(.thumb):not(.top),
+ul.list.middle li .primary:not(.bubble):not(.thumb):not(.top) {
     margin-top: -3.5rem;
     padding: 1rem 0.5rem;
 }
 
-ul.list.thick li .control:not(.bubble):not(.thumb),
-ul.list.thick li .primary:not(.bubble):not(.thumb) {
+ul.list.thick li .control:not(.bubble):not(.thumb):not(.top),
+ul.list.thick li .primary:not(.bubble):not(.thumb):not(.top) {
     margin-top: -4.25rem;
     padding: 1.75rem 0.5rem;
 }
@@ -170,6 +174,10 @@ ul.list li > .primary.bubble {
 
 ul.list li > .primary ~ *:not(.primary):not(.counter):not(.bubble):not(.control) {
     padding-left: 9rem;
+}
+
+ul.list li > .top + .primary ~ *:not(.primary):not(.counter):not(.bubble):not(.control) {
+    padding-left: 2rem;
 }
 
 /* Place the other controls */
