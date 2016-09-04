@@ -42,7 +42,7 @@ var MovimUtils = {
         return r;
     },
     cleanupId: function(string) {
-        return string.replace(/([^a-z0-9]+)/gi, '-');
+        return "id-" + string.replace(/([^a-z0-9]+)/gi, '-');
     },
     base64Decode: function(data) {
         //  discuss at: http://phpjs.org/functions/base64_decode/
@@ -261,6 +261,16 @@ var MovimUtils = {
                 MovimUtils.hideElement(node);
             else
                 MovimUtils.showElement(node);
+        }
+    },
+    enableVideos: function() {
+        var items = document.querySelectorAll('video');
+
+        var i = 0;
+        while(i < items.length)
+        {
+            items[i].setAttribute('controls', 'controls');
+            i++;
         }
     },
     dataURLtoBlob : function(dataURI) {

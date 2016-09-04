@@ -85,15 +85,18 @@
             {$value->node}
         {/if}
         </p>
+        <p>{$value->contentcleaned|strip_tags}</p>
         <p>
             <a href="{$c->route('contact', $value->getContact()->jid)}">
                 <i class="zmdi zmdi-account"></i> {$value->getContact()->getTrueName()}
-            </a> –
-            {$value->published|strtotime|prepareDate}
-        </p>
-
-        <p>
-            {$value->contentcleaned|strip_tags}
+            </a>
+            {$count = $value->countComments()}
+            {if="$count > 0"}
+                {$count} <i class="zmdi zmdi-comment-outline"></i>
+            {/if}
+            <span class="info">
+                {$value->published|strtotime|prepareDate}
+            </span>
         </p>
     </li>
 {/loop}
@@ -154,7 +157,9 @@
                     <img src="{$value->getLogo()}">
                 </span>
             {else}
-                <span class="primary icon bubble color {$value->node|stringToColor}">{$value->node|firstLetterCapitalize}</span>
+                <span class="primary icon bubble color {$value->node|stringToColor}">
+                    {$value->node|firstLetterCapitalize}
+                </span>
             {/if}
 
             <p class="line">
@@ -165,17 +170,18 @@
             {/if}
             </p>
             <p>
-                {$value->origin} /
-                <a href="{$c->route('group', array($value->origin, $value->node))}">
-                    <i class="zmdi zmdi-pages"></i> {$value->node}
-                </a> –
-                {$value->published|strtotime|prepareDate}
-            </p>
-
-            <p>
                 {if="current(explode('.', $value->origin)) != 'nsfw'"}
                     {$value->contentcleaned|strip_tags}
                 {/if}
+            </p>
+            <p>
+                {$value->origin} /
+                <a href="{$c->route('group', array($value->origin, $value->node))}">
+                    <i class="zmdi zmdi-pages"></i> {$value->node}
+                </a>
+                <span class="info">
+                    {$value->published|strtotime|prepareDate}
+                </span>
             </p>
         </li>
     {/if}

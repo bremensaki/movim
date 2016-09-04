@@ -14,11 +14,14 @@ class Post extends \Movim\Widget\Base
 {
     function load()
     {
+        $this->addjs('post.js');
         $this->registerEvent('microblog_commentsget_handle', 'onComments');
         $this->registerEvent('microblog_commentpublish_handle', 'onCommentPublished');
         $this->registerEvent('microblog_commentsget_error', 'onCommentsError');
         $this->registerEvent('pubsub_postpublish_handle', 'onPublish');
         $this->registerEvent('pubsub_postdelete_handle', 'onDelete');
+        $this->registerEvent('pubsub_postdelete', 'onDelete');
+        $this->registerEvent('pubsub_getitem_handle', 'onHandle');
     }
 
     function onPublish($packet)
@@ -26,6 +29,25 @@ class Post extends \Movim\Widget\Base
         Notification::append(false, $this->__('post.published'));
         $this->ajaxClear();
         RPC::call('MovimTpl.hidePanel');
+    }
+
+    function onHandle($packet)
+    {
+        $content = $packet->content;
+
+        if($content['nodeid']) {
+            $pd = new \Modl\PostnDAO;
+            $p  = $pd->get($content['origin'], $content['node'], $content['nodeid']);
+
+            if($p) {
+                $html = $this->preparePost($p);
+
+                RPC::call('MovimUtils.pushState', $this->route('news', [$p->origin, $p->node, $p->nodeid]));
+
+                RPC::call('MovimTpl.fill', '#post_widget', $html);
+                RPC::call('MovimUtils.enableVideos');
+            }
+        }
     }
 
     function onCommentPublished($packet)
@@ -78,6 +100,8 @@ class Post extends \Movim\Widget\Base
 
     function ajaxClear()
     {
+        RPC::call('MovimUtils.pushState', $this->route('news'));
+
         RPC::call('MovimTpl.fill', '#post_widget', $this->prepareEmpty());
         RPC::call('Menu.refresh');
         //RPC::call('Menu_ajaxGetAll');
@@ -89,22 +113,40 @@ class Post extends \Movim\Widget\Base
         $c->ajaxGetDrawer($jid);
     }
 
-    function ajaxGetPost($id)
+    function ajaxGetPost($origin, $node, $id)
     {
         $pd = new \Modl\PostnDAO;
-        $p  = $pd->getItem($id);
+        $p  = $pd->get($origin, $node, $id);
 
-        $gi = new GetItem;
-        $gi->setTo($p->origin)
-           ->setNode($p->node)
-           ->setId($p->nodeid)
-           ->request();
+        if($p) {
+            $html = $this->preparePost($p);
 
-        $html = $this->preparePost($p);
+            RPC::call('MovimUtils.pushState', $this->route('news', [$p->origin, $p->node, $p->nodeid]));
 
-        RPC::call('MovimUtils.pushState', $this->route('news', $id));
+            RPC::call('MovimTpl.fill', '#post_widget', $html);
+            RPC::call('MovimUtils.enableVideos');
 
-        RPC::call('MovimTpl.fill', '#post_widget', $html);
+            // If the post is a reply but we don't have the original
+            if($p->isReply() && !$p->getReply()) {
+                $reply = unserialize($p->reply);
+
+                $gi = new GetItem;
+                $gi->setTo($reply['origin'])
+                   ->setNode($reply['node'])
+                   ->setId($reply['nodeid'])
+                   ->setAskReply([
+                        'origin' => $p->origin,
+                        'node' => $p->node,
+                        'nodeid' => $p->nodeid])
+                   ->request();
+            }
+
+            $gi = new GetItem;
+            $gi->setTo($p->origin)
+               ->setNode($p->node)
+               ->setId($p->nodeid)
+               ->request();
+        }
     }
 
     function ajaxDelete($to, $node, $id)
@@ -184,18 +226,21 @@ class Post extends \Movim\Widget\Base
         $view = $this->tpl();
 
         if(isset($p)) {
-            if(isset($p->commentplace) && !$external) {
-                $this->ajaxGetComments($p->commentplace, $p->nodeid);
+            if(isset($p->commentorigin)
+            && !$external) {
+                $this->ajaxGetComments($p->commentorigin, $p->commentnodeid); // Broken in case of repost
             }
 
-            $view->assign('recycled', false);
+            $view->assign('repost', false);
             $view->assign('external', $external);
             $view->assign('public', $public);
 
-            // Is it a recycled post ?
+            $view->assign('reply', $p->isReply() ? $p->getReply() : false);
+
+            // Is it a repost ?
             if($p->isRecycled()) {
                 $cd = new \Modl\ContactDAO;
-                $view->assign('recycled', $cd->get($p->origin));
+                $view->assign('repost', $cd->get($p->origin));
             }
 
             $view->assign('post', $p);

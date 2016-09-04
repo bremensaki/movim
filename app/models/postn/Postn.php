@@ -18,7 +18,8 @@ class Postn extends Model {
     public $contentraw;     // The raw content
     public $contentcleaned; // The cleanned content
 
-    public $commentplace;
+    public $commentorigin;
+    public $commentnodeid;
 
     public $published;      //
     public $updated;        //
@@ -30,6 +31,8 @@ class Postn extends Model {
     public $lon;
 
     public $links;
+
+    public $reply;
 
     public $hash;
 
@@ -64,8 +67,10 @@ class Postn extends Model {
                 {"type":"text" },
             "contentcleaned" :
                 {"type":"text" },
-            "commentplace" :
-                {"type":"string", "size":128 },
+            "commentorigin" :
+                {"type":"string", "size":64 },
+            "commentnodeid" :
+                {"type":"string", "size":96 },
 
             "open" :
                 {"type":"bool"},
@@ -76,6 +81,9 @@ class Postn extends Model {
                 {"type":"date" },
             "delay" :
                 {"type":"date" },
+
+            "reply" :
+                {"type":"text" },
 
             "lat" :
                 {"type":"string", "size":32 },
@@ -218,20 +226,20 @@ class Postn extends Model {
             && isset($entry->entry->category->attributes()->term)) {
                 $tag = new \Modl\Tag;
                 $tag->nodeid = $this->__get('nodeid');
-                $tag->tag    = (string)$entry->entry->category->attributes()->term;
+                $tag->tag    = strtolower((string)$entry->entry->category->attributes()->term);
                 $td->set($tag);
             } else {
                 foreach($entry->entry->category as $cat) {
                     $tag = new \Modl\Tag;
                     $tag->nodeid = $this->__get('nodeid');
-                    $tag->tag    = (string)$cat->attributes()->term;
+                    $tag->tag    = strtolower((string)$cat->attributes()->term);
                     $td->set($tag);
                 }
             }
         }
 
-        if(!isset($this->commentplace))
-            $this->__set('commentplace', $this->origin);
+        if(!isset($this->commentorigin))
+            $this->__set('commentorigin', $this->origin);
 
         $this->__set('content', trim($content));
         $this->contentcleaned = purifyHTML(html_entity_decode($this->content));
@@ -241,6 +249,14 @@ class Postn extends Model {
         $xml = \simplexml_load_string('<div>'.$this->contentcleaned.'</div>');
         if($xml) {
             $results = $xml->xpath('//img/@src');
+            if(is_array($results) && !empty($results)) {
+                $extra = (string)$results[0];
+                if(isSmallPicture($extra)) {
+                    $this->picture = $extra;
+                }
+            }
+
+            $results = $xml->xpath('//video/@poster');
             if(is_array($results) && !empty($results)) {
                 $extra = (string)$results[0];
                 if(isSmallPicture($extra)) {
@@ -261,6 +277,19 @@ class Postn extends Model {
         // We fill empty aid
         if($this->isMicroblog() && empty($this->aid)) {
             $this->__set('aid', $this->origin);
+        }
+
+        // We check if this is a reply
+        if($entry->entry->{'in-reply-to'}) {
+            $href = (string)$entry->entry->{'in-reply-to'}->attributes()->href;
+            $arr = explode(';', $href);
+            $reply = [
+                'origin' => substr($arr[0], 5, -1),
+                'node'   => substr($arr[1], 5),
+                'nodeid' => substr($arr[2], 5)
+            ];
+
+            $this->__set('reply', serialize($reply));
         }
     }
 
@@ -295,7 +324,8 @@ class Postn extends Model {
 
             if((string)$attachment->attributes()->title == 'comments') {
                 $substr = explode('?',substr((string)$attachment->attributes()->href, 5));
-                $this->commentplace = reset($substr);
+                $this->commentorigin = reset($substr);
+                $this->commentnodeid = substr((string)$substr[1], 36);
             }
         }
 
@@ -420,6 +450,20 @@ class Postn extends Model {
         return $p->get($this->origin.$this->node, 120);
     }
 
+    public function getUUID()
+    {
+        if(substr($this->nodeid, 10) == 'urn:uuid:') {
+            return $this->nodeid;
+        } else {
+            return 'urn:uuid:'.generateUUID($this->nodeid);
+        }
+    }
+
+    public function getRef()
+    {
+        return 'xmpp:'.$this->origin.'?;node='.$this->node.';item='.$this->nodeid;
+    }
+
     public function isMine()
     {
         $user = new \User();
@@ -428,13 +472,8 @@ class Postn extends Model {
         || $this->origin == $user->getLogin());
     }
 
-    public function getUUID()
-    {
-        if(substr($this->nodeid, 10) == 'urn:uuid:') {
-            return $this->nodeid;
-        } else {
-            return 'urn:uuid:'.generateUUID($this->nodeid);
-        }
+    public function isPublic() {
+        return ($this->open);
     }
 
     public function isMicroblog()
@@ -452,9 +491,29 @@ class Postn extends Model {
         return (strlen($this->contentcleaned) < 700);
     }
 
+    public function isReply()
+    {
+        return isset($this->reply);
+    }
+
+    public function getReply()
+    {
+        if(!$this->reply) return;
+
+        $reply = unserialize($this->reply);
+        $pd = new \Modl\PostnDAO;
+        return $pd->get($reply['origin'], $reply['node'], $reply['nodeid']);
+    }
+
     public function getPublicUrl()
     {
         return $this->openlink;
+    }
+
+    public function countComments()
+    {
+        $pd = new \Modl\PostnDAO;
+        return $pd->countComments($this->commentorigin, $this->commentnodeid);
     }
 
     public function getTags()
@@ -472,10 +531,6 @@ class Postn extends Model {
         if(is_array($tags)) {
             return implode(', ', $tags);
         }
-    }
-
-    public function isPublic() {
-        return ($this->open);
     }
 }
 
@@ -509,5 +564,12 @@ class ContactPostn extends Postn {
         return ($this->getContact()->jid
             && $this->node == 'urn:xmpp:microblog:0'
             && (strtolower($this->origin) != strtolower($this->getContact()->jid)));
+    }
+
+    public function isEditable()
+    {
+        return (
+            ($this->contentraw != null || $this->links != null)
+            && !$this->isRecycled());
     }
 }
