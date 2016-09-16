@@ -17,7 +17,7 @@ class Config extends \Movim\Widget\Base
         $view = $this->tpl();
 
         /* We load the user configuration */
-        $this->user->reload();
+        $this->user->reload(true);
 
         $l = Movim\i18n\Locale::start();
 
@@ -78,7 +78,6 @@ class Config extends \Movim\Widget\Base
         $l = Movim\i18n\Locale::start();
 
         if(Validator::in(array_keys($l->getList()))->validate($data['language'])
-        && Validator::in(array('show', 'hide'))->validate($data['roster'])
         && ($data['cssurl'] == '' || Validator::url()->validate($data['cssurl'])))
             return true;
         return false;
