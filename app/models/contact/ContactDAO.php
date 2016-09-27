@@ -369,25 +369,33 @@ class ContactDAO extends SQL {
 
     function getAllPublic($limitf = false, $limitr = false) {
         $this->_sql =
-            'select *, privacy.value as privacy from contact
+            'select contact.*, presence.*, privacy.value as privacy from contact
             left outer join privacy
               on contact.jid = privacy.pkey
+            left outer join (
+                select min(value) as value, jid, session
+                from presence
+                group by jid, session
+                order by value
+            ) as presence
+                on contact.jid = presence.jid
+                and contact.jid = presence.session
             where privacy.value = 1
               and contact.jid not in (select jid from rosterlink where session = :jid)
               and contact.jid != :jid
-            order by jid desc';
+            order by presence.value is null, presence.value, contact.jid desc';
 
         if($limitr)
             $this->_sql = $this->_sql.' limit '.$limitr.' offset '.$limitf;
 
         $this->prepare(
             'Contact',
-            array(
+            [
                 'jid' => $this->_user
-            )
+            ]
         );
 
-        return $this->run('Contact');
+        return $this->run('RosterContact');
     }
 
     function countAllPublic() {
@@ -401,9 +409,9 @@ class ContactDAO extends SQL {
 
         $this->prepare(
             'Contact',
-            array(
+            [
                 'jid' => $this->_user
-            )
+            ]
         );
 
         $results = $this->run(null, 'array');
@@ -627,12 +635,13 @@ class ContactDAO extends SQL {
         return $this->run('PresenceContact');
     }
 
-    function getTop($limit = 6) {
+    function getTop($limit = 6, $filter = false) {
+        $filter = ($filter != false) ? implode('\',\'', $filter) : '';
         $this->_sql = '
             select *, jidfrom from (
                 select jidfrom, count(*) as count from message
-                where jidfrom not like :jid
-                    and session = :jid
+                where jidfrom not like :session
+                    and session = :session
                     and type != \'groupchat\'
                 group by jidfrom
                 order by count desc
@@ -640,7 +649,8 @@ class ContactDAO extends SQL {
             join (
                 select *
                 from rosterlink
-                where session = :jid
+                where session = :session
+                and jid not in (\''.$filter.'\')
                 ) as rosterlink on jidfrom = rosterlink.jid
             left outer join contact on jidfrom = contact.jid
             left outer join (
@@ -649,7 +659,7 @@ class ContactDAO extends SQL {
                 join (
                     select jid, min( id ) as id
                     from presence
-                    where session = :jid
+                    where session = :session
                     group by jid
                     ) as b on ( a.id = b.id )
                 ) presence on jidfrom = presence.jid
@@ -658,10 +668,10 @@ class ContactDAO extends SQL {
 
         $this->prepare(
             'Contact',
-            array(
-                'jid' => $this->_user,
+            [
+                'rosterlink.session' => $this->_user,
                 'tunelenght' => $limit // And an another hack…
-            )
+            ]
         );
 
         return $this->run('RosterContact');

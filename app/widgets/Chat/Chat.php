@@ -573,6 +573,7 @@ class Chat extends \Movim\Widget\Base
         //RPC::call('Chat.appendMessages', $messages);
         RPC::call('Chat.appendMessagesWrapper', $this->_wrapper);
         RPC::call('MovimTpl.scrollPanel');
+        RPC::call('Chat.clearReplace');
     }
 
     function prepareMessage(&$message, $jid=null)
@@ -673,9 +674,12 @@ class Chat extends \Movim\Widget\Base
     {
         $view = $this->tpl();
 
+        $chats = Cache::c('chats');
+        $chats = ($chats == null) ? false : array_keys($chats);
+
         $cd = new \Modl\ContactDAO;
         $view->assign('presencestxt', getPresencesTxt());
-        $view->assign('top', $cd->getTop(8));
+        $view->assign('top', $cd->getTop(8, $chats));
         return $view->draw('_chat_empty', true);
     }
 
