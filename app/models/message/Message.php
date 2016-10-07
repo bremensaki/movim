@@ -32,6 +32,8 @@ class Message extends Model {
     public $sticker; // The sticker code
     public $quoted;  // If the user was quoted in the message
 
+    public $rtl = false;
+
     public function __construct()
     {
         $this->_struct = '
@@ -148,17 +150,25 @@ class Message extends Model {
             else
                 $this->published = gmdate('Y-m-d H:i:s');
 
-            $this->checkPicture();
+            return $this->checkPicture();
         }
     }
 
     public function checkPicture()
     {
         $body = trim($this->body);
-        if(Validator::url()->notEmpty()->validate($body)
-        && isSmallPicture($body)) {
-            $this->picture = $body;
+
+        if(Validator::url()->notEmpty()->validate($body)) {
+            $check = new \Movim\Task\CheckSmallPicture;
+            return $check->run($body)
+                ->then(function($small) use($body) {
+                    if($small) $this->picture = $body;
+                });
         }
+
+        return new \React\Promise\Promise(function($resolve) {
+            $resolve(true);
+        });
     }
 
     public function convertEmojis()

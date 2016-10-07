@@ -16,6 +16,8 @@ $loop = React\EventLoop\Factory::create();
 $connector = new React\SocketClient\TcpConnector($loop);
 $stdin = new React\Stream\Stream(STDIN, $loop);
 
+\Movim\Task\Engine::init($loop);
+
 fwrite(STDERR, colorize(getenv('sid'), 'yellow')." widgets before : ".\sizeToCleanSize(memory_get_usage())."\n");
 
 // We load and register all the widgets
@@ -55,7 +57,36 @@ $loop->addPeriodicTimer(5, function() use(&$conn, &$timestamp) {
     }
 });*/
 
-$stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &$xmpp_behaviour, &$parser, &$timestamp) {
+function writeOut()
+{
+    $msg = \RPC::commit();
+
+    if(!empty($msg)) {
+        echo base64_encode(gzcompress(json_encode($msg), 9))."";
+        //fwrite(STDERR, colorize(json_encode($msg).' '.strlen($msg), 'yellow')." : ".colorize('sent to browser', 'green')."\n");
+    }
+
+    \RPC::clear();
+}
+
+function writeXMPP($xml)
+{
+    global $conn;
+
+    if(!empty($xml) && $conn) {
+        $conn->write(trim($xml));
+        #fwrite(STDERR, colorize(trim($xml), 'yellow')." : ".colorize('sent to XMPP', 'green')."\n");
+    }
+}
+
+function tick()
+{
+    global $loop;
+    $loop->tick();
+}
+
+$stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &$xmpp_behaviour, &$parser, &$timestamp)
+{
     if(substr($data, -1) == "") {
         $messages = explode("", $buffer . substr($data, 0, -1));
         $buffer = '';
@@ -125,36 +156,10 @@ $stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &
                 return;
             }
 
-            $resolver = function (callable $resolve, callable $reject) use (&$conn, $msg) {
-                $rpc = new \RPC();
-                $rpc->handle_json($msg);
+            $rpc = new \RPC();
+            $rpc->handle_json($msg);
 
-                $resolve(true);
-            };
-
-            $canceller = function (callable $resolve, callable $reject) {
-                $reject(new \Exception('Promise cancelled'));
-            };
-
-            $promise = new React\Promise\Promise($resolver, $canceller);
-
-            $promise->then(function ($value) use ($conn) {
-                $msg = \RPC::commit();
-                \RPC::clear();
-
-                if(!empty($msg)) {
-                    echo base64_encode(gzcompress(json_encode($msg), 9))."";
-                }
-
-                $xml = \Moxl\API::commit();
-                \Moxl\API::clear();
-
-                if(!empty($xml) && $conn) {
-                    $conn->write(trim($xml));
-                    #fwrite(STDERR, colorize(trim($xml), 'yellow')." : ".colorize('sent to XMPP', 'green')."\n");
-                }
-            });
-
+            writeOut();
         }
     } else {
         $buffer .= $data;
@@ -214,9 +219,6 @@ $xmpp_behaviour = function (React\Stream\Stream $stream) use (&$conn, $loop, &$s
 
             #fwrite(STDERR, colorize(getenv('sid'), 'yellow')." widgets : ".\sizeToCleanSize(memory_get_usage())."\n");
 
-            \Moxl\API::clear();
-            \RPC::clear();
-
             $timestamp = time();
 
             if($restart) {
@@ -232,45 +234,16 @@ $xmpp_behaviour = function (React\Stream\Stream $stream) use (&$conn, $loop, &$s
 
             while($parser->nodes && !$parser->nodes->isEmpty()) {
                 $node = $parser->nodes->dequeue();
-                $resolver = function (callable $resolve, callable $reject) use (&$parser, &$conn, $message, $node) {
-                    \Moxl\Xec\Handler::handle($node);
-                    $resolve(true);
-                };
-
-                $canceller = function (callable $resolve, callable $reject) {
-                    $reject(new \Exception('Promise cancelled'));
-                };
-
-                $promise = new React\Promise\Promise($resolver, $canceller);
-
-                $promise->then(function ($value) use ($conn) {
-                    $msg = \RPC::commit();
-
-                    if(!empty($msg)) {
-                        echo base64_encode(gzcompress(json_encode($msg), 9))."";
-                        //fwrite(STDERR, colorize(json_encode($msg).' '.strlen($msg), 'yellow')." : ".colorize('sent to browser', 'green')."\n");
-                    }
-
-                    \RPC::clear();
-
-                    $xml = \Moxl\API::commit();
-
-                    if(!empty($xml)) {
-                        $conn->write(trim($xml));
-                        #fwrite(STDERR, colorize(trim($xml), 'yellow')." : ".colorize('sent to XMPP', 'green')."\n");
-                    }
-
-                    \Moxl\API::clear();
-                });
+                \Moxl\Xec\Handler::handle($node);
 
                 $loop->tick();
 
                 unset($node);
             }
 
-            //gc_collect_cycles();
+            writeOut();
+
             //fwrite(STDERR, colorize(getenv('sid'), 'yellow')." end data : ".\sizeToCleanSize(memory_get_usage())."\n");
-            //memprof_dump_callgrind(fopen("/tmp/callgrind.out", "w"));
         }
 
         $loop->tick();
