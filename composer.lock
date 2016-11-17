@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1cf03c908f92f0272a981f74f9bb7fb1",
-    "content-hash": "def0b401d37d7eca252d75ad1fd0924b",
+    "hash": "75bcbec4b18e6ed68e59d729a5d94012",
+    "content-hash": "834cbf613874c03bfe356eb589df8caf",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -319,46 +319,6 @@
                 "html"
             ],
             "time": "2016-07-16 12:58:58"
-        },
-        {
-            "name": "forxer/gravatar",
-            "version": "1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/forxer/gravatar.git",
-                "reference": "98a17ed7880b986d03356baa7bc01b0162761c05"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/forxer/gravatar/zipball/98a17ed7880b986d03356baa7bc01b0162761c05",
-                "reference": "98a17ed7880b986d03356baa7bc01b0162761c05",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "forxer\\Gravatar\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Vincent Garnier",
-                    "email": "forxer@gmail.org",
-                    "homepage": "http://forx.fr"
-                }
-            ],
-            "description": "A library providing easy gravatar integration.",
-            "keywords": [
-                "gravatar"
-            ],
-            "time": "2016-02-26 21:12:47"
         },
         {
             "name": "guzzle/common",
@@ -735,20 +695,20 @@
         },
         {
             "name": "heyupdate/emoji",
-            "version": "0.2.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/heyupdate/emoji.git",
-                "reference": "f1bad3641ebda73c71d9d078a9200e145169ca15"
+                "reference": "78f6f7e20c4685107e57fb11f1356a7d8e9bd661"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/heyupdate/emoji/zipball/f1bad3641ebda73c71d9d078a9200e145169ca15",
-                "reference": "f1bad3641ebda73c71d9d078a9200e145169ca15",
+                "url": "https://api.github.com/repos/heyupdate/emoji/zipball/78f6f7e20c4685107e57fb11f1356a7d8e9bd661",
+                "reference": "78f6f7e20c4685107e57fb11f1356a7d8e9bd661",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.4"
@@ -756,7 +716,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.2.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -772,7 +732,7 @@
             "keywords": [
                 "emoji"
             ],
-            "time": "2015-06-06 08:38:14"
+            "time": "2016-08-27 14:02:32"
         },
         {
             "name": "michelf/php-markdown",
@@ -943,12 +903,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/movim/moxl.git",
-                "reference": "cb486211cc06dbf1abfd625c2f1399f2caadcf86"
+                "reference": "4fa53d847b392e74bc99a2d4b5b12bae26ff15fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/movim/moxl/zipball/cb486211cc06dbf1abfd625c2f1399f2caadcf86",
-                "reference": "cb486211cc06dbf1abfd625c2f1399f2caadcf86",
+                "url": "https://api.github.com/repos/movim/moxl/zipball/4fa53d847b392e74bc99a2d4b5b12bae26ff15fa",
+                "reference": "4fa53d847b392e74bc99a2d4b5b12bae26ff15fa",
                 "shasum": ""
             },
             "require": {
@@ -983,7 +943,7 @@
                 "php",
                 "xmpp"
             ],
-            "time": "2016-10-23 20:43:18"
+            "time": "2016-11-15 20:09:17"
         },
         {
             "name": "movim/sasl2",
@@ -1038,16 +998,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "c0125896dbb151380ab47e96c621741e79623beb"
+                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c0125896dbb151380ab47e96c621741e79623beb",
-                "reference": "c0125896dbb151380ab47e96c621741e79623beb",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
+                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
                 "shasum": ""
             },
             "require": {
@@ -1082,7 +1042,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-10-17 15:23:22"
+            "time": "2016-11-07 23:38:38"
         },
         {
             "name": "pear/net_dns2",
@@ -1541,16 +1501,16 @@
         },
         {
             "name": "react/http-client",
-            "version": "v0.4.13",
+            "version": "v0.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http-client.git",
-                "reference": "07fa19d83d9d3af4a6899c120fd4d41380d4a04e"
+                "reference": "24104ddd30a2a76d0697c05950ba2ae43b51de3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http-client/zipball/07fa19d83d9d3af4a6899c120fd4d41380d4a04e",
-                "reference": "07fa19d83d9d3af4a6899c120fd4d41380d4a04e",
+                "url": "https://api.github.com/repos/reactphp/http-client/zipball/24104ddd30a2a76d0697c05950ba2ae43b51de3f",
+                "reference": "24104ddd30a2a76d0697c05950ba2ae43b51de3f",
                 "shasum": ""
             },
             "require": {
@@ -1577,7 +1537,7 @@
             "keywords": [
                 "http"
             ],
-            "time": "2016-10-19 20:19:11"
+            "time": "2016-10-28 18:03:41"
         },
         {
             "name": "react/promise",
@@ -1756,16 +1716,16 @@
         },
         {
             "name": "react/stream",
-            "version": "v0.4.4",
+            "version": "v0.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "fcc9e7cea126962cff303c90c05e2efdcec09a27"
+                "reference": "23389503012e1ab721ad498a5a1f4b39f7a43c00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/fcc9e7cea126962cff303c90c05e2efdcec09a27",
-                "reference": "fcc9e7cea126962cff303c90c05e2efdcec09a27",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/23389503012e1ab721ad498a5a1f4b39f7a43c00",
+                "reference": "23389503012e1ab721ad498a5a1f4b39f7a43c00",
                 "shasum": ""
             },
             "require": {
@@ -1796,20 +1756,20 @@
                 "pipe",
                 "stream"
             ],
-            "time": "2016-08-22 09:51:07"
+            "time": "2016-11-13 17:06:02"
         },
         {
             "name": "respect/validation",
-            "version": "1.0.14",
+            "version": "1.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Respect/Validation.git",
-                "reference": "98050476c694ac499053342cff232888ab52eb89"
+                "reference": "f82fcf076237e005bc778049d73323d2164b5e8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Respect/Validation/zipball/98050476c694ac499053342cff232888ab52eb89",
-                "reference": "98050476c694ac499053342cff232888ab52eb89",
+                "url": "https://api.github.com/repos/Respect/Validation/zipball/f82fcf076237e005bc778049d73323d2164b5e8e",
+                "reference": "f82fcf076237e005bc778049d73323d2164b5e8e",
                 "shasum": ""
             },
             "require": {
@@ -1861,7 +1821,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2016-09-19 16:22:39"
+            "time": "2016-10-29 13:21:14"
         },
         {
             "name": "ringcentral/psr7",
@@ -1922,63 +1882,17 @@
             "time": "2016-03-25 17:36:49"
         },
         {
-            "name": "stojg/crop",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stojg/crop.git",
-                "reference": "a57276d4ee50e01b465fed27a7b687dfb388a180"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stojg/crop/zipball/a57276d4ee50e01b465fed27a7b687dfb388a180",
-                "reference": "a57276d4ee50e01b465fed27a7b687dfb388a180",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "stojg\\crop": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2"
-            ],
-            "authors": [
-                {
-                    "name": "Stig Lindqvist",
-                    "email": "stojg.lindqvist@gmail.com",
-                    "homepage": "https://stojg.se/"
-                },
-                {
-                    "name": "Julien Deniau jdeniau",
-                    "email": "julien.deniau@gmail.com",
-                    "homepage": "http://www.mapado.com"
-                }
-            ],
-            "description": "Image cropping classes",
-            "homepage": "http://github.com/stojg/crop",
-            "keywords": [
-                "image"
-            ],
-            "time": "2015-12-03 05:49:01"
-        },
-        {
             "name": "symfony/console",
-            "version": "v3.1.5",
+            "version": "v3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "6cb0872fb57b38b3b09ff213c21ed693956b9eb0"
+                "reference": "c99da1119ae61e15de0e4829196b9fba6f73d065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/6cb0872fb57b38b3b09ff213c21ed693956b9eb0",
-                "reference": "6cb0872fb57b38b3b09ff213c21ed693956b9eb0",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c99da1119ae61e15de0e4829196b9fba6f73d065",
+                "reference": "c99da1119ae61e15de0e4829196b9fba6f73d065",
                 "shasum": ""
             },
             "require": {
@@ -2026,11 +1940,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-28 00:11:12"
+            "time": "2016-10-06 01:44:51"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.1.5",
+            "version": "v3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -2087,16 +2001,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.1.5",
+            "version": "v3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "c0c00c80b3a69132c4e55c3e7db32b4a387615e5"
+                "reference": "28b0832b2553ffb80cabef6a7a812ff1e670c0bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/c0c00c80b3a69132c4e55c3e7db32b4a387615e5",
-                "reference": "c0c00c80b3a69132c4e55c3e7db32b4a387615e5",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/28b0832b2553ffb80cabef6a7a812ff1e670c0bc",
+                "reference": "28b0832b2553ffb80cabef6a7a812ff1e670c0bc",
                 "shasum": ""
             },
             "require": {
@@ -2143,20 +2057,20 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-19 10:45:57"
+            "time": "2016-10-13 06:28:43"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v3.1.5",
+            "version": "v3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "5114f1becca9f29e3af94374f1689c83c1aa3d97"
+                "reference": "f21e5a8b88274b7720779aa88f9c02c6d6ec08d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/5114f1becca9f29e3af94374f1689c83c1aa3d97",
-                "reference": "5114f1becca9f29e3af94374f1689c83c1aa3d97",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/f21e5a8b88274b7720779aa88f9c02c6d6ec08d7",
+                "reference": "f21e5a8b88274b7720779aa88f9c02c6d6ec08d7",
                 "shasum": ""
             },
             "require": {
@@ -2196,20 +2110,20 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-21 20:55:10"
+            "time": "2016-10-24 15:52:44"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "dff51f72b0706335131b00a7f49606168c582594"
+                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/dff51f72b0706335131b00a7f49606168c582594",
-                "reference": "dff51f72b0706335131b00a7f49606168c582594",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4",
                 "shasum": ""
             },
             "require": {
@@ -2221,7 +2135,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -2255,11 +2169,11 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "symfony/routing",
-            "version": "v3.1.5",
+            "version": "v3.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
@@ -2345,8 +2259,7 @@
         "embed/embed": 20,
         "heyupdate/emoji": 20,
         "react/child-process": 20,
-        "react/http": 20,
-        "stojg/crop": 20
+        "react/http": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

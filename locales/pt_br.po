@@ -62,8 +62,6 @@
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Search/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
-#. extracted from ../app/widgets/Share/locales.ini
-#. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Statistics/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Stickers/locales.ini
@@ -81,9 +79,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-24 23:28+0200\n"
-"PO-Revision-Date: 2016-08-25 13:25+0000\n"
-"Last-Translator: ismael bonato <ismaelbonato@gmail.com>\n"
+"POT-Creation-Date: 2016-11-13 14:58+0200\n"
+"PO-Revision-Date: 2016-11-06 11:15+0000\n"
+"Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/movim/movim/language/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -408,7 +406,8 @@ msgid "Install the php5-gd library"
 msgstr "Instale a biblioteca php5-curl"
 
 #: [compatibility]rights
-msgid "Read and write rights for the webserver in Movims root directory"
+#, fuzzy
+msgid "Read and write rights for the webserver in Movim's %s directory"
 msgstr "Permissões de leitura e escrita para o servidor Web no diretório raiz do Movim"
 
 #: [compatibility]db
@@ -751,10 +750,6 @@ msgstr "Apelido"
 msgid "Group"
 msgstr "Grupo"
 
-#: [edit]updated [roster]updated
-msgid "Contact updated"
-msgstr "Contato atualizado"
-
 #: [delete]title
 msgid "Are you sure?"
 msgstr "Você tem certeza?"
@@ -902,6 +897,15 @@ msgstr "Terminou? Agora você pode publicar um novo artigo no Grupo utilizando o
 #: [group]help_info4
 msgid "You will find a list of all your subscribed Groups in My Subscriptions and receive instantly all the new incoming posts in the %sNews%s page."
 msgstr "Você encontrará uma lista de todos os Grupos em que está inscrito em Minhas Inscrições e receberá instantaneamente todos os novos artigos na página %sNotícias%s."
+
+#: [group]share_subscription
+#, fuzzy
+msgid "Share this subscription publicly"
+msgstr "Publicar este artigo publicamente?"
+
+#: [group]share_subscription_text
+msgid "It will appear on your profile"
+msgstr ""
 
 #: [groups]empty_title
 msgid "Hello"
@@ -1083,11 +1087,6 @@ msgstr "Erro de sessão"
 msgid "Account successfully created"
 msgstr "Conta criada com sucesso"
 
-#: [error]xmpp_unauthorized
-msgctxt "[error]xmpp_unauthorized"
-msgid "Your XMPP server is unauthorized"
-msgstr "Seu servidor XMPP não esta autorizado"
-
 #: [error]mec_error
 msgid "The server takes too much time to respond"
 msgstr "O servidor demorou muito tempo para responder"
@@ -1109,13 +1108,9 @@ msgid "Invalid password format"
 msgstr "Formato de senha inválido"
 
 #: [error]unauthorized
-msgctxt "[error]unauthorized"
+#, fuzzy
 msgid "Your XMPP server is unauthorized"
 msgstr "Seu servidor XMPP não esta autorizado"
-
-#: [error]conflict
-msgid "A Movim session is already open on an other device"
-msgstr "Uma sessão do Movim já está aberta em outro dispositivo"
 
 #: [error]wrong_account
 msgid "Movim failed to authenticate. You entered wrong data"
@@ -1169,6 +1164,10 @@ msgstr "Ainda sem novidades..."
 msgid "Welcome on your news feed, here you will see all the posts published by your contacts and in the groups you have subscribed."
 msgstr "Bem-vindo à sua Fonte de notícias, aqui você verá todos os artigos publicados por seus contatos e grupos em que esta inscrito."
 
+#: [menu]discover [button]discover
+msgid "Discover"
+msgstr ""
+
 #: [menu]refresh
 msgid "Refresh all the streams"
 msgstr "Recarregar todos os fluxos"
@@ -1209,7 +1208,7 @@ msgstr "Fonte de Notícias"
 msgid "Discover and register to the groups you are interested in"
 msgstr "Descubra e registre-se em grupos que você está interessado"
 
-#: [post]content [post]content_label
+#: [post]content [publish]content_label
 msgid "Content"
 msgstr "Conteúdo"
 
@@ -1345,39 +1344,35 @@ msgstr "Estado"
 msgid "Presence"
 msgstr "Presente"
 
-#: [status]online
-msgid "Online with Movim"
-msgstr "Online com Movim"
-
-#: [post]preview
+#: [publish]preview
 msgid "Preview"
 msgstr "Visualizar"
 
-#: [post]help [page]help
+#: [publish]help [page]help
 msgid "Help"
 msgstr "Ajuda"
 
-#: [post]help_more
+#: [publish]help_more
 msgid "More help"
 msgstr "Mais ajuda"
 
-#: [post]help_manual
+#: [publish]help_manual
 msgid "Markdown syntax manual"
 msgstr "Manual de sintaxe Markdown"
 
-#: [post]content_text
+#: [publish]content_text
 msgid "You can format your content using Markdown"
 msgstr "Você pode formatar o seu conteúdo utilizando Markdown"
 
-#: [post]link
+#: [publish]link
 msgid "Link"
 msgstr "Link"
 
-#: [post]tags
+#: [publish]tags
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: [post]gallery
+#: [publish]gallery
 msgid "This picture will be added to your gallery"
 msgstr "Esta imagem será adicionada em sua galeria"
 
@@ -1533,6 +1528,10 @@ msgstr "Você pode adicioná-lo pressionando o botão + abaixo"
 msgid "Show/Hide"
 msgstr "Mostrar/Esconder"
 
+#: [roster]add_title
+msgid "Add a contact"
+msgstr ""
+
 #: [roster]add_contact_info1
 msgid "Enter the Jabber ID of your contact."
 msgstr "Informe o Jabber ID do seu contato."
@@ -1553,6 +1552,10 @@ msgstr "Resultados"
 msgid "Contact added"
 msgstr "Contato adicionado"
 
+#: [roster]updated
+msgid "Contact updated"
+msgstr "Contato atualizado"
+
 #: [roster]deleted
 msgid "Contact deleted"
 msgstr "Contato excluído"
@@ -1572,14 +1575,6 @@ msgstr "O que você esta procurando?"
 #: [search]subtitle
 msgid "Open me using Ctrl + M"
 msgstr "Me abra utilizando Ctrl + M"
-
-#: [share]error
-msgid "This is not a valid url"
-msgstr "Esta não é uma URL válida"
-
-#: [share]success
-msgid "Sharing the URL"
-msgstr "Compartilhando a URL"
 
 #: [statistics]title
 msgid "Statistics"
@@ -1680,6 +1675,10 @@ msgstr "Skype"
 #: [accounts]yahoo
 msgid "Yahoo Account"
 msgstr "Conta Yahoo"
+
+#: [privacy]my_profile
+msgid "Go to my profile page"
+msgstr ""
 
 #: [privacy]privacy_title
 msgid "Privacy Level"
@@ -1807,12 +1806,17 @@ msgid "Whoops!"
 msgstr "Ooops!"
 
 #: [error]websocket
-msgid "Movim cannot talk with the server, please try again later (Websocket connection error)"
+#, fuzzy
+msgid "Movim cannot talk with the server, please try again later"
 msgstr "Servidor não responde, por favor tente mais tarde (Erro de conexão com o Websocket)"
 
 #: [error]oops
 msgid "Oops!"
 msgstr "Oops!"
+
+#: [button]call
+msgid "Call"
+msgstr ""
 
 #: [button]validate
 msgid "Validate"
@@ -2565,6 +2569,10 @@ msgstr "Publicação do contato"
 msgid "Comments"
 msgstr "Comentários"
 
+#: [post]original_deleted
+msgid "Original post deleted"
+msgstr ""
+
 #: [api]error
 msgid "The API is not reachable, try again later"
 msgstr "A API está inalcançável, tente mais tarde"
@@ -2572,3 +2580,21 @@ msgstr "A API está inalcançável, tente mais tarde"
 #: [field]type_here
 msgid "Type here"
 msgstr "Digite aqui"
+
+#, fuzzy
+#~ msgid "Read and write rights for the webserver in Movim's cache directory"
+#~ msgstr "Permissões de leitura e escrita para o servidor Web no diretório raiz do Movim"
+
+#, fuzzy
+#~ msgid "Read and write rights for the webserver in Movim's log directory"
+#~ msgstr "Permissões de leitura e escrita para o servidor Web no diretório raiz do Movim"
+
+#~ msgctxt "[error]unauthorized"
+#~ msgid "Your XMPP server is unauthorized"
+#~ msgstr "Seu servidor XMPP não esta autorizado"
+
+#~ msgid "A Movim session is already open on an other device"
+#~ msgstr "Uma sessão do Movim já está aberta em outro dispositivo"
+
+#~ msgid "Online with Movim"
+#~ msgstr "Online com Movim"

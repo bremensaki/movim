@@ -51,16 +51,13 @@ class Presence extends \Movim\Widget\Base
     {
         if($form == false) {
             // We update the cache with our status and presence
-            $presence = Cache::c('presence');
+            $presence = \Movim\Cache::c('presence');
 
             $value = $presence['show'];
             $status = $presence['status'];
 
             if($presence == null || !isset($presence['show']) || $presence['show'] == '')
                 $value = 'chat';
-
-            if($presence == null|| !isset($presence['status']) || $presence['status'] == '')
-                $status = $this->__('status.online');
         } else {
             $status = $form['status'];
             $value = $form['value'];
@@ -87,12 +84,12 @@ class Presence extends \Movim\Widget\Base
             }
         }
 
-        Cache::c(
+        \Movim\Cache::c(
             'presence',
-            array(
+            [
                 'status' => $status,
                 'show' => $value
-                )
+            ]
         );
     }
 

@@ -10,6 +10,9 @@ use Moxl\Xec\Action\Pubsub\Unsubscribe;
 use Moxl\Xec\Action\Pubsub\GetConfig;
 use Moxl\Xec\Action\Pubsub\SetConfig;
 
+use Moxl\Xec\Action\PubsubSubscription\Add as SubscriptionAdd;
+use Moxl\Xec\Action\PubsubSubscription\Remove as SubscriptionRemove;
+
 use Moxl\Xec\Action\Pubsub\Delete;
 
 use Respect\Validation\Validator;
@@ -76,10 +79,18 @@ class Group extends \Movim\Widget\Base
         Notification::append(false, $this->__('group.empty'));
 
         if($node != 'urn:xmpp:microblog:0') {
-            $this->ajaxDelete($server, $node, true);
-            $this->ajaxGetAffiliations($server, $node);
-            // Display an error message
-            RPC::call('Group.clearLoad');
+            $sd = new \Modl\SubscriptionDAO;
+
+            if($sd->get($server, $node)) {
+                $this->ajaxDelete($server, $node, true);
+                $this->ajaxGetAffiliations($server, $node);
+                // Display an error message
+                RPC::call('Group.clearLoad');
+            } else {
+                $id = new \Modl\ItemDAO;
+                $id->deleteItem($server, $node);
+                $this->ajaxClear();
+            }
         }
     }
 
@@ -172,8 +183,6 @@ class Group extends \Movim\Widget\Base
 
     function onUnsubscribed($packet)
     {
-        $arr = $packet->content;
-
         // Set the bookmark
         $r = new Rooms;
         $r->setBookmark();
@@ -320,6 +329,14 @@ class Group extends \Movim\Widget\Base
           ->setFrom($this->user->getLogin())
           ->setData($form)
           ->request();
+
+        if($form->share->value) {
+            $a = new SubscriptionAdd;
+            $a->setServer($server)
+              ->setNode($node)
+              ->setFrom($this->user->getLogin())
+              ->request();
+        }
     }
 
     function ajaxAskUnsubscribe($server, $node)
@@ -347,7 +364,7 @@ class Group extends \Movim\Widget\Base
     {
         if(!$this->validateServerNode($server, $node)) return;
 
-        $sd = new \Modl\SubscriptionDAO();
+        $sd = new \Modl\SubscriptionDAO;
 
         foreach($sd->get($server, $node) as $s) {
             $g = new Unsubscribe;
@@ -357,6 +374,12 @@ class Group extends \Movim\Widget\Base
               ->setFrom($this->user->getLogin())
               ->request();
         }
+
+        $r = new SubscriptionRemove;
+        $r->setServer($server)
+          ->setNode($node)
+          ->setFrom($this->user->getLogin())
+          ->request();
     }
 
     function ajaxClear()

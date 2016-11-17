@@ -1,12 +1,16 @@
 <ul class="list middle">
     <li class="subheader">
-        <p>{$c->__('privacy.privacy_title')}</p>
+        <p>
+            <span class="info">
+                <a href="{$c->route('contact', $me->jid)}">
+                    {$c->__('privacy.my_profile')}
+                </a>
+            </span>
+            {$c->__('privacy.privacy_title')}
+        </p>
     </li>
     <li>
-        <span class="primary icon bubble color blue">
-            <i class="zmdi zmdi-shield-security"></i>
-        </span>
-        <span class="control">
+        <span class="primary">
             <form>
                 <div class="control action">
                     <div class="checkbox">
@@ -121,7 +125,7 @@
     </div>
 
     <div class="block">
-        <input type="url" name ="url" class="content" value="{$me->url}">
+        <input type="url" name ="url" class="content" value="{$me->url}" placeholder="https://mywebsite.com/">
         <label for="url">{$c->__('general.website')}</label>
     </div>
 

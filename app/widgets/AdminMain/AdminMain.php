@@ -11,6 +11,7 @@ class AdminMain extends \Movim\Widget\Base
 
         if(isset($form) && !empty($form)) {
             if(isset($form['password'])
+            && isset($form['repassword'])
             && $form['password'] != '' && $form['repassword'] != ''
             && $form['password'] == $form['repassword']) {
                 $form['password'] = sha1($form['password']);
@@ -48,8 +49,7 @@ class AdminMain extends \Movim\Widget\Base
 
     function display()
     {
-        $cd = new \Modl\ConfigDAO();
-        $config = $cd->get();
+        $cd = new \Modl\ConfigDAO;
 
         $l = Movim\i18n\Locale::start();
 

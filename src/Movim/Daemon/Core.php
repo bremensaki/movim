@@ -12,16 +12,12 @@ class Core implements MessageComponentInterface {
 
     public function __construct($loop, $baseuri, $port)
     {
-        $baseuri = rtrim($baseuri, '/') . '/';
-
-        echo colorize("Movim daemon launched\n", 'green');
-        echo colorize("Base URI :", 'green')." {$baseuri}\n";
         $this->setWebsocket($baseuri, $port);
 
         $this->loop    = $loop;
         $this->baseuri = $baseuri;
 
-        $sd = new \Modl\SessionxDAO();
+        $sd = new \Modl\SessionxDAO;
         $sd->clear();
 
         $this->registerCleaner();
@@ -134,10 +130,10 @@ class Core implements MessageComponentInterface {
 
     private function cleanupDBSessions()
     {
-        $sd = new \Modl\SessionxDAO();
+        $sd = new \Modl\SessionxDAO;
         $sd->deleteEmpty();
 
-        $pd = new \Modl\PresenceDAO();
+        $pd = new \Modl\PresenceDAO;
         $pd->cleanPresences();
     }
 

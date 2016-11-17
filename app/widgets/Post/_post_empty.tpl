@@ -77,7 +77,7 @@
                 <i class="zmdi zmdi-account"></i>
             </span>
         {/if}
-        <p class="line">
+        <p class="line" {if="isset($value->title)"}title="{$value->title}"{/if}>
         {if="isset($value->title)"}
             {$value->title}
         {else}
@@ -154,7 +154,7 @@
             </span>
         {/if}
 
-        <p class="line">
+        <p class="line" {if="isset($value->title)"}title="{$value->title}"{/if}>
         {if="isset($value->title)"}
             {$value->title}
         {else}
@@ -196,7 +196,7 @@
             <p>{$c->__('hello.share_text')}</p>
         </li>
         <li class="block">
-            <a class="button" href="javascript:(function(){location.href='{$c->route('share', '\'+encodeURIComponent(location.href);')}})();"><i class="zmdi zmdi-share"></i> {$c->__('button.share')}</a>
+            <a class="button" onclick="return false;" href="javascript:(function(){location.href='{$c->route('share', '\'+encodeURIComponent(location.href);')}})();"><i class="zmdi zmdi-share"></i> {$c->__('button.share')}</a>
         </li>
     </ul>
 {/if}

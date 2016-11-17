@@ -14,6 +14,8 @@ use Respect\Validation\Validator;
 
 use Ramsey\Uuid\Uuid;
 
+use Movim\Picture;
+
 class Chat extends \Movim\Widget\Base
 {
     private $_pagination = 30;
@@ -498,9 +500,6 @@ class Chat extends \Movim\Widget\Base
 
         $jid = echapJS($jid);
 
-        $view->assign('composing', $this->call('ajaxSendComposing', "'" . $jid . "'"));
-        $view->assign('paused', $this->call('ajaxSendPaused', "'" . $jid . "'"));
-
         $view->assign('smiley', $this->call('ajaxSmiley'));
 
         $view->assign('emoji', prepareString('😀'));
@@ -690,7 +689,7 @@ class Chat extends \Movim\Widget\Base
     {
         $view = $this->tpl();
 
-        $chats = Cache::c('chats');
+        $chats = \Movim\Cache::c('chats');
         $chats = ($chats == null) ? false : array_keys($chats);
 
         $cd = new \Modl\ContactDAO;

@@ -45,11 +45,12 @@ class Menu extends \Movim\Widget\Base
     function onPost($packet)
     {
         $pd = new \Modl\PostnDAO;
-        $since = Cache::c('since');
+        $since = \Movim\Cache::c('since');
         $count = $pd->getCountSince($since);
         $post = $packet->content;
 
         if($count > 0
+        && is_object($post)
         && (strtotime($post->published) > strtotime($since))) {
             if($post->isMicroblog()) {
                 $cd = new \Modl\ContactDAO;
@@ -144,11 +145,11 @@ class Menu extends \Movim\Widget\Base
     function prepareList($type = 'all', $server = null, $node = null, $page = 0) {
         $view = $this->tpl();
         $pd = new \Modl\PostnDAO;
-        $count = $pd->getCountSince(Cache::c('since'));
+        $count = $pd->getCountSince(\Movim\Cache::c('since'));
         // getting newer, not older
         if($page == 0 || $page == ""){
             $count = 0;
-            Cache::c('since', date(DATE_ISO8601, strtotime($pd->getLastDate())));
+            \Movim\Cache::c('since', date(DATE_ISO8601, strtotime($pd->getLastDate())));
         }
 
         $next = $page + 1;

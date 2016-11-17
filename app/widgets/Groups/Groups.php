@@ -147,7 +147,9 @@ class Groups extends \Movim\Widget\Base
         }
 
         $c = new Create;
-        $c->setTo($server)->setNode($uri)->setData($form->name->value)
+        $c->setTo($server)
+          ->setNode($uri)
+          ->setName($form->name->value)
           ->request();
     }
 
@@ -172,7 +174,7 @@ class Groups extends \Movim\Widget\Base
     }
 
     function prepareSubscriptions() {
-        $sd = new \modl\SubscriptionDAO();
+        $sd = new \Modl\SubscriptionDAO;
 
         $view = $this->tpl();
         $view->assign('subscriptions', $sd->getSubscribed());
@@ -182,7 +184,7 @@ class Groups extends \Movim\Widget\Base
     }
 
     private function prepareServer($server) {
-        $id = new \modl\ItemDAO();
+        $id = new \Modl\ItemDAO;
 
         $view = $this->tpl();
         $view->assign('nodes', $id->getItems($server));

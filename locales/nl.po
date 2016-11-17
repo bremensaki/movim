@@ -61,8 +61,6 @@
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Search/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
-#. extracted from ../app/widgets/Share/locales.ini
-#. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Statistics/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Stickers/locales.ini
@@ -80,8 +78,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-24 23:28+0200\n"
-"PO-Revision-Date: 2016-07-29 20:30+0000\n"
+"POT-Creation-Date: 2016-11-13 14:58+0200\n"
+"PO-Revision-Date: 2016-11-06 11:15+0000\n"
 "Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: Dutch (http://www.transifex.com/movim/movim/language/nl/)\n"
 "Language: nl\n"
@@ -407,7 +405,8 @@ msgid "Install the php5-gd library"
 msgstr "Installeer de php5-gd library"
 
 #: [compatibility]rights
-msgid "Read and write rights for the webserver in Movims root directory"
+#, fuzzy
+msgid "Read and write rights for the webserver in Movim's %s directory"
 msgstr "Lees en schrif-rechten voor de webserver in Movim's root folder"
 
 #: [compatibility]db
@@ -750,10 +749,6 @@ msgstr "Alias"
 msgid "Group"
 msgstr "Groep"
 
-#: [edit]updated [roster]updated
-msgid "Contact updated"
-msgstr "Contactpersoon bijgewerkt"
-
 #: [delete]title
 msgid "Are you sure?"
 msgstr "Weet je het zeker?"
@@ -902,6 +897,15 @@ msgstr "Klaar? Dan kun je nu een nieuwe post in de groep maken met de %s-knop."
 msgid "You will find a list of all your subscribed Groups in My Subscriptions and receive instantly all the new incoming posts in the %sNews%s page."
 msgstr "Je kunt een lijst van al je geabonneerde groepen vinden onder Mijn Abonnementen. Alle nieuwe posts zie je op de pagina %sNieuws%s."
 
+#: [group]share_subscription
+#, fuzzy
+msgid "Share this subscription publicly"
+msgstr "Post dit bericht openbaar?"
+
+#: [group]share_subscription_text
+msgid "It will appear on your profile"
+msgstr ""
+
 #: [groups]empty_title
 msgid "Hello"
 msgstr "Hallo"
@@ -919,9 +923,8 @@ msgid "You don't have any group subscriptions yet."
 msgstr "Je hebt nog geen abonnementen"
 
 #: [groups]empty_server
-#, fuzzy
 msgid "There is no Groups yet on this server."
-msgstr "%s groepen op deze server"
+msgstr ""
 
 #: [groups]subscriptions
 msgid "My Subscriptions"
@@ -1083,11 +1086,6 @@ msgstr "sessie fout"
 msgid "Account successfully created"
 msgstr "Account succesvol aangemaakt"
 
-#: [error]xmpp_unauthorized
-msgctxt "[error]xmpp_unauthorized"
-msgid "Your XMPP server is unauthorized"
-msgstr "je XMPP server is niet geautoriseerd"
-
 #: [error]mec_error
 msgid "The server takes too much time to respond"
 msgstr "De server neemt te veel tijd om te antwoorden"
@@ -1109,13 +1107,9 @@ msgid "Invalid password format"
 msgstr ""
 
 #: [error]unauthorized
-msgctxt "[error]unauthorized"
+#, fuzzy
 msgid "Your XMPP server is unauthorized"
 msgstr "je XMPP server is niet geautoriseerd"
-
-#: [error]conflict
-msgid "A Movim session is already open on an other device"
-msgstr "Een Movim sessie is al open op een ander apparaat"
 
 #: [error]wrong_account
 msgid "Movim failed to authenticate. You entered wrong data"
@@ -1169,6 +1163,10 @@ msgstr "Nog geen nieuws..."
 msgid "Welcome on your news feed, here you will see all the posts published by your contacts and in the groups you have subscribed."
 msgstr "Welkom op je nieuws feed. Hier zie je alle berichten die door je contacten en groepen waarop je geabonneerd bent zijn geplaatst."
 
+#: [menu]discover [button]discover
+msgid "Discover"
+msgstr ""
+
 #: [menu]refresh
 msgid "Refresh all the streams"
 msgstr "Vernieuw alle streams"
@@ -1209,7 +1207,7 @@ msgstr "nieuwsfeed"
 msgid "Discover and register to the groups you are interested in"
 msgstr "Ontdek en abonneer op de groepen waarop je geinteresseerd bent"
 
-#: [post]content [post]content_label
+#: [post]content [publish]content_label
 msgid "Content"
 msgstr "inhoud"
 
@@ -1278,9 +1276,8 @@ msgid "Comment published"
 msgstr "Reactie gepubliceerd"
 
 #: [post]comment_deleted
-#, fuzzy
 msgid "Comment deleted"
-msgstr "Contactpersoon verwijderd"
+msgstr ""
 
 #: [hello]blog_title
 msgid "Visit your public blog"
@@ -1346,39 +1343,35 @@ msgstr "status"
 msgid "Presence"
 msgstr "aanwezigheid"
 
-#: [status]online
-msgid "Online with Movim"
-msgstr "Online met Movim"
-
-#: [post]preview
+#: [publish]preview
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: [post]help [page]help
+#: [publish]help [page]help
 msgid "Help"
 msgstr "Help"
 
-#: [post]help_more
+#: [publish]help_more
 msgid "More help"
 msgstr "Meer help"
 
-#: [post]help_manual
+#: [publish]help_manual
 msgid "Markdown syntax manual"
 msgstr "Markdown syntax handleiding"
 
-#: [post]content_text
+#: [publish]content_text
 msgid "You can format your content using Markdown"
 msgstr "je kunt je inhoud opmaken met Markdown"
 
-#: [post]link
+#: [publish]link
 msgid "Link"
 msgstr "Link"
 
-#: [post]tags
+#: [publish]tags
 msgid "Tags"
 msgstr "Tag"
 
-#: [post]gallery
+#: [publish]gallery
 msgid "This picture will be added to your gallery"
 msgstr "Deze foto wordt aan je gallerij toegevoegd"
 
@@ -1534,6 +1527,10 @@ msgstr ""
 msgid "Show/Hide"
 msgstr "Tonen/Verbergen"
 
+#: [roster]add_title
+msgid "Add a contact"
+msgstr ""
+
 #: [roster]add_contact_info1
 msgid "Enter the Jabber ID of your contact."
 msgstr "Voer de jabber ID in van je contactpersoon"
@@ -1554,6 +1551,10 @@ msgstr "Resultaten"
 msgid "Contact added"
 msgstr "Contactpersoon toegevoegd"
 
+#: [roster]updated
+msgid "Contact updated"
+msgstr "Contactpersoon bijgewerkt"
+
 #: [roster]deleted
 msgid "Contact deleted"
 msgstr "Contactpersoon verwijderd"
@@ -1572,14 +1573,6 @@ msgstr ""
 
 #: [search]subtitle
 msgid "Open me using Ctrl + M"
-msgstr ""
-
-#: [share]error
-msgid "This is not a valid url"
-msgstr "Dit is geen geldige URL"
-
-#: [share]success
-msgid "Sharing the URL"
 msgstr ""
 
 #: [statistics]title
@@ -1643,9 +1636,8 @@ msgid "File too large"
 msgstr ""
 
 #: [upload]error_failed
-#, fuzzy
 msgid "Upload failed"
-msgstr "Upload een bestand"
+msgstr ""
 
 #: [vcard]title [page]profile
 msgid "Profile"
@@ -1683,6 +1675,10 @@ msgstr "Skype"
 msgid "Yahoo Account"
 msgstr "Yahoo Account"
 
+#: [privacy]my_profile
+msgid "Go to my profile page"
+msgstr ""
+
 #: [privacy]privacy_title
 msgid "Privacy Level"
 msgstr "Privacy-Niveau"
@@ -1712,9 +1708,8 @@ msgid "Movim is a kickass distributed social networking platform that protect yo
 msgstr "Movim is een kick-ass gedistribueerd sociaal netwerk dat jouw privacy beschermt. Een setje awesome mogelijkheden is inbegrepen."
 
 #: [global]loading
-#, fuzzy
 msgid "Loading…"
-msgstr "Laden"
+msgstr ""
 
 #: [page]home
 msgid "Home"
@@ -1777,10 +1772,9 @@ msgid "Pods"
 msgstr "Pods"
 
 #: [page]share
-#, fuzzy
 msgctxt "[page]share"
 msgid "Share"
-msgstr "Deel"
+msgstr ""
 
 #: [page]room
 msgid "Room"
@@ -1811,12 +1805,17 @@ msgid "Whoops!"
 msgstr "Oeps!"
 
 #: [error]websocket
-msgid "Movim cannot talk with the server, please try again later (Websocket connection error)"
+#, fuzzy
+msgid "Movim cannot talk with the server, please try again later"
 msgstr "Movim kan niet communiceren met de server, probeer het later opnieuw (Websocket verbindings fout)"
 
 #: [error]oops
 msgid "Oops!"
 msgstr "Oeps!"
+
+#: [button]call
+msgid "Call"
+msgstr ""
 
 #: [button]validate
 msgid "Validate"
@@ -1915,10 +1914,9 @@ msgid "Search"
 msgstr ""
 
 #: [button]share
-#, fuzzy
 msgctxt "[button]share"
 msgid "Share"
-msgstr "Deel"
+msgstr ""
 
 #: [day]title
 msgid "Day"
@@ -2570,6 +2568,10 @@ msgstr "Contactpersoon publiceren"
 msgid "Comments"
 msgstr "Reacties"
 
+#: [post]original_deleted
+msgid "Original post deleted"
+msgstr ""
+
 #: [api]error
 msgid "The API is not reachable, try again later"
 msgstr "De API is niet bereikbaar, probeer later nog eens"
@@ -2578,31 +2580,20 @@ msgstr "De API is niet bereikbaar, probeer later nog eens"
 msgid "Type here"
 msgstr "Typ hier"
 
-#~ msgid "Conferences"
-#~ msgstr "Conferenties"
+#, fuzzy
+#~ msgid "Read and write rights for the webserver in Movim's cache directory"
+#~ msgstr "Lees en schrif-rechten voor de webserver in Movim's root folder"
 
-#~ msgid "Add a new Chat Room"
-#~ msgstr "Voeg een nieuwe chatroom toe"
+#, fuzzy
+#~ msgid "Read and write rights for the webserver in Movim's log directory"
+#~ msgstr "Lees en schrif-rechten voor de webserver in Movim's root folder"
 
-#~ msgctxt "[chatroom]name"
-#~ msgid "Name"
-#~ msgstr "Naam"
+#~ msgctxt "[error]unauthorized"
+#~ msgid "Your XMPP server is unauthorized"
+#~ msgstr "je XMPP server is niet geautoriseerd"
 
-#~ msgid "Do you want do join automaticaly this Chat Room ?"
-#~ msgstr "Wil je deze chatroom automatisch joinen?"
+#~ msgid "A Movim session is already open on an other device"
+#~ msgstr "Een Movim sessie is al open op een ander apparaat"
 
-#~ msgid "An error occured :"
-#~ msgstr "Er is een fout opgetreden : "
-
-#~ msgid "Configure"
-#~ msgstr "Instellen"
-
-#~ msgid "Add a new URL"
-#~ msgstr "Een nieuwe URL toevoegen"
-
-#~ msgid "URL"
-#~ msgstr "URL"
-
-#~ msgctxt "[url]name"
-#~ msgid "Name"
-#~ msgstr "Naam"
+#~ msgid "Online with Movim"
+#~ msgstr "Online met Movim"

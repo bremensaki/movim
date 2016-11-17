@@ -88,13 +88,13 @@
 <div id="contact_tab">
     <ul class="tabs">
         <li class="active" href="#" onclick="Contact_ajaxGetContact('{$contact->jid}')" title="{$c->__('general.legend')}">
-            {$c->__('page.profile')}
+            <span>{$c->__('page.profile')}</span>
         </li>
         <li onclick="Contact_ajaxGetBlog('{$contact->jid}')" title="{$c->__('page.blog')}">
-            {$c->__('page.blog')}
+            <span>{$c->__('page.blog')}</span>
         </li>
         <li onclick="Contact_ajaxGetGallery('{$contact->jid}')" title="{$c->__('page.gallery')}">
-            {$c->__('page.gallery')}
+            <span>{$c->__('page.gallery')}</span>
         </li>
     </ul>
 
@@ -382,3 +382,7 @@
         </li>
     </ul>
 {/if}
+
+<div id="contact_subscriptions">
+
+</div>

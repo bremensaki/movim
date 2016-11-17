@@ -78,6 +78,8 @@ class Locale {
      */
     public function translate($key, $args = false)
     {
+        if(empty($key)) return $key;
+
         $arr = explode('.', $key);
         if(is_array($this->hash)
         && array_key_exists($arr[0], $this->hash)
@@ -187,7 +189,9 @@ class Locale {
         $last_token = "";
 
         while($line = fgets($handle)) {
-            if($line[0] == "#" || trim(rtrim($line)) == "") {
+            if($line[0] == "#"
+            || trim(rtrim($line)) == ""
+            || preg_match('#^msgctxt#', $line)) {
                 continue;
             }
 

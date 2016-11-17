@@ -1,4 +1,4 @@
-<header>
+<header class="relative">
     <ul class="list middle">
         <li>
             {if="$reply"}
@@ -6,20 +6,20 @@
                 <i class="zmdi zmdi-close"></i>
             </span>
             {else}
-            <span class="primary icon active" onclick="Publish.headerBack('{$to}', '{$node}', false);">
+            <span class="primary icon active" onclick="Publish.headerBack('{$to}', '{$node}', false);  Publish_ajaxClearShareUrl();">
                 <i class="zmdi zmdi-arrow-back"></i>
             </span>
             {/if}
 
-            <span id="button_send" class="control icon active" onclick="Publish.disableSend(); Publish_ajaxPublish(MovimUtils.formToJson('post'));">
-                <i class="zmdi zmdi-mail-send"></i>
-            </span>
-            <span class="control icon active" onclick="Publish_ajaxHelp()">
-                <i class="zmdi zmdi-help"></i>
-            </span>
-            <span class="control icon active" onclick="Publish_ajaxPreview(MovimUtils.formToJson('post'))">
-                <i class="zmdi zmdi-eye"></i>
-            </span>
+            {if="$reply"}
+                <span
+                    title="{$c->__('menu.add_post')}"
+                    id="button_send"
+                    class="control icon active"
+                    onclick="Publish.disableSend(); Publish_ajaxPublish(MovimUtils.formToJson('post'));">
+                    <i class="zmdi zmdi-mail-send"></i>
+                </span>
+            {/if}
 
             <p class="line">
                 {if="$reply"}
@@ -44,6 +44,16 @@
             </p>-->
         </li>
     </ul>
+
+    {if="!$reply"}
+        <span
+            title="{$c->__('menu.add_post')}"
+            id="button_send"
+            class="button action color"
+            onclick="Publish.disableSend(); Publish_ajaxPublish(MovimUtils.formToJson('post'));">
+            <i class="zmdi zmdi-mail-send"></i>
+        </span>
+    {/if}
 </header>
 
 <form name="post" class="block padded">
@@ -98,14 +108,22 @@
         {if="$item != false"}
             {$attachment = $item->getAttachment()}
         {/if}
+        <a class="button oppose flat gray" style="margin-top: 4rem" onclick="Publish_ajaxClearShareUrl()">
+            <i class="zmdi zmdi-close"></i>
+        </a>
         <input
             type="url"
+            style="width: calc(100% - 6rem)"
             name="embed"
             placeholder="http://myawesomewebsite.com/ or http://mynicepictureurl.com/"
             onpaste="var e=this; setTimeout(function(){Publish_ajaxEmbedTest(e.value);}, 4);"
-            {if="isset($attachment) && $attachment != false"}value="{$attachment.href}"{/if}
+            {if="isset($attachment) && $attachment != false"}
+                value="{$attachment.href}"
+            {elseif="$url"}
+                value="{$url}"
+            {/if}
         >
-        <label for="embed">{$c->__('post.link')}</label>
+        <label for="embed">{$c->__('publish.link')}</label>
 
         <article>
             <section>
@@ -120,9 +138,18 @@
         <label>{$c->__('publish.add_text_label')}</label>
     </div>
     <div id="content_field" class="hide">
-        <textarea name="content" placeholder="{$c->__('post.content_text')}" oninput="MovimUtils.textareaAutoheight(this);">{if="$item != false"}{$item->contentraw}{/if}</textarea>
-        <label for="content">{$c->__('post.content_label')}</label>
+        <textarea name="content" placeholder="{$c->__('publish.content_text')}" oninput="MovimUtils.textareaAutoheight(this);">{if="$item != false"}{$item->contentraw}{/if}</textarea>
+        <label for="content">{$c->__('publish.content_label')}</label>
+
+        <a class="button oppose flat gray" onclick="Publish_ajaxHelp()">
+            <i class="zmdi zmdi-help"></i> {$c->__('publish.help')}
+        </a>
+        <a class="button oppose flat gray" onclick="Publish_ajaxPreview(MovimUtils.formToJson('post'))">
+            <i class="zmdi zmdi-eye"></i> {$c->__('publish.preview')}
+        </a>
     </div>
+
+    <hr class="clear" />
 
     <div>
         {if="$item != false"}
@@ -135,7 +162,7 @@
             {if="isset($tags)"}
                 value="{$tags}"
             {/if}>
-        <label for="title">{$c->__('post.tags')}</label>
+        <label for="title">{$c->__('publish.tags')}</label>
     </div>
 
     <ul class="list middle active {if="$reply"}hide{/if}">
@@ -152,7 +179,7 @@
     <div>
         <ul class="list middle">
             <li>
-                <span class="control">
+                <span class="primary">
                     <div class="action">
                         <div class="checkbox">
                             <input
@@ -174,3 +201,4 @@
         </ul>
     </div>
 </form>
+

@@ -17,18 +17,16 @@
 
         "movim/modl": "dev-master",
         "movim/sasl2": "dev-master",
-        "movim/moxl": "dev-master#cb486211cc06dbf1abfd625c2f1399f2caadcf86",
+        "movim/moxl": "dev-master#4fa53d847b392e74bc99a2d4b5b12bae26ff15fa",
 
         "embed/embed": "dev-master",
-        "heyupdate/emoji": "0.2.*@dev",
+        "heyupdate/emoji": "dev-master",
 
         "cboden/ratchet": "0.3.*",
         "react/child-process": "dev-master",
         "react/http": "dev-master#cd15204bd15d106d7832c680e4fb0ca0ce2f5e30",
         "react/promise-timer": "^1.1",
 
-        "stojg/crop": "dev-master",
-        "forxer/Gravatar": "~1.2",
         "respect/validation": "1.0.*",
         "ezyang/htmlpurifier": "^4.7",
         "ramsey/uuid": "^3.2",

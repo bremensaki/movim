@@ -1,6 +1,7 @@
 {if="!$c->supported('anonymous') && $c->getView() != 'room'"}
     <ul class="list divided spaced {if="!$edit"}active{/if}">
         <li class="subheader">
+            {if="$conferences != null"}
             <span class="control icon active gray" onclick="Rooms_ajaxDisplay({if="$edit"}false{else}true{/if});">
                 {if="$edit"}
                     <i class="zmdi zmdi-check"></i>
@@ -8,6 +9,7 @@
                     <i class="zmdi zmdi-settings"></i>
                 {/if}
             </span>
+            {/if}
             <p>
                 <span class="info">{$conferences|count}</span>
                 {$c->__('chatrooms.title')}
@@ -16,7 +18,8 @@
         {loop="$conferences"}
             <li {if="!$edit"} data-jid="{$value->conference}" {/if}
                 {if="$value->nick != null"} data-nick="{$value->nick}" {/if}
-                class="room {if="$value->connected"}online{/if}">
+                class="room {if="$value->connected"}online{/if}"
+                title="{$value->conference}">
                 <span data-key="chat|{$value->conference}" class="counter"></span>
                 {if="$value->connected"}
                     <span class="primary icon small bubble color {$value->name|stringToColor}">

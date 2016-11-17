@@ -2,7 +2,8 @@
 
 use Moxl\Xec\Action\Avatar\Get;
 use Moxl\Xec\Action\Avatar\Set;
-use forxer\Gravatar\Gravatar;
+
+use Movim\Picture;
 
 class Avatar extends \Movim\Widget\Base
 {
@@ -29,7 +30,7 @@ class Avatar extends \Movim\Widget\Base
 
     function onMyAvatarError()
     {
-        $cd = new \modl\ContactDAO();
+        $cd = new \Modl\ContactDAO;
         $me = $cd->get();
         $html = $this->prepareForm($me);
 
@@ -47,15 +48,6 @@ class Avatar extends \Movim\Widget\Base
         $avatarform->assign('photobin', $p->toBase());
 
         $avatarform->assign('me',       $me);
-
-        if(isset($me->email)) {
-            $result = requestURL(Gravatar::profile($me->email, 'json'), 3);
-            $obj = json_decode($result);
-            if($obj != 'User not found') {
-                $avatarform->assign('gravatar_bin', base64_encode(requestURL('http://www.gravatar.com/avatar/'.$obj->entry[0]->hash.'?s=250')));
-                $avatarform->assign('gravatar', $obj);
-            }
-        }
 
         $avatarform->assign(
             'submit',
@@ -75,7 +67,7 @@ class Avatar extends \Movim\Widget\Base
 
     function ajaxDisplay()
     {
-        $cd = new \modl\ContactDAO();
+        $cd = new \Modl\ContactDAO;
         $me = $cd->get();
 
         RPC::call('MovimTpl.fill', '#avatar_form', $this->prepareForm($me));
@@ -83,12 +75,12 @@ class Avatar extends \Movim\Widget\Base
 
     function ajaxSubmit($avatar)
     {
-        $p = new \Picture;
+        $p = new Picture;
         $p->fromBase($avatar->photobin->value);
 
         $p->set('temp', 'jpeg', 60);
 
-        $p = new \Picture;
+        $p = new Picture;
         $p->get('temp');
 
         $r = new Set;
