@@ -18,12 +18,13 @@
             <p class="normal">{$c->__('page.home')}</p>
         </li>
     </a>-->
-    <a class="classic" href="{$c->route('chat')}"
-       title="{$c->__('page.chats')}">
-        <li {if="$page == 'chat'"}class="active"{/if}>
-            <span class="primary icon"><i class="zmdi zmdi-comments"></i></span>
-            <span data-key="chat" class="counter"></span>
-            <p class="normal">{$c->__('page.chats')}</p>
+    <a class="classic {if="!$c->supported('pubsub')"}disabled{/if}"
+       href="{$c->route('news')}"
+       title="{$c->__('page.news')}">
+        <li {if="$page == 'news'"}class="active"{/if}>
+            <span class="primary icon"><i class="zmdi zmdi-receipt"></i></span>
+            <span data-key="news" class="counter"></span>
+            <p class="normal">{$c->__('page.news')}</p>
         </li>
     </a>
     <a class="classic" href="{$c->route('contact')}"
@@ -35,21 +36,20 @@
         </li>
     </a>
     <a class="classic {if="!$c->supported('pubsub')"}disabled{/if}"
-       href="{$c->route('news')}"
-       title="{$c->__('page.news')}">
-        <li {if="$page == 'news'"}class="active"{/if}>
-            <span class="primary icon"><i class="zmdi zmdi-receipt"></i></span>
-            <span data-key="news" class="counter"></span>
-            <p class="normal">{$c->__('page.news')}</p>
-        </li>
-    </a>
-    <a class="classic {if="!$c->supported('pubsub')"}disabled{/if}"
        href="{$c->route('group')}"
        title="{$c->__('page.groups')}">
         <li {if="$page == 'group'"}class="active"{/if}>
             <span class="primary icon"><i class="zmdi zmdi-pages"></i></span>
             <span class="counter"></span>
             <p class="normal">{$c->__('page.groups')}</p>
+        </li>
+    </a>
+    <a class="classic" href="{$c->route('chat')}"
+       title="{$c->__('page.chats')}">
+        <li {if="$page == 'chat'"}class="active"{/if}>
+            <span class="primary icon"><i class="zmdi zmdi-comments"></i></span>
+            <span data-key="chat" class="counter"></span>
+            <p class="normal">{$c->__('page.chats')}</p>
         </li>
     </a>
 </ul>
