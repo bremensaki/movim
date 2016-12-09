@@ -223,6 +223,9 @@ class Bootstrap
 
         if(isset($lang)) {
             $l->load($lang);
+        } elseif(getenv('language') != false) {
+            $l->detect(getenv('language'));
+            $l->loadPo();
         } elseif(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
             $l->detect();
             $l->loadPo();
@@ -307,8 +310,9 @@ class Bootstrap
     public function getWidgets()
     {
         // Return a list of interesting widgets to load (to save memory)
-        return["Account","AccountNext","Ack","AdHoc","Avatar","Bookmark","Chat",
-        "Chats","Config","Contact","Dialog","Drawer","Group","Groups","Header",
+        return["Account","AccountNext","Ack","AdHoc","Avatar","Bookmark","Communities",
+        "CommunityAffiliations","CommunityData","CommunityHeader","CommunitiesServer","Chat",
+        "Chats","Config","Contact","Dialog","Drawer","Group","Header",
         "Init","Login","LoginAnonymous","Menu","Notifs","Post","Presence",
         "Publish","Rooms","Roster","Stickers","Upload","Vcard4", "Visio",
         "VisioLink"];

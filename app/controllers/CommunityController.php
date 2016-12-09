@@ -1,14 +1,17 @@
 <?php
+
 use Movim\Controller\Base;
 
-class GroupController extends Base
+class CommunityController extends Base
 {
-    function load() {
+    function load()
+    {
         $this->session_only = true;
     }
 
-    function dispatch() {
-        $this->page->setTitle(__('page.groups'));
+    function dispatch()
+    {
+        $this->page->setTitle(__('page.communities'));
 
         $user = new User();
         if(!$user->isLogged()) {

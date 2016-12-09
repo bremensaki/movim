@@ -9,9 +9,10 @@
 </nav>
 
 <main>
-    <section>
-        <?php $this->widget('Groups'); ?>
-        <?php $this->widget('Group'); ?>
-        <?php $this->widget('Publish'); ?>
+    <section style="background-color: #EEE;">
+       <aside>
+            <?php $this->widget('PublishHelp');?>
+        </aside>
+        <?php $this->widget('Publish');?>
     </section>
 </main>

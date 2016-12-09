@@ -7,7 +7,8 @@ class ChatController extends Base
         $this->session_only = true;
     }
 
-    function dispatch() {
+    function dispatch()
+    {
         $this->page->setTitle(__('page.chats'));
     }
 }

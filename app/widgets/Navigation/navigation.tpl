@@ -36,12 +36,12 @@
         </li>
     </a>
     <a class="classic {if="!$c->supported('pubsub')"}disabled{/if}"
-       href="{$c->route('group')}"
-       title="{$c->__('page.groups')}">
+       href="{$c->route('community')}"
+       title="{$c->__('page.communities')}">
         <li {if="$page == 'group'"}class="active"{/if}>
-            <span class="primary icon"><i class="zmdi zmdi-pages"></i></span>
+            <span class="primary icon"><i class="zmdi zmdi-group-work"></i></span>
             <span class="counter"></span>
-            <p class="normal">{$c->__('page.groups')}</p>
+            <p class="normal">{$c->__('page.communities')}</p>
         </li>
     </a>
     <a class="classic" href="{$c->route('chat')}"

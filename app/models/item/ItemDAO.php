@@ -4,7 +4,8 @@ namespace modl;
 
 class ItemDAO extends SQL
 {
-    function set(Item $item, $insert_only = false) {
+    function set(Item $item, $insert_only = false)
+    {
         if(!$insert_only) {
             $this->_sql = '
                 update item
@@ -20,7 +21,7 @@ class ItemDAO extends SQL
 
             $this->prepare(
                 'Item',
-                array(
+                [
                     'name'          => $item->name,
                     'created'       => $item->created,
                     'updated'       => $item->updated,
@@ -30,7 +31,7 @@ class ItemDAO extends SQL
                     'creator'       => $item->creator,
                     'description'   => $item->description,
                     'logo'          => $item->logo
-                )
+                ]
             );
 
             $this->run('Item');
@@ -63,7 +64,7 @@ class ItemDAO extends SQL
 
             $this->prepare(
                 'Item',
-                array(
+                [
                     'name'          => $item->name,
                     'creator'       => $item->creator,
                     'created'       => $item->created,
@@ -73,7 +74,7 @@ class ItemDAO extends SQL
                     'node'          => $item->node,
                     'description'   => $item->description,
                     'logo'          => $item->logo
-                )
+                ]
             );
 
             $this->run('Item');
@@ -90,9 +91,9 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'node' => 'urn:xmpp:microblog:0:comments%'
-            )
+            ]
         );
 
         return $this->run('Server');
@@ -121,12 +122,19 @@ class ItemDAO extends SQL
         return $this->run('Server');
     }
 
-    function getItems($server) {
+    function getItems($server = false, $limitf = false, $limitr = false) {
         $this->_sql = '
             select *, postn.published from item
             left outer join (
                 select node, count(node) as num from postn
-                where origin = :server
+            ';
+
+        if($server) {
+            $this->_sql .= '
+                where origin = :server';
+        }
+
+        $this->_sql .= '
                 group by node) as p
             on p.node = item.node
             left outer join (
@@ -136,28 +144,53 @@ class ItemDAO extends SQL
             ) as postn on postn.origin = item.server
               and postn.node = item.node
             left outer join (
-                select node, count(node) as sub from subscription
-                where server = :server
+                select node, count(node) as sub from subscription';
+
+        if($server) {
+            $this->_sql .= '
+                where server = :server';
+        }
+
+        $this->_sql .= '
                 group by node
             ) as sub
               on sub.node = item.node
-            left outer join (select server, node, subscription from subscription where jid = :node)
+            left outer join (select server, node, subscription from subscription where jid = :jid)
                 as s on s.server = item.server
                 and s.node = item.node
-            where item.server = :server
-                and item.node != \'\'
+            where item.node != \'\'
                 and item.node not like \'/%\'
+                and item.node != \'urn:xmpp:microblog:0\'';
+
+        if($server) {
+            $this->_sql .= '
+                and item.server = :server';
+        }
+
+        $this->_sql .= '
             order by postn.published is null, postn.published desc, name, item.node
             ';
 
-        $this->prepare(
-            'Item',
-            [
-                // Dirty hack, using node param to inject the session key
-                'node' => $this->_user,
-                'server' => $server
-            ]
-        );
+        if($limitr) {
+            $this->_sql = $this->_sql.' limit '.$limitr.' offset '.$limitf;
+        }
+
+        if($server) {
+            $this->prepare(
+                'Item',
+                [
+                    'subscription.jid' => $this->_user,
+                    'server' => $server
+                ]
+            );
+        } else {
+            $this->prepare(
+                'Item',
+                [
+                    'subscription.jid' => $this->_user
+                ]
+            );
+        }
 
         return $this->run('Server');
     }
@@ -171,9 +204,9 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'server' => $server
-            )
+            ]
         );
 
         return $this->run('Item');
@@ -189,9 +222,9 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'server' => $server
-            )
+            ]
         );
 
         return $this->run('Item', 'item');
@@ -206,9 +239,9 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'server' => $server
-            )
+            ]
         );
 
         return $this->run('Item', 'item');
@@ -229,9 +262,9 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'node'      => 'urn:xmpp:microblog%'
-            )
+            ]
         );
 
         return $this->run('Item');
@@ -244,9 +277,9 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'server' => $server
-            )
+            ]
         );
 
         return $this->run('Item');
@@ -260,28 +293,56 @@ class ItemDAO extends SQL
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'server' => $server,
                 'node' => $item
-            )
+            ]
         );
 
         return $this->run('Item');
     }
 
-    function getItem($server, $item) {
+    function getJid($jid) {
         $this->_sql = '
             select * from item
             where
-                node = :node
+                jid = :jid
+                and node = \'\'';
+
+        $this->prepare(
+            'Item',
+            [
+                'jid' => $jid
+            ]
+        );
+
+        return $this->run('Item', 'item');
+    }
+
+    function getItem($server, $item) {
+        $this->_sql = '
+            select * from item
+            left outer join (
+                select node, count(node) as num from postn
+                where origin = :server
+                group by node) as p
+            on p.node = item.node
+            left outer join (
+                select node, count(node) as sub from subscription
+                where server = :server
+                group by node
+            ) as sub
+              on sub.node = item.node
+            where
+                item.node = :node
                 and server = :server';
 
         $this->prepare(
             'Item',
-            array(
+            [
                 'node' => $item,
                 'server' => $server
-            )
+            ]
         );
 
         return $this->run('Item', 'item');

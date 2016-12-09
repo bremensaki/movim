@@ -22,7 +22,7 @@ var MovimTpl = {
         }
     },
     back : function() {
-        // If the contect menu is shown
+        // If the context menu is shown
         var cm = document.querySelector('ul.context_menu');
         if(cm != null && cm.className.includes('shown')) {
             MovimTpl.toggleContextMenu(document);
@@ -34,12 +34,13 @@ var MovimTpl = {
             Dialog.clear();
             // If the menu is shown
         } else if(MovimUtils.hasClass('body > nav', 'active')) {
-            MovimUtils.toggleClass('body > nav', 'active');
+            MovimUtils.removeClass('body > nav', 'active');
             // If the panel is shown
         } else if(MovimTpl.isPanel()) {
             MovimTpl.hidePanel();
-        } else {
             window.history.back();
+        } else {
+            history.back();
         }
     },
     fill : function(selector, html) {
