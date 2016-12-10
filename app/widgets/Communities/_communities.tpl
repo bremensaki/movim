@@ -4,6 +4,9 @@
             <span class="primary icon gray active on_mobile" onclick="history.back()">
                 <i class="zmdi zmdi-arrow-left"></i>
             </span>
+            <span class="control icon gray active" onclick="MovimUtils.redirect('{$c->route('community', 'subscriptions')}')">
+                <i class="zmdi zmdi-settings"></i>
+            </span>
             <p class="center">{$c->__('page.communities')}</p>
             <p class="center line">{$c->__('group.empty_text')}</p>
         </li>
@@ -67,16 +70,10 @@
                 </span>
             </p>
             <p>
-                {$value->server} -
-                {if="$value->num > 0"}
-                     {$c->__('groups.num', $value->num)}
-                {/if}
-                {if="$value->sub > 0 && $value->num > 0"}
-                  -
-                {/if}
+                {$value->server}
                 {if="$value->sub > 0"}
                     <span title="{$c->__('groups.sub', $value->sub)}">
-                        {$value->sub} <i class="zmdi zmdi-accounts"></i>
+                        - {$value->sub} <i class="zmdi zmdi-accounts"></i>
                     </span>
                 {/if}
                 <span class="info">
