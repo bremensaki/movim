@@ -12,7 +12,7 @@
                         <img src="{$url}"/>
                     </span>
                 {else}
-                    <span class="primary icon thumb color {$post->getContact()->jid|stringToColor}">
+                    <span class="primary icon bubble color {$post->getContact()->jid|stringToColor}">
                         <i class="zmdi zmdi-account"></i>
                     </span>
                 {/if}
@@ -130,7 +130,7 @@
                 {/if}
 
                 <a class="button flat oppose" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
-                    Read more
+                    {$c->__('post.more')}
                 </a>
             </p>
         </li>
