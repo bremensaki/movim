@@ -3,10 +3,8 @@
 use Moxl\Xec\Action\Pubsub\Delete;
 
 use Moxl\Xec\Action\Pubsub\GetAffiliations;
+use Moxl\Xec\Action\Pubsub\SetAffiliations;
 use Moxl\Xec\Action\Pubsub\GetSubscriptions;
-
-use Moxl\Xec\Action\Pubsub\GetConfig;
-use Moxl\Xec\Action\Pubsub\SetConfig;
 
 use Respect\Validation\Validator;
 
@@ -15,13 +13,11 @@ class CommunityAffiliations extends \Movim\Widget\Base
     public function load()
     {
         $this->registerEvent('pubsub_getaffiliations_handle', 'onAffiliations');
+        $this->registerEvent('pubsub_setaffiliations_handle', 'onAffiliationsSet');
         $this->registerEvent('pubsub_delete_handle', 'onDelete');
         $this->registerEvent('pubsub_delete_error', 'onDeleteError');
 
         $this->registerEvent('pubsub_getsubscriptions_handle', 'onSubscriptions');
-
-        $this->registerEvent('pubsub_getconfig_handle', 'onConfig');
-        $this->registerEvent('pubsub_setconfig_handle', 'onConfigSaved');
 
         $this->addjs('communityaffiliations.js');
     }
@@ -32,9 +28,10 @@ class CommunityAffiliations extends \Movim\Widget\Base
 
         $role = null;
 
-        foreach($affiliations as $r) {
-            if($r[0] == $this->user->getLogin())
-                $role = (string)$r[1];
+        foreach($affiliations['owner'] as $r) {
+            if($r['jid'] == $this->user->getLogin()) {
+                $role = 'owner';
+            }
         }
 
         $id = new \Modl\ItemDAO;
@@ -43,43 +40,48 @@ class CommunityAffiliations extends \Movim\Widget\Base
         $view = $this->tpl();
         $view->assign('role', $role);
         $view->assign('item', $item);
+        $view->assign('affiliations', $affiliations);
 
         $this->rpc('MovimTpl.fill', '#community_affiliation', $view->draw('_communityaffiliations', true));
+
+        // If the configuration is open, we fill it
+        $view = $this->tpl();
+
+        $cd = new \Modl\CapsDAO;
+        $sd = new \Modl\SubscriptionDAO;
+
+        $view->assign('subscriptions', $sd->getAll($server, $node));
+        $view->assign('server', $server);
+        $view->assign('node', $node);
+        $view->assign('affiliations', $affiliations);
+        $view->assign('me', $this->user->getLogin());
+        $view->assign('roles', $cd->get($server)->getPubsubRoles());
+
+        $this->rpc(
+            'MovimTpl.fill',
+            '#community_affiliations_config',
+            $view->draw('_communityaffiliations_config_content', true)
+        );
+    }
+
+    function onAffiliationsSet($packet)
+    {
+        Notification::append(null, $this->__('communityaffiliation.role_set'));
     }
 
     function onSubscriptions($packet)
     {
         list($subscriptions, $server, $node) = array_values($packet->content);
 
+        $sd = new \Modl\SubscriptionDAO;
+
         $view = $this->tpl();
 
-        $view->assign('subscriptions', $subscriptions);
+        $view->assign('subscriptions', $sd->getAll($server, $node));
         $view->assign('server', $server);
         $view->assign('node', $node);
 
         Dialog::fill($view->draw('_communityaffiliations_subscriptions', true), true);
-    }
-
-    function onConfig($packet)
-    {
-        list($config, $server, $node) = array_values($packet->content);
-
-        $view = $this->tpl();
-
-        $xml = new \XMPPtoForm();
-        $form = $xml->getHTML($config->x->asXML());
-
-        $view->assign('form', $form);
-        $view->assign('server', $server);
-        $view->assign('node', $node);
-        $view->assign('attributes', $config->attributes());
-
-        Dialog::fill($view->draw('_communityaffiliations_config', true), true);
-    }
-
-    function onConfigSaved()
-    {
-        Notification::append(false, $this->__('communityaffiliation.config_saved'));
     }
 
     private function deleted($packet)
@@ -111,6 +113,12 @@ class CommunityAffiliations extends \Movim\Widget\Base
         $this->deleted($packet);
     }
 
+    function getContact($jid)
+    {
+        $cd = new \Modl\ContactDAO;
+        return $cd->get($jid);
+    }
+
     function ajaxGetAffiliations($server, $node){
         if(!$this->validateServerNode($server, $node)) return;
 
@@ -127,27 +135,6 @@ class CommunityAffiliations extends \Movim\Widget\Base
         $r->setTo($server)
           ->setNode($node)
           ->setNotify($notify)
-          ->request();
-    }
-
-    function ajaxGetConfig($server, $node)
-    {
-        if(!$this->validateServerNode($server, $node)) return;
-
-        $r = new GetConfig;
-        $r->setTo($server)
-          ->setNode($node)
-          ->request();
-    }
-
-    function ajaxSetConfig($data, $server, $node)
-    {
-        if(!$this->validateServerNode($server, $node)) return;
-
-        $r = new SetConfig;
-        $r->setTo($server)
-          ->setNode($node)
-          ->setData($data)
           ->request();
     }
 
@@ -170,6 +157,33 @@ class CommunityAffiliations extends \Movim\Widget\Base
         $d = new Delete;
         $d->setTo($server)->setNode($node)
           ->request();
+    }
+
+    function ajaxAffiliations($server, $node)
+    {
+        $view = $this->tpl();
+        $view->assign('server', $server);
+        $view->assign('node', $node);
+
+        Dialog::fill($view->draw('_communityaffiliations_config', true));
+
+        $this->ajaxGetAffiliations($server, $node);
+    }
+
+    function ajaxChangeAffiliation($server, $node, $form)
+    {
+        if(!$this->validateServerNode($server, $node)) return;
+
+        $cd = new \Modl\CapsDAO;
+
+        if(Validator::in($cd->get($server)->getPubsubRoles())->validate($form->role->value)
+        && Validator::stringType()->length(3, 100)->validate($form->jid->value)) {
+            $sa = new SetAffiliations;
+            $sa->setTo($server)
+               ->setNode($node)
+               ->setData([$form->jid->value => $form->role->value])
+               ->request();
+        }
     }
 
     private function validateServerNode($server, $node)
