@@ -108,16 +108,16 @@
         </li>
 
         <li>
-            <p class="normal">
-                {$tags = $post->getTags()}
-                {if="isset($tags)"}
-                    {loop="$tags"}
-                        <a target="_blank" href="{$c->route('tag', [$value])}">#{$value}</a>
-                    {/loop}
-                {/if}
+            <p class="normal center">
+                <a class="button flat" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
+                    <i class="zmdi zmdi-plus"></i> {$c->__('post.more')}
+                </a>
             </p>
             <p class="normal">
-                <a class="button flat gray">
+                <a class="button flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
+                    {$post->countLikes()} <i class="zmdi zmdi-favorite-outline"></i>
+                </a>
+                <a class="button flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
                     {$post->countComments()} <i class="zmdi zmdi-comment-outline"></i>
                 </a>
                 <a class="button flat gray" href="{$c->route('publish', [$post->origin, $post->node, $post->nodeid, 'share'])}">
@@ -128,10 +128,6 @@
                         <i title="{$c->__('menu.public')}" class="zmdi zmdi-portable-wifi"></i>
                     </a>
                 {/if}
-
-                <a class="button flat oppose" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
-                    {$c->__('post.more')}
-                </a>
             </p>
         </li>
     </ul>

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6b26c2243100891e20cf918417ba30aa",
-    "content-hash": "820bd39fa148d4ad8e99eaec9ddd3606",
+    "hash": "bdc605def8a93a49beeaccd2e6347617",
+    "content-hash": "9f3fe412e518f3adcbb6d1a5eac53c28",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -237,26 +237,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/Embed.git",
-                "reference": "753c886f2ced7240137003382b055fc4b795cdf2"
+                "reference": "811949b227040f87c0758fcc0999249ea536bc28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/753c886f2ced7240137003382b055fc4b795cdf2",
-                "reference": "753c886f2ced7240137003382b055fc4b795cdf2",
+                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/811949b227040f87c0758fcc0999249ea536bc28",
+                "reference": "811949b227040f87c0758fcc0999249ea536bc28",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-mbstring": "*",
-                "php": ">=5.4.0"
+                "php": "^5.5|^7.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^1.12",
-                "guzzlehttp/guzzle": "5.x",
+                "friendsofphp/php-cs-fixer": "^2.0",
                 "phpunit/phpunit": "*"
-            },
-            "suggest": {
-                "guzzlehttp/guzzle@5.x": "To use Guzzle5 request resolver"
             },
             "type": "library",
             "autoload": {
@@ -285,7 +281,7 @@
                 "opengraph",
                 "twitter cards"
             ],
-            "time": "2016-10-14 16:27:33"
+            "time": "2016-12-18 21:06:48"
         },
         {
             "name": "evenement/evenement",
@@ -645,12 +641,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/movim/moxl.git",
-                "reference": "f3126a03d3ced80811483419bde6f4fda12e6514"
+                "reference": "20dbb213143f44814ded5d3cbfdebc3189281119"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/movim/moxl/zipball/f3126a03d3ced80811483419bde6f4fda12e6514",
-                "reference": "f3126a03d3ced80811483419bde6f4fda12e6514",
+                "url": "https://api.github.com/repos/movim/moxl/zipball/20dbb213143f44814ded5d3cbfdebc3189281119",
+                "reference": "20dbb213143f44814ded5d3cbfdebc3189281119",
                 "shasum": ""
             },
             "require": {
@@ -685,7 +681,7 @@
                 "php",
                 "xmpp"
             ],
-            "time": "2016-12-14 22:54:54"
+            "time": "2016-12-19 18:41:37"
         },
         {
             "name": "movim/sasl2",

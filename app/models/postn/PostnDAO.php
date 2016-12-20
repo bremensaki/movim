@@ -573,7 +573,8 @@ class PostnDAO extends SQL {
     }
 
     // TODO: fixme
-    function getComments($posts) {
+    function getComments($posts)
+    {
         $commentsid = '';
         if(is_array($posts)) {
             $i = 0;
@@ -610,13 +611,39 @@ class PostnDAO extends SQL {
             where origin = :origin
                 and node = :node
                 and (title != \'\'
-                or contentraw != \'\')';
+                or contentraw != \'\')
+                and contentraw != :contentraw';
 
         $this->prepare(
             'Postn',
             [
                 'origin' => $origin,
-                'node'   => 'urn:xmpp:microblog:0:comments/'.$id
+                'node'   => 'urn:xmpp:microblog:0:comments/'.$id,
+                'contentraw' => '♥'
+            ]
+        );
+
+        $arr = $this->run(null, 'array');
+        if(is_array($arr) && isset($arr[0])) {
+            $arr = array_values($arr[0]);
+            return (int)$arr[0];
+        }
+    }
+
+    function countLikes($origin, $id)
+    {
+        $this->_sql = '
+            select count(*) from postn
+            where origin = :origin
+                and node = :node
+                and contentraw = :contentraw';
+
+        $this->prepare(
+            'Postn',
+            [
+                'origin' => $origin,
+                'node'   => 'urn:xmpp:microblog:0:comments/'.$id,
+                'contentraw' => '♥'
             ]
         );
 
@@ -642,7 +669,8 @@ class PostnDAO extends SQL {
         return $this->run('Postn');
     }
 
-    function getCountSince($date) {
+    function getCountSince($date)
+    {
         $this->_sql = '
             select count(*) from postn
             where (
@@ -670,7 +698,35 @@ class PostnDAO extends SQL {
         }
     }
 
-    function getLastDate() {
+    function getNotifsSince($date, $limitf = false, $limitr = false)
+    {
+        $this->_sql = '
+            select * from postn
+            left outer join contact on postn.aid = contact.jid
+            where origin = :origin
+            and commentnodeid is null
+            and node != \'urn:xmpp:microblog:0\'
+            and published > :published
+            order by published desc
+                ';
+
+        if($limitr) {
+            $this->_sql = $this->_sql.' limit '.$limitr.' offset '.$limitf;
+        }
+
+        $this->prepare(
+            'Postn',
+            [
+                'origin' => $this->_user,
+                'published' => $date
+            ]
+        );
+
+        return $this->run('ContactPostn');
+    }
+
+    function getLastDate()
+    {
         $this->_sql = '
             select published from postn
             where (

@@ -1,3 +1,1 @@
-<div id="notifs_widget">
-    {$c->prepareNotifs()}
-</div>
+<div id="notifs">{$c->prepareNotifs()}</div>
