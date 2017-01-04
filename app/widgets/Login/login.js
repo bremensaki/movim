@@ -23,7 +23,6 @@ var Login = {
             button.value = button.dataset.loading;
 
             localStorage.username = document.querySelector('input#username').value;
-            Login.rememberSession(localStorage.username);
 
             // A fallback security
             setTimeout("MovimWebsocket.unregister()", 20000);
@@ -32,7 +31,7 @@ var Login = {
         }, false);
     },
 
-    refresh: function(){
+    refresh: function() {
         /*Add onclick listeners*/
         var sessions = document.querySelectorAll('#sessions section ul > li');
         var i = 0;
@@ -174,7 +173,8 @@ MovimWebsocket.register(function()
     }
 });
 
-movim_add_onload(function() {
+movim_add_onload(function()
+{
     // We had the autocomplete system
     var login = document.querySelector('input#username');
     login.addEventListener('input', function() {
