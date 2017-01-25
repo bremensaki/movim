@@ -109,24 +109,24 @@
 
         <li>
             <p class="normal center">
-                <a class="button flat" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
+                <button class="button flat" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
                     <i class="zmdi zmdi-plus"></i> {$c->__('post.more')}
-                </a>
+                </button>
             </p>
             <p class="normal">
-                <a class="button flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
+                <button class="button flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
                     {$post->countLikes()} <i class="zmdi zmdi-favorite-outline"></i>
-                </a>
-                <a class="button flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
+                </button>
+                <button class="button flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
                     {$post->countComments()} <i class="zmdi zmdi-comment-outline"></i>
-                </a>
-                <a class="button flat gray" href="{$c->route('publish', [$post->origin, $post->node, $post->nodeid, 'share'])}">
+                </button>
+                <button class="button flat gray" href="{$c->route('publish', [$post->origin, $post->node, $post->nodeid, 'share'])}">
                     <i class="zmdi zmdi-share"></i>
-                </a>
+                </button>
                 {if="$post->isPublic()"}
-                    <a class="button flat gray" target="_blank" href="{$post->getPublicUrl()}">
+                    <button class="button flat gray" target="_blank" href="{$post->getPublicUrl()}">
                         <i title="{$c->__('menu.public')}" class="zmdi zmdi-portable-wifi"></i>
-                    </a>
+                    </button>
                 {/if}
             </p>
         </li>

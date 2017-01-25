@@ -22,7 +22,7 @@
     </ul>
 </section>
 <div>
-    <a onclick="Dialog_ajaxClear(); Upload.abort();" class="button flat">
+    <button onclick="Dialog_ajaxClear(); Upload.abort();" class="button flat">
         {$c->__('button.close')}
-    </a>
+    </button>
 </div>

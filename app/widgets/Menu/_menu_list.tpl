@@ -98,10 +98,10 @@
         <div class="placeholder icon news">
             <h1>{$c->__('menu.empty_title')}</h1>
             <h4>{$c->__('menu.empty')}</h4>
-            <a class="button flat on_mobile"
+            <button class="button flat on_mobile"
                onclick="MovimTpl.showPanel()">
                <i class="zmdi zmdi-eye"></i>  {$c->__('button.discover')}
-            </a>
+            </button>
         </div>
     </ul>
 

@@ -4,9 +4,9 @@
     <h4 class="gray">{$error}</h4>
 </section>
 <div>
-    <span
+    <button
         class="button flat oppose"
         onclick="MovimUtils.redirect('{$c->route('disconnect')}');">
         {$c->__('button.return')}
-    </span>
+    </button>
 </div>

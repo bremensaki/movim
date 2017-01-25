@@ -5,5 +5,5 @@
 
 <h1>Y U NO FOUND</h1>
 
-<a class="button flat" href="{$c->route('main')}">{$c->__('page.home')}</a>
+<button class="button flat" href="{$c->route('main')}">{$c->__('page.home')}</button>
 </div>

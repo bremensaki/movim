@@ -43,9 +43,9 @@
                     <ul class="list thin">
                         <li>
                             <p class="center">
-                                <a id="return_sessions" class="button flat" href="#" onclick="Login.toChoose()">
+                                <button id="return_sessions" class="button flat" href="#" onclick="Login.toChoose()">
                                     {$c->__('accounts.accounts_title')}
-                                </a>
+                                </button>
                                 <input
                                     type="submit"
                                     disabled
@@ -80,9 +80,9 @@
                 <li>
                     <p class="normal center">
                         {$c->__('form.no_account')}
-                        <a class="button flat" href="{$c->route('account')}">
+                        <button class="button flat" href="{$c->route('account')}">
                             {$c->__('form.create_one')}
-                        </a>
+                        </button>
                     </p>
                 </li>
             </ul>
@@ -93,4 +93,3 @@
         {$error}
     </div>
 </div>
-

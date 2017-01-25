@@ -4,10 +4,10 @@
     </form>
 </section>
 <div>
-    <a onclick="Dialog_ajaxClear()" class="button flat">
+    <button onclick="Dialog_ajaxClear()" class="button flat">
         {$c->__('button.close')}
-    </a>
-    <a onclick="Chat_ajaxSetRoomConfig(MovimUtils.parseForm('config'), '{$room}'); Dialog_ajaxClear();" class="button flat">
+    </button>
+    <button onclick="Chat_ajaxSetRoomConfig(MovimUtils.parseForm('config'), '{$room}'); Dialog_ajaxClear();" class="button flat">
         {$c->__('button.save')}
-    </a>
+    </button>
 </div>

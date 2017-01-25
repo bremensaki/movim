@@ -39,11 +39,11 @@
                 </span>
                 <p>Gravatar</p>
                 <p>We found a Gravatar picture<br />
-                    <a
+                    <button
                         onclick="Avatar.preview('data:image/jpeg;base64,{$gravatar_bin}')"
                         class="button flat">
                         {$c->__('avatar.use_it')}
-                    </a>
+                    </button>
                 </p>
             </li>
             {/if}
@@ -74,25 +74,25 @@
         <video id="runningcam" class="squares" autoplay></video>
         <canvas style="display:none;"></canvas>
 
-        <a
+        <button
             id="shoot"
             class="button flat oppose"
             onclick="return false;">
             {$c->__('avatar.cheese')}
-        </a>
-        <a
+        </button>
+        <button
             id="capture"
             class="button flat"
             onclick="
                 showVideo();
                 return false;">
             {$c->__('avatar.snapshot')}
-        </a>
+        </button>
         <label for="url">{$c->__('avatar.webcam')}</label>
     </div>-->
 
 <div class="block large">
-    <a
+    <button
         onclick="
             {$submit}
             MovimUtils.buttonSave('#avatarvalidate');
@@ -100,5 +100,5 @@
             this.className='button inactive oppose';"
         class="button color oppose"
         id="avatarvalidate"
-        >{$c->__('button.submit')}</a>
+        >{$c->__('button.submit')}</button>
 </div>

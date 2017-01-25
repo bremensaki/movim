@@ -34,13 +34,13 @@
         <div ng-if="contacts == null" class="empty placeholder icon contacts">
             <h1>{$c->__('roster.no_contacts_title')}</h1>
             <h4>{$c->__('roster.no_contacts_text')}</h4>
-            <a class="button flat on_mobile"
+            <button class="button flat on_mobile"
                onclick="MovimTpl.showPanel()">
                <i class="zmdi zmdi-eye"></i>  {$c->__('button.discover')}
-            </a>
+            </button>
         </div>
     {/if}
 </ul>
-<a onclick="Roster_ajaxDisplaySearch()" class="button action color" title="{$c->__('roster.add_title')}">
+<button onclick="Roster_ajaxDisplaySearch()" class="button action color" title="{$c->__('roster.add_title')}">
     <i class="zmdi zmdi-account-add"></i>
-</a>
+</button>

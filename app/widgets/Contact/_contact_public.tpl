@@ -44,7 +44,7 @@
     <li>
         <p class="center">
             {loop="$pages"}
-                <a onclick="Contact_ajaxPublic({$key});" class="button flat {if="$key == $page"}on{/if}">{$key+1}</a>
+                <button onclick="Contact_ajaxPublic({$key});" class="button flat {if="$key == $page"}on{/if}">{$key+1}</button>
             {/loop}
         </p>
     </li>
