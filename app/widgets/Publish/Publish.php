@@ -4,8 +4,11 @@ use Moxl\Xec\Action\Pubsub\PostPublish;
 use Moxl\Xec\Action\Microblog\CommentCreateNode;
 use Moxl\Xec\Action\Pubsub\Subscribe;
 
-use \Michelf\MarkdownExtra;
+use Movim\Session;
+
+use Michelf\MarkdownExtra;
 use Respect\Validation\Validator;
+
 
 class Publish extends \Movim\Widget\Base
 {
@@ -93,7 +96,7 @@ class Publish extends \Movim\Widget\Base
             $view->assign('reply', false);
         }
 
-        $session = \Session::start();
+        $session = Session::start();
         $view->assign('url', $session->get('share_url'));
 
         $this->rpc('MovimTpl.fill', '#publish', $view->draw('_publish_create', true));
@@ -109,11 +112,11 @@ class Publish extends \Movim\Widget\Base
         $view->assign('item', $item);*/
 
         if($id) {
-            RPC::call('Publish.initEdit');
+            $this->rpc('Publish.initEdit');
         }
 
         if($session->get('share_url')) {
-            RPC::call('Publish.setEmbed');
+            $this->rpc('Publish.setEmbed');
         }
     }
 
@@ -154,10 +157,10 @@ class Publish extends \Movim\Widget\Base
 
     function ajaxClearShareUrl()
     {
-        $session = \Session::start();
+        $session = Session::start();
         $session->remove('share_url');
 
-        RPC::call('Publish.clearEmbed');
+        $this->rpc('Publish.clearEmbed');
     }
 
     function ajaxHelp()
@@ -207,9 +210,9 @@ class Publish extends \Movim\Widget\Base
 
     function ajaxPublish($form)
     {
-        RPC::call('Publish.disableSend');
+        $this->rpc('Publish.disableSend');
 
-        if($form->title->value != '') {
+        if(Validator::stringType()->notEmpty()->validate(trim($form->title->value))) {
             $p = new PostPublish;
             $p->setFrom($this->user->getLogin())
               ->setTo($form->to->value)
@@ -217,19 +220,16 @@ class Publish extends \Movim\Widget\Base
               ->setNode($form->node->value);
               //->setLocation($geo)
 
-            // Still usefull ? Check line 44
-            //if($form->node->value == 'urn:xmpp:microblog:0') {
-                $p->enableComments();
-            //}
+            $p->enableComments();
 
             $content = $content_xhtml = '';
 
-            if($form->content->value != '') {
+            if(Validator::stringType()->notEmpty()->validate(trim($form->content->value))) {
                 $content = $form->content->value;
                 $content_xhtml = addHFR(MarkdownExtra::defaultTransform($content));
             }
 
-            if($form->id->value != '') {
+            if(Validator::stringType()->notEmpty()->validate(trim($form->id->value))) {
                 $p->setId($form->id->value);
 
                 $pd = new \modl\PostnDAO();
@@ -286,17 +286,17 @@ class Publish extends \Movim\Widget\Base
             }
 
             if($form->reply->value) {
-                $pd = new \modl\PostnDAO();
+                $pd = new \Modl\PostnDAO;
                 $post = $pd->get($form->replyorigin->value, $form->replynode->value, $form->replynodeid->value);
                 $p->setReply($post->getRef());
             }
 
-            $session = \Session::start();
+            $session = Session::start();
             $session->remove('share_url');
 
             $p->request();
         } else {
-            RPC::call('Publish.enableSend');
+            $this->rpc('Publish.enableSend');
             Notification::append(false, $this->__('publish.no_title'));
         }
     }
@@ -314,15 +314,15 @@ class Publish extends \Movim\Widget\Base
             $embed = Embed\Embed::create($url);
             $html = $this->prepareEmbed($embed);
 
-            RPC::call('MovimTpl.fill', '#preview', '');
-            RPC::call('MovimTpl.fill', '#gallery', '');
+            $this->rpc('MovimTpl.fill', '#preview', '');
+            $this->rpc('MovimTpl.fill', '#gallery', '');
 
             if(in_array($embed->type, ['photo', 'rich'])) {
-                RPC::call('MovimTpl.fill', '#gallery', $this->prepareGallery($embed));
+                $this->rpc('MovimTpl.fill', '#gallery', $this->prepareGallery($embed));
             }
 
             if($embed->type !== 'photo') {
-                RPC::call('MovimTpl.fill', '#preview', $html);
+                $this->rpc('MovimTpl.fill', '#preview', $html);
             }
         } catch(Exception $e) {
             error_log($e->getMessage());

@@ -1,4 +1,5 @@
 <?php
+
 namespace Movim;
 
 use Monolog\Logger;
@@ -19,7 +20,6 @@ class Bootstrap
         //Check if vital system need is OK
         $this->checkSystem();
 
-        $this->loadSystem();
         $this->loadCommonLibraries();
         $this->loadDispatcher();
         $this->loadHelpers();
@@ -39,11 +39,11 @@ class Bootstrap
 
     private function checkSystem()
     {
-        $listWritableFile = array(
+        $listWritableFile = [
             LOG_PATH.'/logger.log',
             LOG_PATH.'/php.log',
             CACHE_PATH.'/test.tmp',
-        );
+        ];
         $errors = [];
 
         if(!file_exists(CACHE_PATH) && !@mkdir(CACHE_PATH)) {
@@ -101,7 +101,11 @@ class Bootstrap
         define('BASE_URI',      $this->getBaseUri());
         define('CACHE_URI',     $this->getBaseUri() . 'cache/');
 
-        define('SESSION_ID',    getenv('sid'));
+        if(isset($_COOKIE['MOVIM_SESSION_ID'])) {
+            define('SESSION_ID',    $_COOKIE['MOVIM_SESSION_ID']);
+        } else {
+            define('SESSION_ID',    getenv('sid'));
+        }
 
         define('THEMES_PATH',   DOCUMENT_ROOT . '/themes/');
         define('USERS_PATH',    DOCUMENT_ROOT . '/users/');
@@ -174,14 +178,6 @@ class Bootstrap
         }
     }
 
-    private function loadSystem()
-    {
-        require_once(SYSTEM_PATH . "Session.php");
-        require_once(SYSTEM_PATH . "Sessionx.php");
-        require_once(SYSTEM_PATH . "RPC.php");
-        require_once(SYSTEM_PATH . "User.php");
-    }
-
     private function loadCommonLibraries()
     {
         // XMPPtoForm lib
@@ -209,7 +205,7 @@ class Bootstrap
      */
     function loadLanguage()
     {
-        $user = new \User;
+        $user = new User;
         $user->reload(true);
 
         $cd = new \Modl\ConfigDAO;
@@ -303,23 +299,43 @@ class Bootstrap
 
     private function startingSession()
     {
-        $s = \Sessionx::start();
-        $s->load();
+        if(SESSION_ID !== null) {
+            $process = (bool)requestURL('http://localhost:1560/exists/', 2, ['sid' => SESSION_ID]);
 
-        $user = new \User;
-        $db = \Modl\Modl::getInstance();
-        $db->setUser($user->getLogin());
+            $sd = new \Modl\SessionxDAO;
+            $session = $sd->get(SESSION_ID);
+
+            if($session) {
+                // There a session in the DB but no process
+                if(!$process) {
+                    $sd->delete(SESSION_ID);
+                    return;
+                }
+
+                $db = \Modl\Modl::getInstance();
+                $db->setUser($session->jid);
+
+                $s = Session::start();
+                $s->set('jid', $session->jid);
+            } elseif($process) {
+                // A process but no session in the db
+                requestURL('http://localhost:1560/disconnect/', 2, ['sid' => SESSION_ID]);
+            }
+        }
+
+        Cookie::set();
     }
 
     public function getWidgets()
     {
         // Return a list of interesting widgets to load (to save memory)
-        return["Account","AccountNext","Ack","AdHoc","Avatar","Bookmark","Communities",
-        "CommunityAffiliations","CommunityConfig","CommunityData","CommunityHeader","CommunityPosts","CommunitiesServer","Chat",
-        "Chats","Config","Contact","Dialog","Drawer","Header",
-        "Init","Login","LoginAnonymous","Menu","Notifs","Invitations","Post","Presence",
-        "Publish","Rooms","Roster","Stickers","Upload","Vcard4", "Visio",
-        "VisioLink"];
+        return ['Account','AccountNext','Ack','AdHoc','Avatar','Bookmark',
+        'Communities','CommunityAffiliations','CommunityConfig','CommunityData',
+        'CommunityHeader','CommunityPosts','CommunitiesServer','Chat','Chats',
+        'Config','Contact','Dialog','Drawer','Header','Init','Login',
+        'LoginAnonymous','Menu','Notifs','Invitations','Post','Presence',
+        'Publish','Rooms','Roster','Stickers','Upload','Vcard4', 'Visio',
+        'VisioLink'];
     }
 
     /**

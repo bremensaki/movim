@@ -1,6 +1,7 @@
 <?php
 
 use Movim\Controller\Base;
+use Movim\User;
 
 class LoginController extends Base
 {
@@ -13,7 +14,7 @@ class LoginController extends Base
     {
         $this->page->setTitle(__('page.login'));
 
-        $user = new User();
+        $user = new User;
         if($user->isLogged()) {
             $this->redirect('root');
         }

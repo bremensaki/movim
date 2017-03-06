@@ -2,6 +2,8 @@
 
 use Respect\Validation\Validator;
 
+use Movim\Session;
+
 class LoginAnonymous extends \Movim\Widget\Base
 {
     function load()
@@ -12,17 +14,10 @@ class LoginAnonymous extends \Movim\Widget\Base
 
     function onStart($packet)
     {
-        $session = \Sessionx::start();
-        $session->load();
-
-        if($session->mechanism == 'ANONYMOUS') {
-            RPC::call('Rooms.anonymousJoin');
+        $session = Session::start();
+        if($session->get('mechanism') == 'ANONYMOUS') {
+            $this->rpc('Rooms.anonymousJoin');
         }
-    }
-
-    function display()
-    {
-
     }
 
     function ajaxLogin($username)
@@ -40,16 +35,21 @@ class LoginAnonymous extends \Movim\Widget\Base
         $domain = \Moxl\Utils::getDomain($host);
 
         // We launch the XMPP socket
-        RPC::call('register', $host);
+        $this->rpc('register', $host);
 
         // We set the username in the session
         $s = Session::start();
         $s->set('username', $username);
 
-        // We create a new session or clear the old one
-        $s = Sessionx::start();
-        $s->init($username, $password, $host, $domain);
+        $s = new \Modl\Sessionx;
+        $s->init($username, $password, $host);
+        $s->loadMemory();
+        $sd->set($s);
 
         \Moxl\Stanza\Stream::init($host);
+    }
+
+    function display()
+    {
     }
 }

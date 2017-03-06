@@ -7,6 +7,8 @@ use Moxl\Xec\Action\Presence\Unavailable;
 
 use Respect\Validation\Validator;
 
+use Movim\Session;
+
 class Rooms extends \Movim\Widget\Base
 {
     function load()
@@ -40,7 +42,7 @@ class Rooms extends \Movim\Widget\Base
     function onBookmark()
     {
         $this->refreshRooms();
-        RPC::call('MovimTpl.hidePanel');
+        $this->rpc('MovimTpl.hidePanel');
     }
 
     function onConnected()
@@ -65,8 +67,8 @@ class Rooms extends \Movim\Widget\Base
 
     private function refreshRooms($edit = false)
     {
-        RPC::call('MovimTpl.fill', '#rooms_widget', $this->prepareRooms($edit));
-        RPC::call('Rooms.refresh');
+        $this->rpc('MovimTpl.fill', '#rooms_widget', $this->prepareRooms($edit));
+        $this->rpc('Rooms.refresh');
     }
 
     /**
@@ -210,10 +212,10 @@ class Rooms extends \Movim\Widget\Base
                     'name'      => $form['name'],
                     'autojoin'  => $form['autojoin'],
                     'nick'      => $form['nick'],
-                    'jid'       => $form['jid']
+                    'jid'       => strtolower($form['jid'])
                     ];
             $this->setBookmark($item);
-            RPC::call('Dialog_ajaxClear');
+            $this->rpc('Dialog_ajaxClear');
         }
     }
 
@@ -252,7 +254,9 @@ class Rooms extends \Movim\Widget\Base
                         'name'      => $c->name,
                         'autojoin'  => $c->autojoin,
                         'nick'      => $c->nick,
-                        'jid'       => $c->conference]);
+                        'jid'       => $c->conference
+                    ]
+                );
             }
         }
 
@@ -273,7 +277,7 @@ class Rooms extends \Movim\Widget\Base
         $pd = new \Modl\PresenceDAO;
 
         if($resource == false) {
-            $session = \Session::start();
+            $session = Session::start();
             $resource = $session->get('username');
         }
 

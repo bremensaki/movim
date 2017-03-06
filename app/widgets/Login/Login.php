@@ -2,7 +2,11 @@
 
 use Moxl\Xec\Action\Storage\Get;
 use Moxl\Xec\Action\Roster\GetList;
+
 use Respect\Validation\Validator;
+
+use Movim\Cookie;
+use Movim\Session;
 
 class Login extends \Movim\Widget\Base
 {
@@ -18,7 +22,7 @@ class Login extends \Movim\Widget\Base
 
     function onStart($packet)
     {
-        $session = \Session::start();
+        $session = Session::start();
 
         if($session->get('mechanism') != 'ANONYMOUS') {
             // http://xmpp.org/extensions/xep-0280.html
@@ -32,6 +36,9 @@ class Login extends \Movim\Widget\Base
             //$c = new Chats;
             //$c->ajaxGetHistory();
 
+            $p = new Presence;
+            $p->start();
+
             $this->rpc('Login.rememberSession', $this->user->getLogin());
 
             // We get the configuration
@@ -44,14 +51,14 @@ class Login extends \Movim\Widget\Base
     function onConfig($packet)
     {
         $this->user->createDir();
-        RPC::call('Login.post', $this->user->getLogin(), $this->route('root'));
+        $this->rpc('MovimUtils.redirect', $this->route('root'));
     }
 
     function display()
     {
         $submit = $this->call('ajaxLogin', "MovimUtils.formToJson('login')");
 
-        $cd = new \Modl\ConfigDAO();
+        $cd = new \Modl\ConfigDAO;
         $config = $cd->get();
 
         $this->view->assign('submit',   $submit);
@@ -87,8 +94,8 @@ class Login extends \Movim\Widget\Base
 
     function showErrorBlock($error)
     {
-        RPC::call('MovimTpl.fill', '#error', $this->prepareError($error));
-        RPC::call('MovimUtils.addClass', '#login_widget', 'error');
+        $this->rpc('MovimTpl.fill', '#error', $this->prepareError($error));
+        $this->rpc('MovimUtils.addClass', '#login_widget', 'error');
     }
 
     function prepareError($error = 'default')
@@ -166,6 +173,9 @@ class Login extends \Movim\Widget\Base
             return;
         }
 
+        $db = \Modl\Modl::getInstance();
+        $db->setUser($login);
+
         list($username, $host) = explode('@', $login);
 
         // Check whitelisted server
@@ -185,25 +195,18 @@ class Login extends \Movim\Widget\Base
         $here = $sd->getHash(sha1($username.$password.$host));
 
         if($here) {
-            RPC::call('Login.setCookie', $here->session);
-            RPC::call('MovimUtils.redirect', $this->route('main'));
+            $this->rpc('Login.setCookie', $here->session, date(DATE_COOKIE, Cookie::getTime()));
+            $this->rpc('MovimUtils.redirect', $this->route('main'));
             return;
         }
 
-        $s = Session::start();
-
-        // We create a new session or clear the old one
-        $s->set('password', $password);
-        $s->set('username', $username);
-        $s->set('host', $host);
-        $s->set('jid', $login);
-        $s->set('hash', sha1($username.$password.$host));
-
-        $s = Sessionx::start();
+        $s = new \Modl\Sessionx;
         $s->init($username, $password, $host);
+        $s->loadMemory();
+        $sd->set($s);
 
         // We launch the XMPP socket
-        RPC::call('register', $host);
+        $this->rpc('register', $host);
 
         \Moxl\Stanza\Stream::init($host);
     }
@@ -234,7 +237,7 @@ class Login extends \Movim\Widget\Base
         $sessionshtml->assign('sessions', $sessions_grabbed);
         $sessionshtml->assign('empty', new \Modl\Contact);
 
-        RPC::call('MovimTpl.fill', '#sessions', $sessionshtml->draw('_login_sessions', true));
-        RPC::call('Login.refresh');
+        $this->rpc('MovimTpl.fill', '#sessions', $sessionshtml->draw('_login_sessions', true));
+        $this->rpc('Login.refresh');
     }
 }

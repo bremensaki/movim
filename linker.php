@@ -6,6 +6,8 @@ define('DOCUMENT_ROOT', dirname(__FILE__));
 gc_enable();
 
 use Movim\Bootstrap;
+use Movim\RPC;
+use Movim\Session;
 
 $bootstrap = new Bootstrap;
 $booted = $bootstrap->boot();
@@ -20,7 +22,6 @@ $stdin = new React\Stream\Stream(STDIN, $loop);
 // We load and register all the widgets
 $wrapper = \Movim\Widget\Wrapper::getInstance();
 $wrapper->registerAll($bootstrap->getWidgets());
-
 
 $conn = null;
 
@@ -62,14 +63,14 @@ $loop->addPeriodicTimer(5, function() use(&$conn, &$timestamp) {
 
 function writeOut()
 {
-    $msg = \RPC::commit();
+    $msg = RPC::commit();
 
     if(!empty($msg)) {
         echo base64_encode(gzcompress(json_encode($msg), 9))."";
         //fwrite(STDERR, colorize(json_encode($msg).' '.strlen($msg), 'yellow')." : ".colorize('sent to browser', 'green')."\n");
     }
 
-    \RPC::clear();
+    RPC::clear();
 }
 
 function writeXMPP($xml)
@@ -138,12 +139,12 @@ $stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &
                         break;
 
                     case 'register':
-                        if(isset($conn)
+                        /*if(isset($conn)
                         && is_resource($conn->stream)) {
                             $conn->stream->close();
-                        }
+                        }*/
 
-                        $cd = new \Modl\ConfigDAO();
+                        $cd = new \Modl\ConfigDAO;
                         $config = $cd->get();
 
                         $port = 5222;
@@ -168,7 +169,7 @@ $stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &
                         break;
                 }
 
-                $rpc = new \RPC();
+                $rpc = new RPC;
                 $rpc->handle_json($msg);
 
                 writeOut();
@@ -207,7 +208,7 @@ $xmpp_behaviour = function (React\Stream\Stream $stream) use (&$conn, $loop, &$s
                 $loop->stop();
             } elseif($message == "<proceed xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>"
                   || $message == '<proceed xmlns="urn:ietf:params:xml:ns:xmpp-tls"/>') {
-                $session = \Session::start();
+                $session = Session::start();
                 stream_set_blocking($conn->stream, 1);
                 stream_context_set_option($conn->stream, 'ssl', 'SNI_enabled', false);
                 stream_context_set_option($conn->stream, 'ssl', 'peer_name', $session->get('host'));
@@ -242,7 +243,7 @@ $xmpp_behaviour = function (React\Stream\Stream $stream) use (&$conn, $loop, &$s
             $timestamp = time();
 
             if($restart) {
-                $session = \Session::start();
+                $session = Session::start();
                 \Moxl\Stanza\Stream::init($session->get('host'));
                 stream_set_blocking($conn->stream, 0);
                 $restart = false;

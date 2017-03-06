@@ -1,5 +1,8 @@
 <?php
+
 use Movim\Controller\Base;
+use Movim\Cookie;
+use Movim\Session;
 
 class DisconnectController extends Base
 {
@@ -10,10 +13,12 @@ class DisconnectController extends Base
 
     function dispatch()
     {
-        $session = \Sessionx::start();
-        requestURL('http://localhost:1560/disconnect/', 2, ['sid' => $session->sessionid]);
-
+        // Just in case
+        requestURL('http://localhost:1560/disconnect/', 2, ['sid' => SESSION_ID]);
         Session::dispose();
+
+        // Fresh cookie
+        Cookie::renew();
 
         $this->redirect('login');
     }

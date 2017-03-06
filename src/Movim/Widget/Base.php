@@ -1,8 +1,10 @@
 <?php
+
 namespace Movim\Widget;
 
 use Rain\Tpl;
 use Movim\Controller\Ajax;
+use Movim\User;
 
 class Base
 {
@@ -31,7 +33,7 @@ class Base
     {
         if($view != null) $this->_view = $view;
 
-        $this->user = new \User;
+        $this->user = new User;
 
         $this->load();
         $this->name = get_class($this);
@@ -106,7 +108,7 @@ class Base
 
     function rpc()
     {
-        return call_user_func_array('\RPC::call', func_get_args());
+        return call_user_func_array('\Movim\RPC::call', func_get_args());
     }
 
     function load() {}

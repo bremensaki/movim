@@ -5,9 +5,13 @@ use Moxl\Xec\Action\Presence\Away;
 use Moxl\Xec\Action\Presence\DND;
 use Moxl\Xec\Action\Presence\XA;
 use Moxl\Xec\Action\Presence\Unavailable;
+
 use Moxl\Xec\Action\Pubsub\GetItems;
-use Moxl\Stanza\Stream;
 use Moxl\Xec\Action\Storage\Get;
+
+use Moxl\Stanza\Stream;
+
+use Movim\Session;
 
 class Presence extends \Movim\Widget\Base
 {
@@ -34,10 +38,23 @@ class Presence extends \Movim\Widget\Base
     function onMyPresence($packet)
     {
         $html = $this->preparePresence();
-        RPC::call('MovimTpl.fill', '#presence_widget', $html);
+        $this->rpc('MovimTpl.fill', '#presence_widget', $html);
         Notification::append(null, $this->__('status.updated'));
-        RPC::call('Presence.refresh');
-        RPC::call('MovimUtils.removeClass', '#presence_widget', 'unfolded');
+        $this->rpc('Presence.refresh');
+        $this->rpc('MovimUtils.removeClass', '#presence_widget', 'unfolded');
+    }
+
+    function start()
+    {
+        $this->rpc('Notification.inhibit', 10);
+
+        $this->ajaxClear();
+        $this->ajaxSet();
+        $this->ajaxServerCapsGet();
+        $this->ajaxBookmarksGet();
+        $this->ajaxUserRefresh();
+        $this->ajaxFeedRefresh();
+        $this->ajaxServerDisco();
     }
 
     function ajaxClear()
@@ -94,10 +111,7 @@ class Presence extends \Movim\Widget\Base
 
     function ajaxLogout()
     {
-        $pd = new \Modl\PresenceDAO();
-        $pd->clearPresence();
-
-        $session = \Session::start();
+        $session = Session::start();
         $p = new Unavailable;
         $p->setType('terminate')
           ->setResource($session->get('resource'))
@@ -110,7 +124,7 @@ class Presence extends \Movim\Widget\Base
     function ajaxGetPresence()
     {
         $html = $this->preparePresence();
-        if($html) RPC::call('MovimTpl.fill', '#presence_widget', $html);
+        if($html) $this->rpc('MovimTpl.fill', '#presence_widget', $html);
     }
 
     function ajaxConfigGet() {
@@ -122,7 +136,7 @@ class Presence extends \Movim\Widget\Base
     // We get the server capabilities
     function ajaxServerCapsGet()
     {
-        $session = \Session::start();
+        $session = Session::start();
         $c = new \Moxl\Xec\Action\Disco\Request;
         $c->setTo($session->get('host'))
           ->request();
@@ -131,7 +145,7 @@ class Presence extends \Movim\Widget\Base
     // We discover the server services
     function ajaxServerDisco()
     {
-        $session = \Session::start();
+        $session = Session::start();
         $c = new \Moxl\Xec\Action\Disco\Items;
         $c->setTo($session->get('host'))
           ->request();
@@ -140,7 +154,7 @@ class Presence extends \Movim\Widget\Base
     // We refresh the bookmarks
     function ajaxBookmarksGet()
     {
-        $session = \Session::start();
+        $session = Session::start();
         $b = new \Moxl\Xec\Action\Bookmark\Get;
         $b->setTo($session->get('jid'))
           ->request();
@@ -167,7 +181,7 @@ class Presence extends \Movim\Widget\Base
     function ajaxOpenDialog()
     {
         Dialog::fill($this->preparePresenceList());
-        RPC::call('Presence.refresh');
+        $this->rpc('Presence.refresh');
     }
 
     function preparePresence()
@@ -175,11 +189,11 @@ class Presence extends \Movim\Widget\Base
         $cd = new \Modl\ContactDAO;
         $pd = new \Modl\PresenceDAO;
 
-        $session = \Session::start();
+        $session = Session::start();
 
         // If the user is still on a logued-in page after a daemon restart
         if($session->get('jid') == false) {
-            RPC::call('MovimUtils.disconnect');
+            $this->rpc('MovimUtils.disconnect');
             return false;
         }
 
@@ -211,7 +225,7 @@ class Presence extends \Movim\Widget\Base
         $txt = getPresences();
         $txts = getPresencesTxt();
 
-        $session = \Session::start();
+        $session = Session::start();
 
         $pd = new \Modl\PresenceDAO;
         $p = $pd->getPresence($session->get('jid'), $session->get('resource'));

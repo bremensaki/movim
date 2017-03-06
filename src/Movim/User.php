@@ -1,16 +1,16 @@
 <?php
 
+namespace Movim;
+
+use Movim\i18n\Locale;
+
 class User
 {
-    public  $username = '';
     private $config = [];
 
     public $caps;
 
     public $userdir;
-    public $useruri;
-
-    public $sizelimit;
 
     /**
      * Class constructor. Reloads the user's session or attempts to authenticate
@@ -18,18 +18,9 @@ class User
      */
     function __construct($username = false)
     {
+        $s = Session::start();
         if($username) {
-            $this->username = $username;
-        }
-
-        $session = \Sessionx::start();
-        if($session->active && $this->username == null) {
-            $this->username = $session->user.'@'.$session->host;
-        }
-
-        if($this->username != null) {
-            $this->userdir = DOCUMENT_ROOT.'/users/'.$this->username.'/';
-            $this->useruri = BASE_URI.'users/'.$this->username.'/';
+            $s->set('username', $username);
         }
     }
 
@@ -38,18 +29,20 @@ class User
      */
     function reload($language = false)
     {
-        $session = \Sessionx::start();
-        if($session->config) {
+        $sd = new \Modl\SessionxDAO;
+        $session = $sd->get(SESSION_ID);
+
+        if($session && $session->config) {
             if($language) {
                 $this->config = $session->config;
                 $lang = $this->getConfig('language');
                 if(isset($lang)) {
-                    $l = Movim\i18n\Locale::start();
+                    $l = Locale::start();
                     $l->load($lang);
                 }
             }
 
-            $cd = new modl\CapsDAO;
+            $cd = new \Modl\CapsDAO;
             $caps = $cd->get($session->host);
             $this->caps = $caps->features;
         }
@@ -60,41 +53,49 @@ class User
      */
     function isLogged()
     {
-        // We check if the session exists in the daemon
-        $session = \Sessionx::start();
-        return (bool)requestURL('http://localhost:1560/exists/', 2, ['sid' => $session->sessionid]);
+        $s = Session::start();
+        return ($s->get('jid'));
     }
 
     function createDir()
     {
-        if(!is_dir($this->userdir)
-        && $this->userdir != '') {
-            mkdir($this->userdir);
-            touch($this->userdir.'index.html');
+        $s = Session::start();
+        if($s->get('jid')) {
+            $this->userdir = DOCUMENT_ROOT.'/users/'.$s->get('jid').'/';
+
+            if(!is_dir($this->userdir)) {
+                mkdir($this->userdir);
+                touch($this->userdir.'index.html');
+            }
         }
     }
 
     function getLogin()
     {
-        return $this->username;
+        $s = Session::start();
+        return $s->get('jid');
     }
 
     function getServer()
     {
-        $exp = explodeJid($this->username);
-        return $exp['server'];
+        $s = Session::start();
+        return $s->get('host');
     }
 
     function getUser()
     {
-        $exp = explodeJid($this->username);
-        return $exp['username'];
+        $s = Session::start();
+        return $s->get('username');
     }
 
     function setConfig(array $config)
     {
-        $session = \Sessionx::start();
+        $sd = new \Modl\SessionxDAO;
+        $session = $sd->get(SESSION_ID);
         $session->config = $config;
+        $sd->set($session);
+
+        $this->createDir();
 
         file_put_contents($this->userdir.'config.dump', serialize($config));
 
@@ -103,10 +104,11 @@ class User
 
     function getConfig($key = false)
     {
-        if($key == false)
+        if($key == false) {
             return $this->config;
-        if(isset($this->config[$key]))
+        } if(isset($this->config[$key])) {
             return $this->config[$key];
+        }
     }
 
     function getDumpedConfig($key = false)
@@ -115,10 +117,11 @@ class User
 
         $config = unserialize(file_get_contents($this->userdir.'config.dump'));
 
-        if($key == false)
+        if($key == false) {
             return $config;
-        if(isset($config[$key]))
+        } if(isset($config[$key])) {
             return $config[$key];
+        }
     }
 
     function isSupported($key)
@@ -138,8 +141,8 @@ class User
                     break;
             }
         } elseif($key == 'anonymous') {
-            $session = \Sessionx::start();
-            return ($session->mechanism == 'ANONYMOUS');
+            $session = Session::start();
+            return ($session->get('mechanism') == 'ANONYMOUS');
         } else {
             return false;
         }
