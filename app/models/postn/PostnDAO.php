@@ -198,7 +198,7 @@ class PostnDAO extends SQL
             ];
 
         $this->_sql = '
-            select postn.*, contact.*, postn.aid from postn
+            select postn.*, contact.*, postn.aid, item.logo from postn
             left outer join contact on postn.aid = contact.jid
             left outer join item
                 on postn.origin = item.server
@@ -463,11 +463,14 @@ class PostnDAO extends SQL
     {
         $this->_sql = '
             select *, postn.aid from postn
+            left outer join item
+                on postn.origin = item.server
+                and postn.node = item.node
             left outer join contact on postn.aid = contact.jid
             where (
-                (postn.origin in (select jid from rosterlink where session = :origin and rostersubscription in (\'both\', \'to\')) and node = \'urn:xmpp:microblog:0\')
-                or (postn.origin = :origin and node = \'urn:xmpp:microblog:0\')
-                or ((postn.origin, node) in (select server, node from subscription where jid = :origin))
+                (postn.origin in (select jid from rosterlink where session = :origin and rostersubscription in (\'both\', \'to\')) and postn.node = \'urn:xmpp:microblog:0\')
+                or (postn.origin = :origin and postn.node = \'urn:xmpp:microblog:0\')
+                or ((postn.origin, postn.node) in (select server, node from subscription where jid = :origin))
                 )
                 and postn.node not like \'urn:xmpp:microblog:0:comments/%\'
                 and postn.node not like \'urn:xmpp:inbox\'
@@ -520,7 +523,10 @@ class PostnDAO extends SQL
         $this->_sql = '
             select *, postn.aid from postn
             left outer join contact on postn.aid = contact.jid
-            where ((postn.origin, node) in (select server, node from subscription where jid = :origin))
+            left outer join item
+                on postn.origin = item.server
+                and postn.node = item.node
+            where ((postn.origin, postn.node) in (select server, node from subscription where jid = :origin))
             order by postn.published desc
             ';
 
@@ -543,6 +549,7 @@ class PostnDAO extends SQL
         $this->_sql = '
             select *, postn.aid from postn
             left outer join contact on postn.aid = contact.jid
+
             where postn.origin = :origin and postn.node = \'urn:xmpp:microblog:0\'
             order by postn.published desc
             ';
@@ -624,8 +631,8 @@ class PostnDAO extends SQL
                 and node = :node
                 and (title != \'\'
                 or contentraw != \'\')
-                and contentraw != :contentraw
-                and title != :contentraw
+                and (contentraw != :contentraw
+                or title != :contentraw)
                 ';
 
         $this->prepare(
@@ -651,8 +658,7 @@ class PostnDAO extends SQL
             where origin = :origin
                 and node = :node
                 and (contentraw = :contentraw
-                  or title = :contentraw
-                )';
+                or title = :contentraw)';
 
         $this->prepare(
             'Postn',
@@ -785,6 +791,8 @@ class PostnDAO extends SQL
                         where subscription.jid = :jid
                     )
                 )
+                and (postn.origin, postn.node) in
+                    (select server, node from sharedsubscription)
                 and aid is not null';
 
         if($origin) {
