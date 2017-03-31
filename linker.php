@@ -139,11 +139,6 @@ $stdin_behaviour = function ($data) use (&$conn, $loop, &$buffer, &$connector, &
                         break;
 
                     case 'register':
-                        /*if(isset($conn)
-                        && is_resource($conn->stream)) {
-                            $conn->stream->close();
-                        }*/
-
                         $cd = new \Modl\ConfigDAO;
                         $config = $cd->get();
 
@@ -263,7 +258,6 @@ $xmpp_behaviour = function (React\Stream\Stream $stream) use (&$conn, $loop, &$s
             }
 
             writeOut();
-
             //fwrite(STDERR, colorize(getenv('sid'), 'yellow')." end data : ".\sizeToCleanSize(memory_get_usage())."\n");
         }
 

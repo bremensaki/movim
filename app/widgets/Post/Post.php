@@ -219,8 +219,6 @@ class Post extends \Movim\Widget\Base
 
     function prepareEmpty()
     {
-        $view = $this->tpl();
-
         $nd = new \Modl\PostnDAO;
         $cd = new \Modl\ContactDAO;
 
@@ -242,8 +240,13 @@ class Post extends \Movim\Widget\Base
 
         if(isset($p)) {
             if(isset($p->commentorigin)
+            && isset($p->commentnodeid)
             && !$external) {
                 $this->ajaxGetComments($p->commentorigin, $p->commentnodeid); // Broken in case of repost
+                $view->assign('commentsdisabled', false);
+            } else {
+                $viewd = $this->tpl();
+                $view->assign('commentsdisabled', $viewd->draw('_post_comments_error', true));
             }
 
             $view->assign('repost', false);
@@ -273,7 +276,7 @@ class Post extends \Movim\Widget\Base
 
     function getComments($post)
     {
-        $pd = new \Modl\PostnDAO();
+        $pd = new \Modl\PostnDAO;
         return $pd->getComments($post);
     }
 

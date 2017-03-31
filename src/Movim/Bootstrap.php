@@ -206,7 +206,10 @@ class Bootstrap
     function loadLanguage()
     {
         $user = new User;
-        $user->reload(true);
+
+        if(php_sapi_name() != 'cli') {
+            $user->reload(true);
+        }
 
         $cd = new \Modl\ConfigDAO;
         $config = $cd->get();
