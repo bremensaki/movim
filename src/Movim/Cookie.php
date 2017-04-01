@@ -30,7 +30,7 @@ class Cookie
         return time()+604800;
     }
 
-    private function setCookie($key)
+    private static function setCookie($key)
     {
         if(!headers_sent()) {
             header_remove('Set-Cookie');

@@ -11,6 +11,8 @@ class NewsNav extends \Movim\Widget\Base
         $nd = new \Modl\PostnDAO;
 
         $blogs = $nd->getLastBlogPublic(rand(0, 5), 4);
+        $blogs = is_array($blogs) ? $blogs : [];
+
         shuffle($blogs);
 
         $this->view->assign('blogs', $blogs);
@@ -20,6 +22,8 @@ class NewsNav extends \Movim\Widget\Base
             $this->get('s') : false;
 
         $posts = $nd->getLastPublished($origin, rand(0, 5), $count);
+        $posts = is_array($posts) ? $posts : [];
+
         shuffle($posts);
 
         $this->view->assign('posts', $posts);
