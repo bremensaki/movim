@@ -6,6 +6,10 @@ class MessageDAO extends SQL
 {
     function set(Message $message)
     {
+        if(empty($message->newid)) {
+            $message->newid = $message->id;
+        }
+
         $this->_sql = '
             update message
                 set id              = :thread,
@@ -13,6 +17,8 @@ class MessageDAO extends SQL
                     html            = :html,
                     published       = :published,
                     delivered       = :delivered,
+                    displayed       = :displayed,
+                    markable        = :markable,
                     edited          = :edited,
                     picture         = :picture,
                     quoted          = :quoted,
@@ -38,7 +44,9 @@ class MessageDAO extends SQL
                 'body'      => $message->body,
                 'html'      => $message->html,
                 'published' => $message->published,
-                'delivered' => $message->delivered
+                'delivered' => $message->delivered,
+                'displayed' => $message->displayed,
+                'markable'  => $message->markable
             ]
         );
 
@@ -61,6 +69,8 @@ class MessageDAO extends SQL
                 file,
                 published,
                 delivered,
+                displayed,
+                markable,
                 sticker,
                 picture,
                 quoted)
@@ -78,6 +88,8 @@ class MessageDAO extends SQL
                     :file,
                     :published,
                     :delivered,
+                    :displayed,
+                    :markable,
                     :sticker,
                     :picture,
                     :quoted
@@ -99,6 +111,8 @@ class MessageDAO extends SQL
                     'file'      => $message->file,
                     'published' => $message->published,
                     'delivered' => $message->delivered,
+                    'displayed' => $message->displayed,
+                    'markable'  => $message->markable,
                     'sticker'   => $message->sticker,
                     'picture'   => $message->picture,
                     'quoted'    => $message->quoted

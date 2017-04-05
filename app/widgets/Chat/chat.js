@@ -34,6 +34,8 @@ var Chat = {
     {
         if(jid) {
             document.querySelector('#chat_widget').dataset.jid = jid;
+        } else {
+            delete document.querySelector('#chat_widget').dataset.jid;
         }
 
         var textarea = document.querySelector('#chat_textarea');
@@ -198,6 +200,16 @@ var Chat = {
                 discussion.scrollTop += scrollDiff;
                 Chat.lastScroll = discussion.scrollHeight;
             }
+
+            var chat = document.querySelector('#chat_widget');
+            var lastMessage = chat.querySelector('ul li:not(.oppose):last-child div.bubble > div:last-child');
+
+            if(chat.dataset.jid && lastMessage) {
+                Chat_ajaxDisplayed(
+                    chat.dataset.jid,
+                    lastMessage.id
+                );
+            }
         }
     },
     appendMucMessage : function(message) {
@@ -327,8 +339,13 @@ var Chat = {
         if (data.edited) {
             span.appendChild(Chat.getEditedIcoHtml());
         }
-        if (data.delivered) {
-            span.appendChild(Chat.getDeliveredIcoHtml(data.delivered));
+
+        if (data.session == data.jidfrom) {
+            if (data.displayed) {
+                span.appendChild(Chat.getDisplayedIcoHtml(data.displayed));
+            } else if (data.delivered) {
+                span.appendChild(Chat.getDeliveredIcoHtml(data.delivered));
+            }
         }
 
         msg.appendChild(p);
@@ -448,6 +465,12 @@ var Chat = {
         var i = document.createElement("i");
         i.setAttribute("class", "zmdi zmdi-check");
         i.setAttribute("title", delivered);
+        return i;
+    },
+    getDisplayedIcoHtml: function(displayed) {
+        var i = document.createElement("i");
+        i.setAttribute("class", "zmdi zmdi-check-all");
+        i.setAttribute("title", displayed);
         return i;
     },
     toggleAction: function(l) {

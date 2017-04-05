@@ -30,6 +30,7 @@ class Chat extends \Movim\Widget\Base
         $this->registerEvent('carbons', 'onMessage');
         $this->registerEvent('message', 'onMessage');
         $this->registerEvent('receipt', 'onMessage');
+        $this->registerEvent('displayed', 'onMessage');
         $this->registerEvent('mamresult', 'onMessageHistory');
         $this->registerEvent('composing', 'onComposing');
         $this->registerEvent('paused', 'onPaused');
@@ -114,6 +115,7 @@ class Chat extends \Movim\Widget\Base
             $n = new Notification;
             $n->ajaxClear('chat|'.$from);
         }
+
         if(!preg_match('#^\?OTR#', $message->body)) {
             $this->rpc('Chat.appendMessagesWrapper', $this->prepareMessage($message, $from));
         }
@@ -281,6 +283,9 @@ class Chat extends \Movim\Widget\Base
         $m->jidto   = echapJid($to);
         $m->jidfrom = $this->user->getLogin();
 
+        // TODO: make this boolean configurable
+        $m->markable = true;
+
         if($replace != false) {
             $m->newid     = Uuid::uuid4();
             $m->id        = $replace->id;
@@ -288,7 +293,7 @@ class Chat extends \Movim\Widget\Base
             $m->published = $replace->published;
             $m->delivered = $replace->delivered;
         } else {
-            $m->id      = Uuid::uuid4();
+            $m->id        = Uuid::uuid4();
             $m->published = gmdate('Y-m-d H:i:s');
         }
 
@@ -336,6 +341,7 @@ class Chat extends \Movim\Widget\Base
         /* Is it really clean ? */
         if(!$p->getMuc()) {
             if(!preg_match('#^\?OTR#', $m->body)) {
+
                 $md = new \Modl\MessageDAO;
                 $md->set($m);
             }
@@ -492,6 +498,26 @@ class Chat extends \Movim\Widget\Base
         $p->setTo($room)
           ->setSubject($form->subject->value)
           ->request();
+    }
+
+    /**
+     * @brief Set last displayed message
+     */
+    function ajaxDisplayed($jid, $id)
+    {
+        if(!$this->validateJid($jid)) return;
+
+        $md = new \Modl\MessageDAO;
+        $m = $md->getId($id);
+
+        if($m
+        && $m->markable == true
+        && $m->displayed == null) {
+            $m->displayed = gmdate('Y-m-d H:i:s');
+            $md->set($m);
+
+            \Moxl\Stanza\Message::displayed($jid, $id);
+        }
     }
 
     function prepareChat($jid, $muc = false)
@@ -663,6 +689,10 @@ class Chat extends \Movim\Widget\Base
 
         if ($message->delivered) {
             $message->delivered = prepareDate(strtotime($message->delivered), true);
+        }
+
+        if ($message->displayed) {
+            $message->displayed = prepareDate(strtotime($message->displayed), true);
         }
 
         $date = prepareDate(strtotime($message->published), false, false, true);
