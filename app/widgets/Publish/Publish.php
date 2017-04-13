@@ -24,9 +24,9 @@ class Publish extends \Movim\Widget\Base
     {
         Notification::append(false, $this->__('post.published'));
 
-        list($to, $node, $id, $repost) = array_values($packet->content);
+        list($to, $node, $id, $repost, $comments) = array_values($packet->content);
 
-        if(!$repost) {
+        if(!$repost && $comments) {
             $this->ajaxCreateComments($to, $id);
         }
 
@@ -220,8 +220,6 @@ class Publish extends \Movim\Widget\Base
               ->setNode($form->node->value);
               //->setLocation($geo)
 
-            $p->enableComments();
-
             $content = $content_xhtml = '';
 
             if(Validator::stringType()->notEmpty()->validate(trim($form->content->value))) {
@@ -261,12 +259,13 @@ class Publish extends \Movim\Widget\Base
                     $embed = Embed\Embed::create($form->embed->value);
                     $p->setLink($form->embed->value);
 
-                    if(in_array($embed->type, ['photo', 'rich'])) {
+                    if($embed->type == 'photo') {
                         $p->setImage($embed->images[0]['url'], $embed->title, $embed->images[0]['mime']);
-                    }
-
-                    if($embed->type !== 'photo') {
-                        $content_xhtml .= $this->prepareEmbed($embed);
+                    } else {
+                        if(isset($embed->images)) {
+                            $p->setImage($embed->images[0]['url'], $embed->title, $embed->images[0]['mime']);
+                        }
+                        $p->setLink($form->embed->value, $embed->title, 'text/html', $embed->description, $embed->providerIcon);
                     }
                 } catch(Exception $e) {
                     error_log($e->getMessage());
@@ -278,6 +277,7 @@ class Publish extends \Movim\Widget\Base
             }
 
             if($content != '') {
+                $p->enableComments();
                 $p->setContent(htmlspecialchars($content));
             }
 
@@ -316,14 +316,7 @@ class Publish extends \Movim\Widget\Base
 
             $this->rpc('MovimTpl.fill', '#preview', '');
             $this->rpc('MovimTpl.fill', '#gallery', '');
-
-            if(in_array($embed->type, ['photo', 'rich'])) {
-                $this->rpc('MovimTpl.fill', '#gallery', $this->prepareGallery($embed));
-            }
-
-            if($embed->type !== 'photo') {
-                $this->rpc('MovimTpl.fill', '#preview', $html);
-            }
+            $this->rpc('MovimTpl.fill', '#preview', $html);
         } catch(Exception $e) {
             error_log($e->getMessage());
         }
@@ -334,13 +327,6 @@ class Publish extends \Movim\Widget\Base
         $view = $this->tpl();
         $view->assign('embed', $embed);
         return $view->draw('_publish_embed', true);
-    }
-
-    function prepareGallery($embed)
-    {
-        $view = $this->tpl();
-        $view->assign('embed', $embed);
-        return $view->draw('_publish_gallery', true);
     }
 
     private function validateServerNode($server, $node)

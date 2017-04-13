@@ -623,6 +623,27 @@ class PostnDAO extends SQL
         return $this->run('ContactPostn');
     }
 
+    function countReplies($reply)
+    {
+        $this->_sql = '
+            select count(*) from postn
+            where reply = :reply
+                ';
+
+        $this->prepare(
+            'Postn',
+            [
+                'reply' => $reply
+            ]
+        );
+
+        $arr = $this->run(null, 'array');
+        if(is_array($arr) && isset($arr[0])) {
+            $arr = array_values($arr[0]);
+            return (int)$arr[0];
+        }
+    }
+
     function countComments($origin, $id)
     {
         $this->_sql = '
@@ -850,7 +871,6 @@ class PostnDAO extends SQL
                             node = \'urn:xmpp:microblog:0\'
                             and postn.origin not in (select jid from rosterlink where session = :origin)
                             and postn.open = true
-                            and content != \'\'
                     ) p
                     order by published desc
                     ';

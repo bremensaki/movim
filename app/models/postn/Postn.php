@@ -360,7 +360,10 @@ class Postn extends Model
                             [
                                 'href' => $l['href'],
                                 'url'  => parse_url($l['href']),
-                                'rel'  => 'related'
+                                'title'=> $l['title'],
+                                'rel'  => 'related',
+                                'description' => $l['description'],
+                                'logo' => $l['logo']
                             ]
                         );
                         break;
@@ -393,6 +396,16 @@ class Postn extends Model
     public function getAttachment()
     {
         $attachments = $this->getAttachments();
+
+        if(array_key_exists('links', $attachments)) {
+            foreach($attachments['links'] as $attachment) {
+                if(in_array($attachment['rel'], ['enclosure', 'related'])) {
+                    return $attachment;
+                }
+            }
+        }
+
+        unset($attachments['links']);
 
         foreach($attachments as $key => $group) {
             foreach($group as $attachment) {
@@ -479,6 +492,11 @@ class Postn extends Model
         return (strlen($this->contentcleaned) < 700);
     }
 
+    public function isBrief()
+    {
+        return ($this->content == '');
+    }
+
     public function isNSFW()
     {
         return (current(explode('.', $this->origin)) == 'nsfw');
@@ -501,7 +519,11 @@ class Postn extends Model
 
     public function getSummary()
     {
-        return truncate(stripTags(html_entity_decode($this->contentcleaned)), 140);
+        if($this->isBrief()) {
+            return truncate(html_entity_decode($this->title), 140);
+        } else {
+            return truncate(stripTags(html_entity_decode($this->contentcleaned)), 140);
+        }
     }
 
     public function getReply()
@@ -529,6 +551,16 @@ class Postn extends Model
         $pd = new \Modl\PostnDAO;
         return $pd->countLikes($this->commentorigin, $this->commentnodeid);
     }
+
+    /*public function countReplies()
+    {
+        $pd = new \Modl\PostnDAO;
+        return $pd->countReplies([
+            'origin'    => $this->origin,
+            'node'      => $this->node,
+            'nodeid'    => $this->nodeid
+        ]);
+    }*/
 
     public function getTags()
     {

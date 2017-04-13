@@ -1,14 +1,18 @@
-<li>
+<li class="block">
+    <span class="control active icon gray" onclick="PublishBrief.clearEmbed()">
+        <i class="zmdi zmdi-close"></i>
+    </span>
     <span class="primary icon bubble gray">
-        {if="$embed->type == 'photo'"}
-            <i class="zmdi zmdi-image"></i>
+
+    {if="$embed->type == 'photo'"}
+        <i class="zmdi zmdi-image"></i>
+    {else}
+        {if="$embed->providerIcon"}
+            <img src="{$embed->providerIcon}"/>
         {else}
-            {if="$embed->providerIcon"}
-                <img src="{$embed->providerIcon}"/>
-            {else}
-                <i class="zmdi zmdi-link"></i>
-            {/if}
+            <i class="zmdi zmdi-link"></i>
         {/if}
+    {/if}
     </span>
     {if="isset($embed->images)"}
         <span class="control icon"
@@ -20,9 +24,7 @@
         <p class="line">{$embed->images[0]['width']} x {$embed->images[0]['height']}</p>
         <p class="line">{$embed->images[0]['size']|sizeToCleanSize}</p>
     {else}
-        <p class="line normal">{$embed->title}</p>
-        {if="$embed->description"}
-            <p class="line">{$embed->description}</p>
-        {/if}
+        <p class="line">{$embed->title}</p>
+        <p class="line">{$embed->description}</p>
     {/if}
 </li>
