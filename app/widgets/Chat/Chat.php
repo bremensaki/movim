@@ -19,7 +19,7 @@ use Movim\Session;
 
 class Chat extends \Movim\Widget\Base
 {
-    private $_pagination = 30;
+    private $_pagination = 50;
     private $_wrapper = [];
 
     function load()
@@ -27,9 +27,10 @@ class Chat extends \Movim\Widget\Base
         $this->addjs('chat.js');
         //$this->addjs('chat_otr.js');
         $this->addcss('chat.css');
+        $this->registerEvent('invitation', 'onMessage');
         $this->registerEvent('carbons', 'onMessage');
         $this->registerEvent('message', 'onMessage');
-        $this->registerEvent('receipt', 'onMessage');
+        $this->registerEvent('receiptack', 'onMessage');
         $this->registerEvent('displayed', 'onMessage');
         $this->registerEvent('mamresult', 'onMessageHistory');
         $this->registerEvent('composing', 'onComposing');
@@ -78,11 +79,15 @@ class Chat extends \Movim\Widget\Base
         && $message->jidfrom != $message->jidto) {
             $from = $message->jidfrom;
 
+            $notify = true;
             $contact = $cd->getRosterItem($from);
-            if($contact == null)
+            if($contact == null) {
+                $notify = false;
                 $contact = $cd->get($from);
+            }
 
             if($contact != null
+            && $notify
             && !preg_match('#^\?OTR#', $message->body)
             && $message->type != 'groupchat') {
                 $avatar = $contact->getPhoto('s');
@@ -716,6 +721,12 @@ class Chat extends \Movim\Widget\Base
             $counter = count($this->_wrapper[$date]);
 
             $this->_wrapper[$date][$counter.$msgkey] = $message;
+        }
+
+        if ($message->type == 'invitation') {
+            $view = $this->tpl();
+            $view->assign('message', $message);
+            $message->body = $view->draw('_chat_invitation', true);
         }
 
         return $this->_wrapper;

@@ -10,8 +10,28 @@ class PublishBrief extends \Movim\Widget\Base
 {
     function load()
     {
+        $this->registerEvent('pubsub_postpublish_handle', 'onPublish');
+
         $this->addjs('publishbrief.js');
         $this->addcss('publishbrief.css');
+    }
+
+    function onPublish($packet)
+    {
+        Notification::append(false, $this->__('post.published'));
+
+        list($to, $node, $id, $repost, $comments) = array_values($packet->content);
+
+        if(!$repost && $comments) {
+            $p = new Publish;
+            $p->ajaxCreateComments($to, $id);
+        }
+    }
+
+    function ajaxGet()
+    {
+        $this->rpc('MovimTpl.fill', '#publishbrief', $this->preparePublishBrief());
+        $this->rpc('PublishBrief.checkEmbed');
     }
 
     function ajaxPublish($form)
@@ -23,7 +43,8 @@ class PublishBrief extends \Movim\Widget\Base
             $p->setFrom($this->user->getLogin())
               ->setTo($this->user->getLogin())
               ->setTitle(htmlspecialchars($form->title->value))
-              ->setNode('urn:xmpp:microblog:0');
+              ->setNode('urn:xmpp:microblog:0')
+              ->enableComments();
 
             if($form->open->value === true) {
                 $p->isOpen();
@@ -61,15 +82,13 @@ class PublishBrief extends \Movim\Widget\Base
             return;
         }
 
+        $this->rpc('Dialog_ajaxClear');
+
         try {
             $embed = Embed\Embed::create($url);
             $html = $this->prepareEmbed($embed);
 
-            $this->rpc('Dialog_ajaxClear');
-
-            //if(in_array($embed->type, ['photo', 'rich'])) {
-                $this->rpc('MovimTpl.fill', '#publishbrief p.embed', $this->prepareEmbed($embed));
-            //}
+            $this->rpc('MovimTpl.fill', '#publishbrief p.embed', $this->prepareEmbed($embed));
         } catch(Exception $e) {
             error_log($e->getMessage());
         }
@@ -93,6 +112,16 @@ class PublishBrief extends \Movim\Widget\Base
         return $view->draw('_publishbrief_embed', true);
     }
 
+    function preparePublishBrief()
+    {
+        $view = $this->tpl();
+
+        $session = Session::start();
+        $view->assign('url', $session->get('share_url'));
+        $view->assign('embed', $this->prepareEmbedDefault());
+        return $view->draw('_publishbrief', true);
+    }
+
     function ajaxLink()
     {
         $view = $this->tpl();
@@ -110,6 +139,5 @@ class PublishBrief extends \Movim\Widget\Base
 
     function display()
     {
-        $this->view->assign('embed', $this->prepareEmbedDefault());
     }
 }

@@ -176,9 +176,9 @@ class MessageDAO extends SQL
 
         $this->prepare(
             'Message',
-            array(
+            [
                 'session' => $this->_user
-            )
+            ]
         );
 
         return $this->run('Message');
@@ -192,7 +192,8 @@ class MessageDAO extends SQL
                 and (jidfrom = :jidfrom
                 or jidto = :jidto)
                 and (type = \'chat\'
-                or type = \'headline\')
+                or type = \'headline\'
+                or type = \'invitation\')
             order by published desc';
 
         if($limitr)
