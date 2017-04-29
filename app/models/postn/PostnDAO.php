@@ -567,6 +567,24 @@ class PostnDAO extends SQL
         return $this->run('ContactPostn');
     }
 
+    function getAllPublishedPublic($limitf = false, $limitr = false)
+    {
+        $this->_sql = '
+            select *, postn.aid from postn
+            left outer join contact on postn.aid = contact.jid
+            where postn.open = true
+            and postn.origin not like \'nsfw%\'
+            and aid is not null
+            order by postn.published desc';
+
+        if($limitr !== false)
+            $this->_sql = $this->_sql.' limit '.(int)$limitr.' offset '.(int)$limitf;
+
+        $this->prepare();
+
+        return $this->run('ContactPostn');
+    }
+
     function getPublic($origin, $node, $limitf = false, $limitr = false)
     {
         $this->_sql = '
@@ -852,9 +870,7 @@ class PostnDAO extends SQL
                     left outer join contact on postn.aid = contact.jid
                     where
                         node = \'urn:xmpp:microblog:0\'
-                        and postn.origin not in (select jid from rosterlink where session = :origin)
                         and postn.open = true
-                        and content != \'\'
                     group by origin
                     order by published desc
                     ';
@@ -869,8 +885,8 @@ class PostnDAO extends SQL
                         left outer join contact on postn.aid = contact.jid
                         where
                             node = \'urn:xmpp:microblog:0\'
-                            and postn.origin not in (select jid from rosterlink where session = :origin)
                             and postn.open = true
+                            order by origin, published desc
                     ) p
                     order by published desc
                     ';

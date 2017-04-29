@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bd14e3188a5e3b5246e3d36a7d5a73b",
+    "content-hash": "bd5c351f771b796c859e5bdf0f0fccf6",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -12,21 +12,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ratchetphp/Ratchet.git",
-                "reference": "b00da833ced5eef568280fe3d2fcce363cb33f96"
+                "reference": "4ac1f914f3150c9b35d2f5bf794363561ac3bde9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ratchetphp/Ratchet/zipball/b00da833ced5eef568280fe3d2fcce363cb33f96",
-                "reference": "b00da833ced5eef568280fe3d2fcce363cb33f96",
+                "url": "https://api.github.com/repos/ratchetphp/Ratchet/zipball/4ac1f914f3150c9b35d2f5bf794363561ac3bde9",
+                "reference": "4ac1f914f3150c9b35d2f5bf794363561ac3bde9",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.0",
                 "php": ">=5.4.2",
                 "ratchet/rfc6455": "^0.2",
-                "react/socket": "^0.5",
+                "react/socket": "^0.7 || ^0.6 || ^0.5",
                 "symfony/http-foundation": "^2.2|^3.0",
                 "symfony/routing": "^2.2|^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
             },
             "suggest": {
                 "ext-pecl_http": "^2.0"
@@ -57,7 +60,7 @@
                 "sockets",
                 "websocket"
             ],
-            "time": "2017-03-10 14:22:43"
+            "time": "2017-04-19 21:05:46"
         },
         {
             "name": "clue/buzz-react",
@@ -236,6 +239,65 @@
                 "tls"
             ],
             "time": "2017-03-06T11:59:08+00:00"
+        },
+        {
+            "name": "defuse/php-encryption",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/defuse/php-encryption.git",
+                "reference": "2c6fea3d9a4eaaa8cef86b2a89f3660818117b33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/2c6fea3d9a4eaaa8cef86b2a89f3660818117b33",
+                "reference": "2c6fea3d9a4eaaa8cef86b2a89f3660818117b33",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "paragonie/random_compat": "~2.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "nikic/php-parser": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Hornby",
+                    "email": "taylor@defuse.ca",
+                    "homepage": "https://defuse.ca/"
+                },
+                {
+                    "name": "Scott Arciszewski",
+                    "email": "info@paragonie.com",
+                    "homepage": "https://paragonie.com"
+                }
+            ],
+            "description": "Secure PHP Encryption Library",
+            "keywords": [
+                "aes",
+                "authenticated encryption",
+                "cipher",
+                "crypto",
+                "cryptography",
+                "encrypt",
+                "encryption",
+                "openssl",
+                "security",
+                "symmetric key cryptography"
+            ],
+            "time": "2016-10-10T15:20:26+00:00"
         },
         {
             "name": "dflydev/fig-cookies",
@@ -710,12 +772,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/movim/moxl.git",
-                "reference": "a903ff9b7d4b134c31572533c88e587038586540"
+                "reference": "34c904e096a42fbd56b49731ae8d66bdfdcc793e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/movim/moxl/zipball/a903ff9b7d4b134c31572533c88e587038586540",
-                "reference": "a903ff9b7d4b134c31572533c88e587038586540",
+                "url": "https://api.github.com/repos/movim/moxl/zipball/34c904e096a42fbd56b49731ae8d66bdfdcc793e",
+                "reference": "34c904e096a42fbd56b49731ae8d66bdfdcc793e",
                 "shasum": ""
             },
             "require": {
@@ -750,7 +812,7 @@
                 "php",
                 "xmpp"
             ],
-            "time": "2017-04-15 20:44:34"
+            "time": "2017-04-25 21:58:57"
         },
         {
             "name": "movim/sasl2",
@@ -1241,16 +1303,16 @@
         },
         {
             "name": "react/dns",
-            "version": "v0.4.7",
+            "version": "v0.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/dns.git",
-                "reference": "e09ca286e3e18fea93317315dd7fc59d7963af8a"
+                "reference": "86d3da64ebfbecddf6b940c6e69daa67c0f21a05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/dns/zipball/e09ca286e3e18fea93317315dd7fc59d7963af8a",
-                "reference": "e09ca286e3e18fea93317315dd7fc59d7963af8a",
+                "url": "https://api.github.com/repos/reactphp/dns/zipball/86d3da64ebfbecddf6b940c6e69daa67c0f21a05",
+                "reference": "86d3da64ebfbecddf6b940c6e69daa67c0f21a05",
                 "shasum": ""
             },
             "require": {
@@ -1279,7 +1341,7 @@
                 "dns",
                 "dns-resolver"
             ],
-            "time": "2017-03-31T16:21:48+00:00"
+            "time": "2017-04-16T11:20:57+00:00"
         },
         {
             "name": "react/event-loop",
@@ -1504,29 +1566,31 @@
         },
         {
             "name": "react/socket",
-            "version": "v0.5.1",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "c0e337e375d5fb064da4ba62a91a29815e7502f8"
+                "reference": "05b2fa7df1f87ba1d7d3c703c77b1eed02b171f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/c0e337e375d5fb064da4ba62a91a29815e7502f8",
-                "reference": "c0e337e375d5fb064da4ba62a91a29815e7502f8",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/05b2fa7df1f87ba1d7d3c703c77b1eed02b171f2",
+                "reference": "05b2fa7df1f87ba1d7d3c703c77b1eed02b171f2",
                 "shasum": ""
             },
             "require": {
                 "evenement/evenement": "~2.0|~1.0",
                 "php": ">=5.3.0",
+                "react/dns": "0.4.*|0.3.*",
                 "react/event-loop": "0.4.*|0.3.*",
-                "react/promise": "^2.0 || ^1.1",
+                "react/promise": "^2.1 || ^1.2",
+                "react/promise-timer": "~1.0",
                 "react/stream": "^0.6 || ^0.5 || ^0.4.5"
             },
             "require-dev": {
                 "clue/block-react": "^1.1",
                 "phpunit/phpunit": "~4.8",
-                "react/socket-client": "^0.5.1"
+                "react/stream": "^0.6"
             },
             "type": "library",
             "autoload": {
@@ -1538,11 +1602,15 @@
             "license": [
                 "MIT"
             ],
-            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server for React PHP",
+            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server and client connections for ReactPHP",
             "keywords": [
-                "Socket"
+                "Connection",
+                "Socket",
+                "async",
+                "reactphp",
+                "stream"
             ],
-            "time": "2017-03-09T12:13:07+00:00"
+            "time": "2017-04-24T09:37:03+00:00"
         },
         {
             "name": "react/socket-client",

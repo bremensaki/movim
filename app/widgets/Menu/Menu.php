@@ -76,7 +76,8 @@ class Menu extends \Movim\Widget\Base
                         $title,
                         $contact->getPhoto('s'),
                         2,
-                        $this->route('post', [$post->origin, $post->node, $post->nodeid])
+                        $this->route('post', [$post->origin, $post->node, $post->nodeid]),
+                        $this->route('contact', $post->origin)
                     );
                 }
             } else {
@@ -88,7 +89,8 @@ class Menu extends \Movim\Widget\Base
                     $post->node,
                     $logo,
                     2,
-                    $this->route('post', [$post->origin, $post->node, $post->nodeid])
+                    $this->route('post', [$post->origin, $post->node, $post->nodeid]),
+                    $this->route('community', [$post->origin, $post->node])
                 );
             }
 
@@ -200,7 +202,7 @@ class Menu extends \Movim\Widget\Base
     function preparePost($p)
     {
         $pw = new \Post;
-        return $pw->preparePost($p, true, true, true);
+        return $pw->preparePost($p, true, false, true);
     }
 
     function display()
