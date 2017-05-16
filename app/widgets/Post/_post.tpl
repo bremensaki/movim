@@ -103,7 +103,7 @@
             {if="!$post->isBrief()"}
                 <p {if="$post->title != null"}title="{$post->title|strip_tags}"{/if}>
                     {if="$post->title != null"}
-                        {$post->title}
+                        {$post->title|addHashtagsLinks}
                     {else}
                         {$c->__('post.default_title')}
                     {/if}
@@ -138,7 +138,7 @@
             </p>
             {if="$post->isBrief()"}
                 <p class="normal">
-                    {$post->title|addUrls|nl2br}
+                    {$post->title|addUrls|addHashtagsLinks|nl2br}
                 </p>
             {/if}
         </li>
@@ -253,7 +253,7 @@
                         {/if}
                     {/loop}
                 {/if}
-                {$post->contentcleaned}
+                {$post->contentcleaned|addHashtagsLinks}
             </content>
         </section>
         <footer>
@@ -337,20 +337,6 @@
                             <a title="{$post->getPublicUrl()}" target="_blank" href="{$post->getPublicUrl()}">
                                 {$c->__('post.public_url')}
                             </a>
-                        </p>
-                    </li>
-                </ul>
-            {/if}
-            {$tags = $post->getTags()}
-            {if="isset($tags)"}
-                <ul class="list thick">
-                    <li>
-                        <span class="primary icon zmdi zmdi-tag gray"></span>
-                        <p></p>
-                        <p class="normal">
-                            {loop="$tags"}
-                                <a target="_blank" href="{$c->route('tag', [$value])}">#{$value}</a>
-                            {/loop}
                         </p>
                     </li>
                 </ul>

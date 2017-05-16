@@ -2,6 +2,7 @@
 <?php $this->widget('Search');?>
 <?php $this->widget('VisioLink');?>
 <?php $this->widget('PostActions');?>
+<?php $this->widget('ContactActions');?>
 
 <nav class="color dark">
     <?php $this->widget('Presence');?>
@@ -12,6 +13,7 @@
     <section style="background-color: #EEE;">
         <?php if(empty($_GET['s'])) { ?>
             <aside>
+                <?php $this->widget('ContactDisco');?>
             </aside>
             <div>
                 <?php $this->widget('Invitations');?>

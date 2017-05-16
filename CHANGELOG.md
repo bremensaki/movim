@@ -1,8 +1,12 @@
 Movim Changelog
 ================
 
-v0.11.1
+v0.11.1 (trunk)
 ---------------------------
+ * Add autojoin support for chatrooms
+ * New Contact page
+ * Improve Posts tags detection and navigation
+ * New system to recover the session quickly
  * New PublishBrief widget
  * Add support for MUC invitations
  * Don't notify if the user is not in the Roster
@@ -12,6 +16,7 @@ v0.11.1
  * Update the translations
  * New design for the post Material Design cards
  * New UI for adding a contact through a Gateway (by singpolyma)
+ * Allow users to clear their information on the instance and leave it properly
 
 v0.11
 ---------------------------

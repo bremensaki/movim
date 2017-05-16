@@ -46,6 +46,8 @@ class Postn extends Model
     public $logo;
     private $openlink;
 
+    public $nsfw = false;
+
     public $_struct = [
         'origin'        => ['type' => 'string','size' => 64,'key' => true],
         'node'          => ['type' => 'string','size' => 96,'key' => true],
@@ -68,7 +70,8 @@ class Postn extends Model
         'lon'           => ['type' => 'string','size' => 32],
         'links'         => ['type' => 'serialized'],
         'picture'       => ['type' => 'text'],
-        'hash'          => ['type' => 'string','size' => 128,'mandatory' => true]
+        'hash'          => ['type' => 'string','size' => 128,'mandatory' => true],
+        'nsfw'          => ['type' => 'bool']
     ];
 
     public function __construct()
@@ -207,15 +210,21 @@ class Postn extends Model
                 $tag->nodeid = $this->nodeid;
                 $tag->tag    = strtolower((string)$entry->entry->category->attributes()->term);
                 $td->set($tag);
+
+                if($tag->tag == 'nsfw') $this->nsfw = true;
             } else {
                 foreach($entry->entry->category as $cat) {
                     $tag = new \Modl\Tag;
                     $tag->nodeid = $this->nodeid;
                     $tag->tag    = strtolower((string)$cat->attributes()->term);
                     $td->set($tag);
+
+                    if($tag->tag == 'nsfw') $this->nsfw = true;
                 }
             }
         }
+
+        if(current(explode('.', $this->origin)) == 'nsfw') $this->nsfw = true;
 
         if(!isset($this->commentorigin)) {
             $this->commentorigin = $this->origin;
@@ -499,7 +508,7 @@ class Postn extends Model
 
     public function isNSFW()
     {
-        return (current(explode('.', $this->origin)) == 'nsfw');
+        return $this->nsfw;
     }
 
     public function isReply()

@@ -65,6 +65,11 @@ class Presence extends \Movim\Widget\Base
 
     function ajaxLogout()
     {
+        $this->rpc('Presence.clearQuick');
+
+        $ed = new \Modl\EncryptedPassDAO;
+        $ed->delete();
+
         $session = Session::start();
         $p = new Unavailable;
         $p->setType('terminate')

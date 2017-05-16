@@ -1,4 +1,4 @@
-<ul class="list thick">
+<ul class="list middle">
     <li>
         {if="$contactr != null"}
             <span class="control icon active gray" onclick="ContactHeader_ajaxEditContact('{$contact->jid|echapJS}')">
@@ -9,11 +9,14 @@
             </span>
         {else}
             {if="!$contact->isMe()"}
-            <!--<span class="control icon active gray" onclick="Roster_ajaxDisplaySearch('{$contact->jid}')">
+            <span class="control icon active gray" onclick="ContactActions_ajaxAddAsk('{$contact->jid}')">
                 <i class="zmdi zmdi-account-add"></i>
-            </span>-->
+            </span>
             {/if}
         {/if}
+	        <span class="control active icon gray on_mobile" onclick="ContactActions_ajaxGetDrawer('{$contact->jid}')">
+            <i class="zmdi zmdi-more"></i>
+        </span>
         <span class="primary icon active gray" onclick="history.back()">
             <i class="zmdi zmdi-arrow-back"></i>
         </span>

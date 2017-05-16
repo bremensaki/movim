@@ -280,6 +280,7 @@ class Bootstrap
         \Modl\Utils::loadModel('RosterLink');
         \Modl\Utils::loadModel('Cache');
         \Modl\Utils::loadModel('Postn');
+        \Modl\Utils::loadModel('EncryptedPass');
         \Modl\Utils::loadModel('Subscription');
         \Modl\Utils::loadModel('SharedSubscription');
         \Modl\Utils::loadModel('Caps');
@@ -336,10 +337,10 @@ class Bootstrap
         return ['Account','AccountNext','Ack','AdHoc','Avatar','Bookmark',
         'Communities','CommunityAffiliations','CommunityConfig','CommunityData',
         'CommunityHeader','CommunityPosts','CommunitiesServer','Chat','Chats',
-        'Config','Contact','ContactHeader','Dialog','Drawer','Header','Init','Login',
-        'LoginAnonymous','Menu','Notifs','Invitations','Post','PostActions',
-        'Presence','Publish','PublishBrief','Rooms','Roster','Stickers','Upload',
-        'Vcard4','Visio','VisioLink'];
+        'Config','ContactData','ContactHeader','Dialog','Drawer',
+        'Header','Init','Login','LoginAnonymous','Menu','Notifs','Invitations',
+        'Post','PostActions','Presence','Publish','PublishBrief','Rooms',
+        'Roster','Stickers','Upload','Vcard4','Visio','VisioLink'];
     }
 
     /**
