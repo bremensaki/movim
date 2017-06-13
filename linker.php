@@ -44,7 +44,7 @@ function handleSSLErrors($errno, $errstr) {
 
 // Temporary linker killer
 $loop->addPeriodicTimer(5, function() use(&$conn, &$timestamp) {
-    if($timestamp < time() - 3600*6) {
+    if($timestamp < time() - 3600*4) {
         $conn->close();
     }
 });
@@ -222,6 +222,9 @@ $xmpp_behaviour = function (React\Stream\Stream $stream) use (&$conn, $loop, &$s
                 restore_error_handler();
 
                 if($out !== true) {
+                    $evt = new Movim\Widget\Event;
+                    $evt->run('ssl_error');
+
                     $loop->stop();
                     return;
                 }

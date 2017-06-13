@@ -1,7 +1,7 @@
 Movim Changelog
 ================
 
-v0.11.1 (trunk)
+v0.12 (trunk)
 ---------------------------
  * Add autojoin support for chatrooms
  * New Contact page
@@ -17,6 +17,9 @@ v0.11.1 (trunk)
  * New design for the post Material Design cards
  * New UI for adding a contact through a Gateway (by singpolyma)
  * Allow users to clear their information on the instance and leave it properly
+ * Add NSFW filter configuration
+ * Save Draft of publications in Publish and PublishBrief
+ * Add touch support to open the menu on mobile devices
 
 v0.11
 ---------------------------

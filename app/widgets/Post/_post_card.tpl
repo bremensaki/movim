@@ -72,54 +72,6 @@
         <li class="active">
             <p>
                 <section {if="!$post->isShort()"}class="limited"{/if}>
-                    {if="$post->isReply()"}
-                        {$reply = $post->getReply()}
-                        {if="$reply"}
-                            <ul class="list thick card">
-                                <li class="block">
-                                    {if="$reply->picture"}
-                                        <span
-                                            class="primary icon thumb color white"
-                                            style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%), url({$reply->picture});">
-                                            <i class="zmdi zmdi-mail-reply"></i>
-                                        </span>
-                                    {elseif="$reply->isMicroblog()"}
-                                        {$url = $reply->getContact()->getPhoto('l')}
-                                        {if="$url"}
-                                            <span class="primary icon thumb color white" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%), url({$url});">
-                                                <i class="zmdi zmdi-mail-reply"></i>
-                                            </span>
-                                        {else}
-                                            <span class="primary icon thumb color {$reply->getContact()->jid|stringToColor}">
-                                                <i class="zmdi zmdi-mail-reply"></i>
-                                            </span>
-                                        {/if}
-                                    {/if}
-                                    <p class="line">{$reply->title}</p>
-                                    <p>{$reply->contentcleaned|html_entity_decode|stripTags}</p>
-                                    <p>
-                                        {if="$reply->isMicroblog()"}
-                                            <i class="zmdi zmdi-account"></i> {$reply->getContact()->getTrueName()}
-                                        {else}
-                                            <i class="zmdi zmdi-pages"></i> {$reply->node}
-                                        {/if}
-                                        <span class="info">
-                                            {$reply->published|strtotime|prepareDate:true,true}
-                                        </span>
-                                    </p>
-                                </li>
-                            </ul>
-                        {else}
-                            <ul class="list thick card">
-                                <li class="block">
-                                    <span class="primary icon gray">
-                                        <i class="zmdi zmdi-info-outline"></i>
-                                    </span>
-                                    <p class="line normal">{$c->__('post.original_deleted')}</p>
-                                </li>
-                            </ul>
-                        {/if}
-                    {/if}
                     <content>
                         {if="$post->getYoutube()"}
                             <div class="video_embed">
@@ -159,6 +111,56 @@
             </section>
         {/if}
 
+        {if="$post->isReply()"}
+            <hr />
+            {$reply = $post->getReply()}
+            {if="$reply"}
+                <ul class="list thick active faded">
+                    <li>
+                        {if="$reply->picture"}
+                            <span
+                                class="primary icon bubble color white"
+                                style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%), url({$reply->picture});">
+                                <i class="zmdi zmdi-mail-reply"></i>
+                            </span>
+                        {elseif="$reply->isMicroblog()"}
+                            {$url = $reply->getContact()->getPhoto('l')}
+                            {if="$url"}
+                                <span class="primary icon bubble color white" style="background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%), url({$url});">
+                                    <i class="zmdi zmdi-mail-reply"></i>
+                                </span>
+                            {else}
+                                <span class="primary icon bubble color {$reply->getContact()->jid|stringToColor}">
+                                    <i class="zmdi zmdi-mail-reply"></i>
+                                </span>
+                            {/if}
+                        {/if}
+                        <p class="normal line">{$reply->title}</p>
+                        <p>{$reply->contentcleaned|html_entity_decode|stripTags}</p>
+                        <p>
+                            {if="$reply->isMicroblog()"}
+                                <i class="zmdi zmdi-account"></i> {$reply->getContact()->getTrueName()}
+                            {else}
+                                <i class="zmdi zmdi-pages"></i> {$reply->node}
+                            {/if}
+                            <span class="info">
+                                {$reply->published|strtotime|prepareDate:true,true}
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+            {else}
+                <ul class="list thick active faded">
+                    <li>
+                        <span class="primary icon gray">
+                            <i class="zmdi zmdi-mail-reply"></i>
+                        </span>
+                        <p class="line normal">{$c->__('post.original_deleted')}</p>
+                    </li>
+                </ul>
+            {/if}
+        {/if}
+
         {if="isset($attachments.links)"}
             {loop="$attachments.links"}
                 {if="!empty($value.title)"}
@@ -177,7 +179,7 @@
                             </a>
                         </p>
                         {if="isset($value.description)"}
-                            <p>{$value.description}</p>
+                            <p title="{$value.description}">{$value.description}</p>
                         {else}
                             <p>{$value.url.host}</p>
                         {/if}
@@ -201,11 +203,13 @@
                 {/if}>
                     <i class="zmdi zmdi-plus"></i> {$c->__('post.more')}
                 </a>
+                {if="$post->hasCommentsNode()"}
                 <a class="button icon flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
                     {$post->countLikes()} <i class="zmdi zmdi-favorite-outline"></i>
                 </a><a class="button icon flat gray" href="{$c->route('post', [$post->origin, $post->node, $post->nodeid])}">
                     {$post->countComments()} <i class="zmdi zmdi-comment-outline"></i>
                 </a>
+                {/if}
                 {if="!$public"}
                 <a class="button icon flat gray" href="{$c->route('publish', [$post->origin, $post->node, $post->nodeid, 'share'])}">
                     <i class="zmdi zmdi-mail-reply"></i>

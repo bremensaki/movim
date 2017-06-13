@@ -15,13 +15,12 @@ class Config extends \Movim\Widget\Base
         $view = $this->tpl();
 
         /* We load the user configuration */
-        $this->user->reload(true);
-
+        $sd = new \Modl\SettingDAO;
         $l = Movim\i18n\Locale::start();
 
         $view->assign('languages', $l->getList());
         $view->assign('me',        $this->user->getLogin());
-        $view->assign('conf',      $this->user->getConfig());
+        $view->assign('conf',      $sd->get());
 
         $view->assign('submit',
             $this->call(
@@ -52,10 +51,6 @@ class Config extends \Movim\Widget\Base
             Notification::append(null, $this->__('config.not_valid'));
             return;
         }
-
-        $config = $this->user->getConfig();
-        if(isset($config))
-            $data = array_merge($config, $data);
 
         $s = new Set;
         $s->setXmlns('movim:prefs')

@@ -6,6 +6,8 @@ use Moxl\Xec\Action\Presence\DND;
 use Moxl\Xec\Action\Presence\XA;
 use Moxl\Xec\Action\Presence\Unavailable;
 
+use Moxl\Xec\Action\Roster\GetList;
+
 use Moxl\Xec\Action\Pubsub\GetItems;
 use Moxl\Xec\Action\Storage\Get;
 
@@ -48,18 +50,28 @@ class Presence extends \Movim\Widget\Base
     {
         $this->rpc('Notification.inhibit', 10);
 
+        // http://xmpp.org/extensions/xep-0280.html
+        \Moxl\Stanza\Carbons::enable();
+
+        // We refresh the roster
+        $r = new GetList;
+        $r->request();
+
+        // We refresh the messages
+        $c = new Chats;
+        $c->ajaxGetHistory();
+
         $this->ajaxClear();
         $this->onSessionUp();
         $this->ajaxServerCapsGet();
         $this->ajaxBookmarksGet();
-        $this->ajaxUserRefresh();
         $this->ajaxFeedRefresh();
         $this->ajaxServerDisco();
     }
 
     function ajaxClear()
     {
-        $pd = new \Modl\PresenceDAO();
+        $pd = new \Modl\PresenceDAO;
         $pd->clearPresence();
     }
 
@@ -119,18 +131,10 @@ class Presence extends \Movim\Widget\Base
           ->request();
     }
 
-    // We refresh the user (local) configuration
-    function ajaxUserRefresh()
-    {
-        $language = $this->user->getConfig('language');
-        if(isset($language)) {
-            loadLanguage($language);
-        }
-    }
-
     // We refresh our personnal feed
     function ajaxFeedRefresh()
     {
+        // Replace me with GetItemsId when moving from Metronome
         $r = new GetItems;
         $r->setTo($this->user->getLogin())
           ->setNode('urn:xmpp:microblog:0')

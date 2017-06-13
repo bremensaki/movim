@@ -54,6 +54,9 @@
                 <p class="normal">{$c->__('button.delete')}</p>
             </li>
         {/if}
+        <li onclick="Rooms_ajaxAskInvite('{$room}');">
+            <p class="normal">{$c->__('room.invite')}</p>
+        </li>
         <li onclick="Rooms_ajaxEdit('{$room}');">
             <p class="normal">{$c->__('chatroom.config')}</p>
         </li>
@@ -128,7 +131,11 @@
                         id="chat_textarea"
                         data-jid="{$jid}"
                         data-muc="{if="$muc"}true{/if}"
-                        placeholder="{$c->__('chat.placeholder')}"
+                        {if="rand(0, 4) == 4 && !$muc"}
+                            placeholder="{$c->__('message.edit_help')}"
+                        {else}
+                            placeholder="{$c->__('chat.placeholder')}"
+                        {/if}
                     ></textarea>
                 </div>
             </form>

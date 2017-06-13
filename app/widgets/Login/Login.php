@@ -1,7 +1,6 @@
 <?php
 
 use Moxl\Xec\Action\Storage\Get;
-use Moxl\Xec\Action\Roster\GetList;
 
 use Respect\Validation\Validator;
 use Defuse\Crypto\Key;
@@ -21,6 +20,7 @@ class Login extends \Movim\Widget\Base
         $this->registerEvent('storage_get_handle', 'onConfig');
         $this->registerEvent('storage_get_errorfeaturenotimplemented', 'onConfig');
         $this->registerEvent('storage_get_errorserviceunavailable', 'onConfig');
+        $this->registerEvent('ssl_error', 'onSSLError');
     }
 
     function onStart($packet)
@@ -28,20 +28,6 @@ class Login extends \Movim\Widget\Base
         $session = Session::start();
 
         if($session->get('mechanism') != 'ANONYMOUS') {
-            // http://xmpp.org/extensions/xep-0280.html
-            \Moxl\Stanza\Carbons::enable();
-
-            // We refresh the roster
-            $r = new GetList;
-            $r->request();
-
-            // We refresh the messages
-            $c = new Chats;
-            $c->ajaxGetHistory();
-
-            $p = new Presence;
-            $p->start();
-
             // We get the configuration
             $s = new Get;
             $s->setXmlns('movim:prefs')
@@ -52,7 +38,10 @@ class Login extends \Movim\Widget\Base
     function onConfig($packet)
     {
         $this->user->createDir();
-        $this->rpc('MovimUtils.reloadThis'/*, $this->route('root')*/);
+        $this->rpc('MovimUtils.reloadThis');
+
+        $p = new Presence;
+        $p->start();
     }
 
     function display()
@@ -77,9 +66,21 @@ class Login extends \Movim\Widget\Base
 
         $pop = 0;
 
-        foreach(scandir(USERS_PATH) as $f)
-            if(is_dir(USERS_PATH.'/'.$f))
+        foreach(scandir(USERS_PATH) as $f) {
+            if(is_dir(USERS_PATH.'/'.$f)) {
                 $pop++;
+            }
+        }
+
+        $this->view->assign('invitation', null);
+
+        if($this->get('i') && Validator::length(8)->validate($this->get('i'))) {
+            $invitation = \Modl\Invite::get($this->get('i'));
+            $this->view->assign('invitation', $invitation);
+
+            $cd = new \Modl\ContactDAO;
+            $this->view->assign('contact', $cd->get($invitation->jid));
+        }
 
         $this->view->assign('pop', $pop-2);
         $this->view->assign('connected', (int)requestURL('http://localhost:1560/started/', 2));
@@ -121,24 +122,23 @@ class Login extends \Movim\Widget\Base
         return $view->draw('_login_error', true);
     }
 
+    function onSSLError()
+    {
+        $this->showErrorBlock('fail_auth');
+    }
+
     function onSASLFailure($packet)
     {
         switch($packet->content) {
-            case 'not-authorized':
-                $error = 'wrong_account';
-                break;
             case 'invalid-mechanism':
-                $error = 'mechanism';
-                break;
             case 'malformed-request':
                 $error = 'mechanism';
                 break;
-            case 'bad-protocol':
-                $error = 'fail_auth';
-                break;
+            case 'not-authorized':
             case 'bad-auth':
                 $error = 'wrong_account';
                 break;
+            case 'bad-protocol':
             default :
                 $error = 'fail_auth';
                 break;

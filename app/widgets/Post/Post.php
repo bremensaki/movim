@@ -85,7 +85,7 @@ class Post extends \Movim\Widget\Base
 
     function ajaxGetContact($jid)
     {
-        $c = new Contact;
+        $c = new ContactActions;
         $c->ajaxGetDrawer($jid);
     }
 
@@ -98,7 +98,7 @@ class Post extends \Movim\Widget\Base
             $html = $this->preparePost($p);
 
             $this->rpc('MovimTpl.fill', '#post_widget', $html);
-            $this->rpc('MovimUtils.enableVideos');
+            $this->rpc('MovimUtils.enhanceArticlesContent');
 
             // If the post is a reply but we don't have the original
             if($p->isReply() && !$p->getReply()) {
@@ -192,9 +192,10 @@ class Post extends \Movim\Widget\Base
     {
         $view = $this->tpl();
 
+        $view->assign('external', $external);
+
         if(isset($p)) {
-            if(isset($p->commentorigin)
-            && isset($p->commentnodeid)
+            if($p->hasCommentsNode()
             && !$external) {
                 $this->ajaxGetComments($p->commentorigin, $p->commentnodeid); // Broken in case of repost
                 $view->assign('commentsdisabled', false);

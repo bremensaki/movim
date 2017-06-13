@@ -17,6 +17,8 @@ use Ramsey\Uuid\Uuid;
 use Movim\Picture;
 use Movim\Session;
 
+include_once WIDGETS_PATH.'ContactActions/ContactActions.php';
+
 class Chat extends \Movim\Widget\Base
 {
     private $_pagination = 50;
@@ -225,7 +227,7 @@ class Chat extends \Movim\Widget\Base
      */
     function ajaxGetContact($jid)
     {
-        $c = new Contact;
+        $c = new ContactActions;
         $c->ajaxGetDrawer($jid);
     }
 
@@ -346,7 +348,6 @@ class Chat extends \Movim\Widget\Base
         /* Is it really clean ? */
         if(!$p->getMuc()) {
             if(!preg_match('#^\?OTR#', $m->body)) {
-
                 $md = new \Modl\MessageDAO;
                 $md->set($m);
             }

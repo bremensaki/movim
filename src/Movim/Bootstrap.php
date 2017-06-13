@@ -285,8 +285,10 @@ class Bootstrap
         \Modl\Utils::loadModel('SharedSubscription');
         \Modl\Utils::loadModel('Caps');
         \Modl\Utils::loadModel('Item');
+        \Modl\Utils::loadModel('Invite');
         \Modl\Utils::loadModel('Message');
         \Modl\Utils::loadModel('Sessionx');
+        \Modl\Utils::loadModel('Setting');
         \Modl\Utils::loadModel('Conference');
         \Modl\Utils::loadModel('Tag');
 
