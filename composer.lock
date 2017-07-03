@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe9fec12ad9a9f432e66aff613ecce3f",
+    "content-hash": "16411fcfd55ddc8dcbd3336526c3fd9d",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -361,12 +361,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/Embed.git",
-                "reference": "7ffd756b4386ea719350e9ae7b589b3752a61000"
+                "reference": "3164bfcede8d5dea107b04a8f517c56fa0a15332"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/7ffd756b4386ea719350e9ae7b589b3752a61000",
-                "reference": "7ffd756b4386ea719350e9ae7b589b3752a61000",
+                "url": "https://api.github.com/repos/oscarotero/Embed/zipball/3164bfcede8d5dea107b04a8f517c56fa0a15332",
+                "reference": "3164bfcede8d5dea107b04a8f517c56fa0a15332",
                 "shasum": ""
             },
             "require": {
@@ -406,7 +406,7 @@
                 "opengraph",
                 "twitter cards"
             ],
-            "time": "2017-05-27 14:13:19"
+            "time": "2017-06-29 18:16:23"
         },
         {
             "name": "evenement/evenement",
@@ -609,30 +609,25 @@
         },
         {
             "name": "michelf/php-markdown",
-            "version": "1.7.0",
+            "version": "dev-lib",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220"
+                "reference": "83caf0b14004da9b8d2b63db86c930f8a2fbb464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/1f51cc520948f66cd2af8cbc45a5ee175e774220",
-                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/83caf0b14004da9b8d2b63db86c930f8a2fbb464",
+                "reference": "83caf0b14004da9b8d2b63db86c930f8a2fbb464",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-lib": "1.4.x-dev"
-                }
-            },
             "autoload": {
-                "psr-0": {
-                    "Michelf": ""
+                "psr-4": {
+                    "Michelf\\": "Michelf/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -656,7 +651,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2016-10-29T18:58:20+00:00"
+            "time": "2017-06-17 11:56:57"
         },
         {
             "name": "monolog/monolog",
@@ -732,12 +727,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/movim/modl.git",
-                "reference": "5863813c917d302bd31781965bbd8cbe693d30ae"
+                "reference": "aa949c8106cea5a4ebba51a06f3b48cee85ff9e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/movim/modl/zipball/5863813c917d302bd31781965bbd8cbe693d30ae",
-                "reference": "5863813c917d302bd31781965bbd8cbe693d30ae",
+                "url": "https://api.github.com/repos/movim/modl/zipball/aa949c8106cea5a4ebba51a06f3b48cee85ff9e8",
+                "reference": "aa949c8106cea5a4ebba51a06f3b48cee85ff9e8",
                 "shasum": ""
             },
             "require": {
@@ -768,7 +763,7 @@
                 "database",
                 "sql"
             ],
-            "time": "2017-05-10 06:50:59"
+            "time": "2017-06-28 21:32:36"
         },
         {
             "name": "movim/moxl",
@@ -776,12 +771,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/movim/moxl.git",
-                "reference": "dcf08648390fe1a805c66f9575f26552351890c7"
+                "reference": "fd45514d0fd0be46b91dd0d8674f55b3cb659391"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/movim/moxl/zipball/dcf08648390fe1a805c66f9575f26552351890c7",
-                "reference": "dcf08648390fe1a805c66f9575f26552351890c7",
+                "url": "https://api.github.com/repos/movim/moxl/zipball/fd45514d0fd0be46b91dd0d8674f55b3cb659391",
+                "reference": "fd45514d0fd0be46b91dd0d8674f55b3cb659391",
                 "shasum": ""
             },
             "require": {
@@ -816,7 +811,7 @@
                 "php",
                 "xmpp"
             ],
-            "time": "2017-05-23 21:06:48"
+            "time": "2017-06-30 09:15:37"
         },
         {
             "name": "movim/sasl2",
@@ -1267,7 +1262,7 @@
         },
         {
             "name": "react/child-process",
-            "version": "dev-master",
+            "version": "v0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/child-process.git",
@@ -1303,7 +1298,7 @@
             "keywords": [
                 "process"
             ],
-            "time": "2017-03-14 13:23:20"
+            "time": "2017-03-14T13:23:20+00:00"
         },
         {
             "name": "react/dns",
@@ -2143,13 +2138,13 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "rain/raintpl": 20,
+        "michelf/php-markdown": 20,
         "movim/modl": 20,
         "movim/sasl2": 20,
         "movim/moxl": 20,
         "embed/embed": 20,
         "heyupdate/emoji": 20,
         "cboden/ratchet": 20,
-        "react/child-process": 20,
         "react/http": 20
     },
     "prefer-stable": false,

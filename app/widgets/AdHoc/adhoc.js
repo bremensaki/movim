@@ -2,7 +2,7 @@ var AdHoc = {
     refresh: function() {
         var items = document.querySelectorAll('#adhoc_widget li');
         var i = 0;
-        
+
         while(i < items.length)
         {
             items[i].onclick = function() {
@@ -22,12 +22,17 @@ var AdHoc = {
             i++;
         }
     },
-    submit: function() {
+    submit: function(jid) {
         var form = document.querySelector('#dialog form[name=command]');
-        AdHoc_ajaxSubmit(MovimUtils.parseForm('command'), form.dataset.node, form.dataset.sessionid);
+        AdHoc_ajaxSubmit(jid, MovimUtils.parseForm('command'), form.dataset.node, form.dataset.sessionid);
     }
 }
 
 MovimWebsocket.attach(function() {
-    AdHoc_ajaxGet();
+    var parts = MovimUtils.urlParts();
+    if(parts.page === "contact") {
+        AdHoc_ajaxGet(parts.params[0]);
+    } else {
+        AdHoc_ajaxGet();
+    }
 });

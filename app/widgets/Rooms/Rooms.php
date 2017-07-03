@@ -5,6 +5,7 @@ use Moxl\Xec\Action\Bookmark\Get;
 use Moxl\Xec\Action\Bookmark\Set;
 use Moxl\Xec\Action\Presence\Unavailable;
 use Moxl\Xec\Action\Message\Invite;
+use Moxl\Xec\Action\Disco\Request;
 
 use Ramsey\Uuid\Uuid;
 
@@ -105,14 +106,12 @@ class Rooms extends \Movim\Widget\Base
     {
         $view = $this->tpl();
 
-        $id = new \Modl\ItemDAO;
-        $item = $id->getConference($this->user->getServer());
+        $id = new \Modl\InfoDAO;
+        $cd = new \Modl\ConferenceDAO;
 
-        if($item) {
-            $view->assign('server', $item->jid);
-        }
-
+        $view->assign('info', $id->getConference($room));
         $view->assign('id', $room);
+        $view->assign('conference', $cd->get($room));
         $view->assign('username', $this->user->getUser());
 
         Dialog::fill($view->draw('_rooms_add', true));
@@ -153,20 +152,6 @@ class Rooms extends \Movim\Widget\Base
             Notification::append(null, $this->__('room.invited'));
             $this->rpc('Dialog_ajaxClear');
         }
-    }
-
-    /**
-     * @brief Edit a room configuration
-     */
-    function ajaxEdit($room)
-    {
-        $view = $this->tpl();
-        $cd = new \Modl\ConferenceDAO;
-
-        $view->assign('room', $cd->get($room));
-        $view->assign('username', $this->user->getUser());
-
-        Dialog::fill($view->draw('_rooms_add', true));
     }
 
     /**
@@ -217,6 +202,10 @@ class Rooms extends \Movim\Widget\Base
     function ajaxJoin($room, $nickname = false)
     {
         if(!$this->validateRoom($room)) return;
+
+        $r = new Request;
+        $r->setTo($room)
+          ->request();
 
         $p = new Muc;
         $p->setTo($room);

@@ -1,5 +1,5 @@
 {if="!$c->supported('anonymous') && $c->getView() != 'room'"}
-    <ul class="list divided spaced {if="!$edit"}active{/if}">
+    <ul class="list divided spaced middle {if="!$edit"}active{/if}">
         <li class="subheader">
             {if="$conferences != null"}
             <span class="control icon active gray" onclick="Rooms_ajaxDisplay({if="$edit"}false{else}true{/if});">
@@ -21,18 +21,37 @@
                 class="room {if="$value->connected"}online{/if}"
                 title="{$value->conference}">
                 <span data-key="chat|{$value->conference}" class="counter"></span>
-                <span class="primary {if="!$value->connected"}disabled{/if} icon small bubble color {$value->name|stringToColor}">
-                    {$value->name|firstLetterCapitalize:true}
+                <span class="primary {if="!$value->connected"}disabled{/if} icon bubble color {$value->name|stringToColor}">
+                    {$value->name|firstLetterCapitalize}
                 </span>
+
+                {$info = $value->getItem()}
                 {if="$edit"}
                     <span class="control icon active gray" onclick="Rooms_ajaxRemoveConfirm('{$value->conference}');">
                         <i class="zmdi zmdi-delete"></i>
                     </span>
-                    <span class="control icon active gray" onclick="Rooms_ajaxEdit('{$value->conference}');">
+                    <span class="control icon active gray" onclick="Rooms_ajaxAdd('{$value->conference}');">
                         <i class="zmdi zmdi-edit"></i>
                     </span>
                 {/if}
                 <p class="normal line">{$value->name} <span class="second">{$value->conference}</span></p>
+                <p class="line"
+                    {if="isset($info) && $info->description"}title="{$info->description}"{/if}>
+                    {if="$value->connected"}
+                        <span title="{$c->__('communitydata.sub', $info->occupants)}">
+                            {$value->countConnected()} <i class="zmdi zmdi-accounts"></i>  –
+                        </span>
+                    {elseif="isset($info) && $info->occupants > 0"}
+                        <span title="{$c->__('communitydata.sub', $info->occupants)}">
+                            {$info->occupants} <i class="zmdi zmdi-accounts"></i>  –
+                        </span>
+                    {/if}
+                    {if="isset($info) && $info->description"}
+                        {$info->description}
+                    {else}
+                        {$value->conference}
+                    {/if}
+                </p>
             </li>
         {/loop}
     </ul>

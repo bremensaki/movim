@@ -31,7 +31,8 @@
 }
 
 #chat_widget .chat_box form textarea {
-    padding: 3rem 0px 1rem;
+    padding: 0rem 0px 1rem;
+    margin-top: 3rem;
 }
 
 #chat_widget .chat_box span.control {
@@ -80,6 +81,14 @@
     width: auto;
 }
 
+#chat_widget li.room > p.message.code,
+#chat_widget li div.bubble p.code {
+    display: block;
+    margin: 0;
+    font-size: 1.6rem;
+    margin: 0.5rem 0;
+    color: white;
+}
 
 #chat_widget li.room {
     padding: 0.25rem 0;
@@ -141,9 +150,9 @@
 }
 
 #chat_widget > .placeholder {
-    padding-top: 37em;
-    background-size: 35rem 35rem;
-    background-position: center 7rem;
+    padding-top: 27em;
+    background-size: 28rem;
+    background-position: center 5rem;
     background-image: url('img/chat.svg');
 }
 

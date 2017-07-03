@@ -17,6 +17,10 @@
                 {/if}
             </span>
 
+            <span class="primary icon bubble color {$conference->name|stringToColor}">
+                {$conference->name|firstLetterCapitalize}
+            </span>
+
             <span class="control icon show_context_menu active">
                 <i class="zmdi zmdi-more-vert"></i>
             </span>
@@ -57,7 +61,7 @@
         <li onclick="Rooms_ajaxAskInvite('{$room}');">
             <p class="normal">{$c->__('room.invite')}</p>
         </li>
-        <li onclick="Rooms_ajaxEdit('{$room}');">
+        <li onclick="Rooms_ajaxAdd('{$room}');">
             <p class="normal">{$c->__('chatroom.config')}</p>
         </li>
     </ul>
@@ -71,6 +75,19 @@
             id="back" class="primary icon active">
                 <i class="zmdi zmdi-arrow-back"></i>
             </span>
+
+            {$url = $contact->getPhoto('s')}
+            {if="$url"}
+                <span class="primary icon bubble active"
+                    onclick="Chat_ajaxGetContact('{$contact->jid}')">
+                    <img src="{$url}">
+                </span>
+            {else}
+                <span class="primary icon bubble active color {$contact->jid|stringToColor}"
+                    onclick="Chat_ajaxGetContact('{$contact->jid}')">
+                    {$contact->getTrueName()|firstLetterCapitalize}
+                </span>
+            {/if}
 
             <span class="control icon show_context_menu active">
                 <i class="zmdi zmdi-more-vert"></i>

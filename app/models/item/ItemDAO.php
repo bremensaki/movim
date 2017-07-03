@@ -1,10 +1,10 @@
 <?php
 
-namespace modl;
+namespace Modl;
 
 class ItemDAO extends SQL
 {
-    function set(Item $item, $insert_only = false)
+    function set($item, $insert_only = false)
     {
         if(!$insert_only) {
             $this->_sql = '
@@ -14,6 +14,7 @@ class ItemDAO extends SQL
                     created = :created,
                     updated = :updated,
                     description = :description,
+                    subscribers = :subscribers,
                     logo = :logo
                 where server = :server
                     and jid  = :jid
@@ -30,6 +31,7 @@ class ItemDAO extends SQL
                     'node'          => $item->node,
                     'creator'       => $item->creator,
                     'description'   => $item->description,
+                    'subscribers'   => $item->subscribers,
                     'logo'          => $item->logo
                 ]
             );
@@ -48,6 +50,7 @@ class ItemDAO extends SQL
                 created,
                 updated,
                 description,
+                subscribers,
                 logo
                 )
                 values(
@@ -59,6 +62,7 @@ class ItemDAO extends SQL
                     :created,
                     :updated,
                     :description,
+                    :subscribers,
                     :logo
                     )';
 
@@ -73,6 +77,7 @@ class ItemDAO extends SQL
                     'jid'           => $item->jid,
                     'node'          => $item->node,
                     'description'   => $item->description,
+                    'subscribers'   => $item->subscribers,
                     'logo'          => $item->logo
                 ]
             );

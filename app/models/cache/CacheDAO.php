@@ -4,26 +4,7 @@ namespace Modl;
 
 class CacheDAO extends SQL
 {
-    function get($key)
-    {
-        $this->_sql = '
-            select * from cache
-            where
-                session = :session
-            and name    = :name';
-
-        $this->prepare(
-            'Cache',
-            [
-                'session' => $this->_user,
-                'name' => $key
-            ]
-        );
-
-        return $this->run('Cache', 'item');
-    }
-
-    function set(Cache $cache)
+    function set($cache)
     {
         $this->_sql = '
             update cache
@@ -62,5 +43,24 @@ class CacheDAO extends SQL
 
             return $this->run('Cache');
         }
+    }
+
+    function get($key)
+    {
+        $this->_sql = '
+            select * from cache
+            where
+                session = :session
+            and name    = :name';
+
+        $this->prepare(
+            'Cache',
+            [
+                'session' => $this->_user,
+                'name' => $key
+            ]
+        );
+
+        return $this->run('Cache', 'item');
     }
 }

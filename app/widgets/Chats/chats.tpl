@@ -2,7 +2,6 @@
     <ul class="list middle on_mobile">
         <li>
             <span id="menu" class="primary on_mobile icon active gray" onclick="MovimTpl.toggleMenu()"><i class="zmdi zmdi-menu"></i></span>
-            <span class="primary icon on_desktop icon gray"><i class="zmdi zmdi-comments"></i></span>
             <p class="center">{$c->__('page.chats')}</p>
         </li>
     </ul>
@@ -16,9 +15,7 @@
 </header>
 
 <ul id="chats_widget_list" class="list middle active divided spaced">
-    <div id="spinner">
-        <img src="{$base_uri}/app/widgets/Roster/img/movim_cloud.svg"/>
-    </div>
+    {$c->prepareChats()}
 </ul>
 
 <div class="placeholder icon">

@@ -40,7 +40,7 @@ class CommunitiesServer extends \Movim\Widget\Base
     {
         $server = $packet->content;
 
-        $id = new \Modl\ItemDAO();
+        $id = new \Modl\InfoDAO;
         $id->deleteItems($server);
 
         $this->rpc('MovimTpl.fill', '#communities_server', $this->prepareCommunitiesServer($server));
@@ -70,7 +70,7 @@ class CommunitiesServer extends \Movim\Widget\Base
             return;
         }
 
-        $this->rpc('MovimTpl.fill', '#communities_server', '');
+        //$this->rpc('MovimTpl.fill', '#communities_server', '');
 
         $r = new Items;
         $r->setTo($server)->request();
@@ -115,7 +115,7 @@ class CommunitiesServer extends \Movim\Widget\Base
 
     public function prepareCommunitiesServer($server)
     {
-        $id = new \Modl\ItemDAO;
+        $id = new \Modl\InfoDAO;
 
         $view = $this->tpl();
         $view->assign('item', $id->getJid($server));
