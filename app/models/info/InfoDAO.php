@@ -87,6 +87,7 @@ class InfoDAO extends SQL
                 as s on s.server = info.server
                 and s.node = info.node
             where info.node != \'\'
+                and info.category = \'pubsub\'
                 and info.node not like \'urn:xmpp:microblog:0:comments%\'
                 and info.node not like \'/%\'
                 and info.node != \'urn:xmpp:microblog:0\'';

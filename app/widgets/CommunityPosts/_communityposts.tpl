@@ -1,10 +1,22 @@
+{if="$nsfwMessage"}
+    <ul class="list clear middle">
+        <li>
+            <span class="primary icon color bubble red">
+                18+
+            </span>
+            <p>{$c->__('communityposts.nsfw_title')}</p>
+            <p class="all">{$c->__('communityposts.nsfw_message')}</p>
+        </li>
+    </ul>
+{/if}
+
 {if="!empty($posts)"}
     <ul class="list card shadow">
-    {loop="$posts"}
-        <div id="{$value->nodeid|cleanupId}" class="block large">
-            {$c->preparePost($value)}
-        </div>
-    {/loop}
+        {loop="$posts"}
+            <div id="{$value->nodeid|cleanupId}" class="block large">
+                {$c->preparePost($value)}
+            </div>
+        {/loop}
     </ul>
 {elseif="!empty($ids)"}
     <ul class="list card shadow">

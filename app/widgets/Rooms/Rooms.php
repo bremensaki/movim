@@ -25,6 +25,7 @@ class Rooms extends \Movim\Widget\Base
         $this->registerEvent('presence_muc_handle', 'onConnected');
         $this->registerEvent('presence_unavailable_handle', 'onDisconnected');
         $this->registerEvent('presence_muc_errorconflict', 'onConflict');
+        $this->registerEvent('presence_muc_errorregistrationrequired', 'onRegistrationRequired');
     }
 
     function onMessage($packet)
@@ -42,6 +43,11 @@ class Rooms extends \Movim\Widget\Base
                 null
             );
         }
+    }
+
+    function onRegistrationRequired()
+    {
+        Notification::append(null, $this->__('chatrooms.registrationrequired'));
     }
 
     function onGetBookmark()
@@ -229,6 +235,11 @@ class Rooms extends \Movim\Widget\Base
     {
         if(!$this->validateRoom($room)) return;
 
+        // We reset the Chat view
+        $c = new Chat();
+        $c->ajaxGet();
+
+        // We properly exit
         $s = Session::start();
         $resource = $s->get('username');
 
