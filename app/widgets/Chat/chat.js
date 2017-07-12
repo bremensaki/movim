@@ -11,33 +11,42 @@ var Chat = {
     // Chat state
     state: null,
     since: null,
+    sended: false,
 
     sendMessage: function(jid, muc)
     {
         var n = document.querySelector('#chat_textarea');
         var text = n.value;
         n.focus();
-        MovimUtils.textareaAutoheight(n);
 
-        localStorage.removeItem(n.dataset.jid + '_message');
+        if(!Chat.sended) {
+            Chat.sended = true;
 
-        if(Chat.edit) {
-            Chat.edit = false;
-            Chat_ajaxCorrect(jid, encodeURIComponent(text));
-        } else {
-            Chat_ajaxSendMessage(jid, encodeURIComponent(text), muc);
+            if(Chat.edit) {
+                Chat.edit = false;
+                Chat_ajaxCorrect(jid, encodeURIComponent(text));
+            } else {
+                Chat_ajaxSendMessage(jid, encodeURIComponent(text), muc);
+            }
         }
     },
 
     sendedMessage: function()
     {
+        Chat.sended = false;
+
         var n = document.querySelector('#chat_textarea');
         n.value = "";
         n.focus();
+        MovimUtils.textareaAutoheight(n);
+
+        localStorage.removeItem(n.dataset.jid + '_message');
     },
 
     focus: function(jid)
     {
+        Chat.sended = false;
+
         if(jid) {
             document.querySelector('#chat_widget').dataset.jid = jid;
         } else {
@@ -55,6 +64,8 @@ var Chat = {
         }, 0); // Fix Me
 
         textarea.onkeydown = function(event) {
+            if(this.dataset.muc) return;
+
             if(event.keyCode == 38 && this.value == '') {
                 Chat_ajaxLast(this.dataset.jid);
             } else if(event.keyCode == 40
@@ -195,7 +206,10 @@ var Chat = {
                         if(!Chat.currentDate) {
                             Chat.currentDate = page[date][speakertime].published;
                         }
-                        Chat.appendMessage(speakertime, page[date][speakertime], prepend);
+
+                        if(discussion.dataset.muc != 1) {
+                            Chat.appendMessage(speakertime, page[date][speakertime], prepend);
+                        }
                     }
                 }
 
