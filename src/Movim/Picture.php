@@ -6,6 +6,7 @@ class Picture
 {
     private $_path = CACHE_PATH;
     private $_uri  = CACHE_URI;
+    private $_folder = 'cache/';
     private $_key;
     private $_bin  = false;
     private $_formats = ['jpeg' => '.jpg', 'png' => '.png'];
@@ -71,7 +72,7 @@ class Picture
         if($width == false) {
             if(file_exists($original)) {
                 $this->fromPath($original);
-                return $this->_uri.md5($this->_key).$this->_formats[$format];
+                return urilize($this->_folder.md5($this->_key).$this->_formats[$format]);
             } else {
                 return false;
             }
@@ -79,13 +80,13 @@ class Picture
         } else {
             if(file_exists($this->_path.md5($this->_key).'_'.$width.$this->_formats[$format])) {
                 $this->fromPath($this->_path.md5($this->_key).'_'.$width.$this->_formats[$format]);
-                return $this->_uri.md5($this->_key).'_'.$width.$this->_formats[$format];
+                return urilize($this->_folder.md5($this->_key).'_'.$width.$this->_formats[$format]);
             } else {
                 if(file_exists($original)) {
                     $this->fromPath($original);
                     $this->createThumbnail($width, $height);
 
-                    return $this->_uri.md5($this->_key).'_'.$width.$this->_formats[$format];
+                    return urilize($this->_folder.md5($this->_key).'_'.$width.$this->_formats[$format]);
                 } else {
                     return false;
                 }
@@ -149,14 +150,14 @@ class Picture
                     if($format == 'jpeg') {
                         $im->setImageCompression(\Imagick::COMPRESSION_JPEG);
                         $im->setImageAlphaChannel(11);
+                        $im->setInterlaceScheme(\Imagick::INTERLACE_PLANE);
                         // Put 11 as a value for now, see http://php.net/manual/en/imagick.flattenimages.php#116956
                         //$im->setImageAlphaChannel(Imagick::ALPHACHANNEL_REMOVE);
                         $im->setImageBackgroundColor('#ffffff');
+                        $im->setImageCompressionQuality($quality);
                         $im = $im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
                     }
 
-                    $im->setImageCompressionQuality($quality);
-                    $im->setInterlaceScheme(\Imagick::INTERLACE_PLANE);
                     $im->writeImage($path);
                     $im->clear();
                     return true;

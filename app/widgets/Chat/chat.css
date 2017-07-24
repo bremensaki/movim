@@ -78,9 +78,16 @@
     border-radius: 0.5rem;
     margin-bottom: 0.5rem;
     width: auto;
-    height: auto;
-    max-width: 200px;
-    max-height: 160px;
+    max-height: 150px;
+}
+
+#chat_widget li div.bubble.sticker.file img:not(.emoji):not(.hfr) {
+    max-height: 170px;
+}
+
+#chat_widget li.room > p.message,
+#chat_widget li div.bubble p {
+    white-space: pre-wrap;
 }
 
 #chat_widget li.room > p.message.code,
