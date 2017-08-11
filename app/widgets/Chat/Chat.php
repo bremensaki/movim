@@ -91,7 +91,8 @@ class Chat extends \Movim\Widget\Base
             if($contact != null
             && $notify
             && !preg_match('#^\?OTR#', $message->body)
-            && $message->type != 'groupchat') {
+            && $message->type != 'groupchat'
+            && !$message->edited) {
                 $avatar = $contact->getPhoto('s');
                 if($avatar == false) $avatar = null;
                 Notification::append(
@@ -685,7 +686,8 @@ class Chat extends \Movim\Widget\Base
             $sticker = $p->get($message->sticker, false, false, 'png');
             $stickerSize = $p->getSize();
 
-            if ($sticker == false) {
+            if ($sticker == false
+            && $message->jidfrom != $message->session) {
                 $r = new Request;
                 $r->setTo($message->jidfrom)
                     ->setResource($message->resource)

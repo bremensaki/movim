@@ -127,8 +127,8 @@ body > nav li span.counter {
         width: 15%;
     }
 
-    body > nav + main,
-    body > nav:hover + main {
+    body > nav ~ main,
+    body > nav:hover ~ main {
         width: 85%;
     }
 }
@@ -150,7 +150,7 @@ main {
     overflow-y: none;
 }
 
-nav + main {
+nav ~ main {
     width: calc(100% - 7rem);
     transform: translateZ(0);
 }
@@ -267,7 +267,7 @@ main > section > div > div.contained > * {
     }
 
     main,
-    nav + main {
+    nav ~ main {
         width: 100%;
     }
 
