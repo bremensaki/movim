@@ -21,9 +21,9 @@ class Rooms extends \Movim\Widget\Base
         $this->addcss('rooms.css');
         $this->registerEvent('message', 'onMessage');
         $this->registerEvent('bookmark_get_handle', 'onGetBookmark');
-        $this->registerEvent('bookmark_set_handle', 'onBookmark');
-        $this->registerEvent('presence_muc_handle', 'onConnected');
-        $this->registerEvent('presence_unavailable_handle', 'onDisconnected');
+        $this->registerEvent('bookmark_set_handle', 'onBookmark', 'chat');
+        $this->registerEvent('presence_muc_handle', 'onConnected', 'chat');
+        $this->registerEvent('presence_unavailable_handle', 'onDisconnected', 'chat');
         $this->registerEvent('presence_muc_errorconflict', 'onConflict');
         $this->registerEvent('presence_muc_errorregistrationrequired', 'onRegistrationRequired');
         $this->registerEvent('presence_muc_errorremoteservernotfound', 'onRemoteServerNotFound');
@@ -191,10 +191,19 @@ class Rooms extends \Movim\Widget\Base
 
         $view = $this->tpl();
 
-        $cd = new \Modl\ContactDAO;
-        $view->assign('list', $cd->getPresences($room));
+        $userslist = $this->getUsersList($room);
+        $view->assign('list', $userslist);
+        $view->assign('me', $this->user->getLogin());
 
         Dialog::fill($view->draw('_rooms_list', true), true);
+    }
+
+    /**
+     * @brief Autocomplete users in MUC
+     */
+    function ajaxMucUsersAutocomplete($room) {
+        $usersForAutocomplete = $this->getUsersList($room);
+        $this->rpc("Chat.onAutocomplete", $usersForAutocomplete);
     }
 
     /**
@@ -352,6 +361,15 @@ class Rooms extends \Movim\Widget\Base
         } else {
             return false;
         }
+    }
+
+    /**
+     * @brief Get rooms users list
+     */
+    function getUsersList($room)
+    {
+        $cd = new \Modl\ContactDAO;
+        return $cd->getPresences($room);
     }
 
     function prepareRooms($edit = false)

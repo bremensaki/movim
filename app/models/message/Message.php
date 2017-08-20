@@ -90,6 +90,11 @@ class Message extends Model
                 $this->type = (string)$stanza->attributes()->type;
             }
 
+            if($stanza->x
+            && (string)$stanza->x->attributes()->xmlns == 'http://jabber.org/protocol/muc#user') {
+                $this->jidfrom = $jid[0].'/'.$jid[1];
+            }
+
             if($stanza->body) {
                 $this->body = (string)$stanza->body;
             }
@@ -113,29 +118,39 @@ class Message extends Model
                 $p = $pd->getMyPresenceRoom($this->jidfrom);
 
                 if(is_object($p)
-                && strpos($this->body, $p->resource) !== false) {
+                && strpos($this->body, $p->resource) !== false
+                && $this->resource != $p->resource) {
                     $this->quoted = true;
                 }
             }
 
             if($stanza->html) {
-                $xml = \simplexml_load_string((string)$stanza->html->body);
-                if($xml) {
-                    $results = $xml->xpath('//img/@src');
-                    if(is_array($results) && !empty($results)) {
-                        if(substr((string)$results[0], 0, 10) == 'data:image') {
-                            $str = explode('base64,', $results[0]);
-                            if(isset($str[1])) {
-                                $p = new Picture;
-                                $p->fromBase(urldecode($str[1]));
-                                $key = sha1(urldecode($str[1]));
-                                $p->set($key, 'png');
+                $results = [];
 
-                                $this->sticker = $key;
-                            }
-                        } else {
-                            $this->sticker = getCid((string)$results[0]);
+                $xml = \simplexml_load_string((string)$stanza->html);
+                if(!$xml) {
+                    $xml = \simplexml_load_string((string)$stanza->html->body);
+                    if($xml) {
+                        $results = $xml->xpath('//img/@src');
+                    }
+                } else {
+                    $xml->registerXPathNamespace('xhtml', 'http://www.w3.org/1999/xhtml');
+                    $results = $xml->xpath('//xhtml:img/@src');
+                }
+
+                if(!empty($results)) {
+                    if(substr((string)$results[0], 0, 10) == 'data:image') {
+                        $str = explode('base64,', $results[0]);
+                        if(isset($str[1])) {
+                            $p = new Picture;
+                            $p->fromBase(urldecode($str[1]));
+                            $key = sha1(urldecode($str[1]));
+                            $p->set($key, 'png');
+
+                            $this->sticker = $key;
                         }
+                    } else {
+                        $this->sticker = getCid((string)$results[0]);
                     }
                 }
             }
