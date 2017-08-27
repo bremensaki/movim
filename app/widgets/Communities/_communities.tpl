@@ -1,18 +1,4 @@
-<header>
-    <ul class="list middle">
-        <li>
-            {if="$c->supported('pubsub')"}
-            <span class="control icon gray active" onclick="MovimUtils.redirect('{$c->route('community', 'subscriptions')}')">
-                <i class="zmdi zmdi-settings"></i>
-            </span>
-            {/if}
-            <p class="center">{$c->__('page.communities')}</p>
-            <p class="center line">{$c->__('communities.empty_text')}</p>
-        </li>
-    </ul>
-</header>
-
-<ul class="list flex middle active">
+<ul class="list flex third middle active">
     {loop="$communities"}
         <li
             class="block
@@ -64,36 +50,3 @@
     {/loop}
 </ul>
 
-<ul class="list flex middle active">
-    <li class="subheader block large">
-        <p>{$c->__('communities.servers')}</p>
-    </li>
-    {loop="$servers"}
-        {if="!filter_var($value->server, FILTER_VALIDATE_EMAIL)"}
-            <li class="block
-                {if="empty($value->number)"}faded{/if}"
-                onclick="MovimUtils.redirect('{$c->route('community', $value->server)}')">
-                <span class="primary icon bubble color {$value->server|stringToColor}">
-                    {$value->server|firstLetterCapitalize}
-                </span>
-                <p class="line" title="{$value->server} - {$value->name}">
-                    {$value->server}
-                    <span class="second">{$value->name}</span>
-                </p>
-                <p>{$c->__('communities.counter', (empty($value->number)) ? 0 : $value->number)}</p>
-            </li>
-        {/if}
-    {/loop}
-    <li class="block large">
-        <span class="primary icon">
-            <i class="zmdi zmdi-search-for"></i>
-        </span>
-        <form>
-            <div>
-                <input placeholder="pubsub.server.com" onkeypress="
-                    if(event.keyCode == 13) { Communities_ajaxDisco(this.value); return false; }" >
-                <label>{$c->__('communities.search_server')}</label>
-            </div>
-        </form>
-    </li>
-</ul>
