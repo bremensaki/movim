@@ -73,7 +73,6 @@
     display: block;
 }
 
-
 #chat_widget li div.bubble.sticker img:not(.emoji):not(.hfr) {
     border-radius: 0.5rem;
     margin-bottom: 0.5rem;
@@ -85,76 +84,20 @@
     max-height: 170px;
 }
 
-#chat_widget li.room > p.message,
-#chat_widget li div.bubble p {
-    white-space: pre-wrap;
-}
-
-#chat_widget li.room > p.message.code,
-#chat_widget li div.bubble p.code {
-    display: block;
-    margin: 0;
-    font-size: 1.6rem;
-    margin: 0.5rem 0;
-    color: white;
-}
-
-#chat_widget li.room {
-    padding: 0.25rem 0;
-    padding-right: 2rem;
-}
-
-#chat_widget li.room > p {
-    font-size: 2rem;
-    display: inline;
-}
-
-#chat_widget li.room span.info {
-    float: right;
-    width: auto;
-    margin-top: 0.5rem;
-}
-
-#chat_widget li.room:first-child {
-    margin-top: 1rem;
-}
-
-#chat_widget li.room p.user {
-    font-weight: 700;
-    padding: 0;
-}
-
-#chat_widget li.room > p.message {
-    color: black;
-    padding-left: 1rem;
-}
-
-#chat_widget li.room > p.message.sticker {
-    display: block;
-    padding: 0.5rem 0;
-}
-
-#chat_widget li.room p.user:hover {
-    cursor: pointer;
-}
-
-#chat_widget li.room p.quoted {
-    background-color: rgba(255, 255, 51, 0.3);
-    padding: 0 0.5rem;
-    margin: 0 1rem;
-    border-radius: 0.5rem;
-}
-
 #chat_widget ul:after {
     content: " ";
     display: block;
     clear: both;
 }
 
-#chat_widget .contained ul li.oppose + li.oppose span.icon,
-#chat_widget .contained ul li.oppose + li.oppose .bubble::before,
-#chat_widget .contained ul li:not(.oppose) + li:not(.oppose) span.icon,
-#chat_widget .contained ul li:not(.oppose) + li:not(.oppose) .bubble::before {
+#chat_widget .contained.muc ul li span.primary:hover {
+    cursor: pointer;
+}
+
+#chat_widget .contained:not(.muc) ul li.oppose + li.oppose span.icon,
+#chat_widget .contained:not(.muc) ul li.oppose + li.oppose .bubble::before,
+#chat_widget .contained:not(.muc) ul li:not(.oppose) + li:not(.oppose) span.icon,
+#chat_widget .contained:not(.muc) ul li:not(.oppose) + li:not(.oppose) .bubble::before {
     display: none;
 }
 
@@ -195,6 +138,14 @@ table.emojis td:hover {
         left: 0;
         width: 100%;
     }
+}
+
+#chat_widget div.quoted {
+    background-color: #fff59d;
+}
+
+#chat_widget div.quoted:before {
+    border-top-color: #fff59d;
 }
 
 /* File preview */

@@ -1,7 +1,6 @@
 var Chat = {
     left : null,
     right: null,
-    room: null,
     date: null,
     currentDate: null,
     lastScroll: null,
@@ -25,7 +24,7 @@ var Chat = {
         Rooms_ajaxMucUsersAutocomplete(jid);
     },
     onAutocomplete: function(usersList) {
-        var textarea = document.querySelector('#chat_textarea');
+        var textarea = Chat.getTextarea();
         var text = textarea.value.toLowerCase();
 
         // If user have deleted text from textarea - reinitialize
@@ -40,7 +39,7 @@ var Chat = {
         if (Chat.toAutocomplete === null
             || (
                 Chat.toAutocomplete != text
-                && text.indexOf(':') === -1)
+                && text.indexOf(',') === -1)
             ) {
             Chat.toAutocomplete = text;
         }
@@ -51,43 +50,40 @@ var Chat = {
         if (Chat.previouslyAutocompleted === null
             && Chat.toAutocomplete == '') {
             var autocompleted = usersList[0]['resource'];
-            textarea.value = autocompleted + ': ';
+            Chat.quoteMUC(autocompleted);
             Chat.previouslyAutocompleted = autocompleted;
         } else {
             // Otherwise we should autocomplete next to
             // previouslyAutocompleted.
             var autocompletedOk = false;
+
             for (var i = 0; i < usersList.length; i++) {
                 var autocompleted = '';
-                // If we want to just-scroll thru all people in MUC.
+
+                // If we have substring to autocomplete.
+                var user_substr = usersList[i]['resource'].substring(0, Chat.toAutocomplete.length);
+
+                // If we want to just-scroll through all people in MUC.
                 if (usersList[i]['resource'] == Chat.previouslyAutocompleted
                     && i !== usersList.length - 1
                     && Chat.toAutocomplete == '') {
                     autocompleted = usersList[i+1]['resource'];
-                    textarea.value = autocompleted + ': ';
+                    autocompletedOk = true;
+                } else if (i > Chat.previouslyAutocompletedSeqID
+                    && user_substr.toLowerCase().indexOf(Chat.toAutocomplete) !== -1
+                    && usersList[i]['resource'] != Chat.previouslyAutocompleted) {
+                    autocompleted = usersList[i]['resource'];
+                    autocompletedOk = true;
+                }
+
+                if (autocompletedOk) {
+                    Chat.quoteMUC(autocompleted);
                     Chat.previouslyAutocompleted = autocompleted;
                     Chat.previouslyAutocompletedSeqID = i;
-                    autocompletedOk = true;
-                    break;
-                } else {
-                    // If we have substring to autocomplete.
-                    var user_substr = usersList[i]['resource'].substring(0,
-                        Chat.toAutocomplete.length)
-                    if (i > Chat.previouslyAutocompletedSeqID
-                        && user_substr.toLowerCase().indexOf(Chat.toAutocomplete) !== -1
-                        && usersList[i]['resource'] != Chat.previouslyAutocompleted) {
-                        autocompleted = usersList[i]['resource'];
-                        textarea.value = autocompleted + ': ';
-                        Chat.previouslyAutocompleted = autocompleted;
-                        Chat.previouslyAutocompletedSeqID = i;
-                        autocompletedOk = true;
-                        break;
-                    }
-                }
-                if (autocompletedOk) {
                     break;
                 }
             }
+
             // If autocompletion failed - emptify input field.
             if (!autocompletedOk) {
                 textarea.value = '';
@@ -96,10 +92,27 @@ var Chat = {
             }
         }
     },
-    sendMessage: function(jid, muc)
+    quoteMUC: function(nickname, add)
     {
-        var textarea = document.querySelector('#chat_textarea');
+        var textarea = Chat.getTextarea();
+        if(add) {
+            if(textarea.value.search(nickname) === -1) {
+                textarea.value = nickname + ', ' + textarea.value;
+            }
+        } else {
+            textarea.value = nickname + ', ';
+        }
+
+        textarea.focus();
+    },
+    sendMessage: function()
+    {
+        var textarea = Chat.getTextarea();
+
         var text = textarea.value;
+        var muc = Boolean(textarea.dataset.muc);
+        var jid = textarea.dataset.jid;
+
         textarea.focus();
 
         if(!Chat.sended) {
@@ -124,34 +137,27 @@ var Chat = {
     {
         Chat.sended = false;
         Chat.clearReplace();
-        var textarea = document.querySelector('#chat_textarea');
+        var textarea = Chat.getTextarea();
         localStorage.removeItem(textarea.dataset.jid + '_message');
     },
     clearReplace: function()
     {
         Chat.edit = false;
-        var textarea = document.querySelector('#chat_textarea');
+        var textarea = Chat.getTextarea();
         textarea.value = '';
         MovimUtils.textareaAutoheight(textarea);
     },
-    focus: function(jid)
+    focus: function()
     {
         Chat.sended = false;
 
-        if(jid) {
-            document.querySelector('#chat_widget').dataset.jid = jid;
-        } else {
-            delete document.querySelector('#chat_widget').dataset.jid;
-        }
-
-        var textarea = document.querySelector('#chat_textarea');
+        var textarea = Chat.getTextarea();
 
         setTimeout(function() {
-            var textarea = document.querySelector('#chat_textarea');
+            var textarea = Chat.getTextarea();
             textarea.value = localStorage.getItem(textarea.dataset.jid + '_message');
 
             MovimUtils.textareaAutoheight(textarea);
-            //Chat.adaptDiscussion();
         }, 0); // Fix Me
 
         textarea.onkeydown = function(event) {
@@ -174,7 +180,7 @@ var Chat = {
                     return;
                 }
                 Chat.state = 0;
-                Chat.sendMessage(this.dataset.jid, Boolean(this.dataset.muc));
+                Chat.sendMessage();
 
                 return false;
             } else if(!Boolean(this.dataset.muc)) {
@@ -202,25 +208,16 @@ var Chat = {
                 }
             },5000);
 
-            //Chat.adaptDiscussion();
             Chat.toggleAction(this.value.length);
         };
 
         textarea.oninput = function() {
             MovimUtils.textareaAutoheight(this);
-            //Chat.adaptDiscussion();
         };
 
         if(document.documentElement.clientWidth > 1024) {
             document.querySelector('#chat_textarea').focus();
         }
-    },
-    adaptDiscussion: function()
-    {
-        document.querySelector('main > section > div > div.contained').style.height =
-            'calc(100% - '+
-            document.querySelector('.chat_box').clientHeight +
-            'px)';
     },
     setTextarea: function(value)
     {
@@ -241,7 +238,7 @@ var Chat = {
     {
         Chat_ajaxGet();
     },
-    setBubbles : function(left, right, room, date) {
+    setBubbles : function(left, right, date) {
         var div = document.createElement('div');
 
         Chat.currentDate = null;
@@ -250,8 +247,6 @@ var Chat = {
         Chat.left = div.firstChild.cloneNode(true);
         div.innerHTML = right;
         Chat.right = div.firstChild.cloneNode(true);
-        div.innerHTML = room;
-        Chat.room = div.firstChild.cloneNode(true);
         div.innerHTML = date;
         Chat.date = div.firstChild.cloneNode(true);
 
@@ -260,12 +255,11 @@ var Chat = {
     setScrollBehaviour : function() {
         var discussion = document.querySelector('#chat_widget div.contained');
         discussion.onscroll = function() {
-            if(discussion.dataset.muc != true) {
-                if(this.scrollTop < 1) {
-                    var chat = document.querySelector('#chat_widget');
-                    Chat_ajaxGetHistory(chat.dataset.jid, Chat.currentDate);
-                }
+            if(this.scrollTop < 1
+            && discussion.querySelectorAll('ul li p').length >= Chat.pagination) {
+                Chat_ajaxGetHistory(Chat.getTextarea().dataset.jid, Chat.currentDate);
             }
+
             Chat.lastHeight = this.clientHeight;
         };
     },
@@ -301,20 +295,12 @@ var Chat = {
                     Chat.appendDate(date, prepend);
                 }
 
-                if (page[date].constructor == Array) {
-                    for(id in page[date]) {
-                        Chat.appendMucMessage(page[date][id]);
+                for(speakertime in page[date]) {
+                    if(!Chat.currentDate) {
+                        Chat.currentDate = page[date][speakertime].published;
                     }
-                } else {
-                    for(speakertime in page[date]) {
-                        if(!Chat.currentDate) {
-                            Chat.currentDate = page[date][speakertime].published;
-                        }
 
-                        if(discussion.dataset.muc != 1) {
-                            Chat.appendMessage(speakertime, page[date][speakertime], prepend);
-                        }
-                    }
+                    Chat.appendMessage(speakertime, page[date][speakertime], prepend);
                 }
 
                 if(prepend && date) {
@@ -339,58 +325,14 @@ var Chat = {
 
             var chat = document.querySelector('#chat_widget');
             var lastMessage = chat.querySelector('ul li:not(.oppose):last-child div.bubble > div:last-child');
+            var textarea = Chat.getTextarea();
 
-            if(chat.dataset.jid && lastMessage) {
+            if(textarea && lastMessage) {
                 Chat_ajaxDisplayed(
-                    chat.dataset.jid,
+                    textarea.dataset.jid,
                     lastMessage.id
                 );
             }
-        }
-    },
-    appendMucMessage : function(message) {
-        var conversation = document.getElementById(
-            MovimUtils.cleanupId(message.jidfrom + '_conversation')
-        );
-
-        bubble = Chat.room.cloneNode(true);
-
-        var p = bubble.querySelector('p.message');
-
-        if(message.body.match(/^\/me/)) {
-            p.classList.add('quote');
-            message.body = message.body.substr(4);
-        }
-
-        if(message.body.match(/^\/code/)) {
-            p.classList.add('code');
-            message.body = message.body.substr(6).trim();
-        }
-
-        if (message.quoted) {
-            p.classList.add('quoted');
-        }
-
-        /*if (message.sticker != null) {
-            MovimUtils.addClass(bubble.querySelector('p.message'), 'sticker');
-            bubble.querySelector('p.message').appendChild(Chat.getStickerHtml(message.sticker));
-        } else {*/
-        //}
-        p.innerHTML = message.body;
-
-        bubble.querySelector('span.info').innerHTML = message.publishedPrepared;
-
-        var user = bubble.querySelector('p.user');
-        user.className = 'user ' + message.color;
-        user.innerHTML = message.resource;
-        user.onclick = function(n) {
-            var textarea = document.querySelector('#chat_textarea');
-            textarea.value = this.innerHTML + ', ' + textarea.value;
-            textarea.focus();
-        };
-
-        if(conversation) {
-            conversation.appendChild(bubble);
         }
     },
     appendMessage : function(idjidtime, data, prepend) {
@@ -400,6 +342,8 @@ var Chat = {
             mergeMsg = false,
             msgStack,
             refBubble;
+
+        var isMuc = (document.querySelector('#chat_widget div.contained').dataset.muc == 1);
         var jidtime = idjidtime.substring(idjidtime.indexOf('<') + 1);
 
         if(prepend) {
@@ -509,6 +453,38 @@ var Chat = {
             } else {
                 bubble.querySelector('div.bubble').appendChild(msg);
             }
+        }
+
+        /* MUC specific */
+        if(isMuc) {
+            bubble.querySelector('div.bubble').dataset.publishedprepared = data.resource + ' – ' + data.publishedPrepared;
+
+            icon = bubble.querySelector('span.primary.icon');
+
+            if(icon.querySelector('img') == undefined) {
+                if(data.icon_url) {
+                    var img = document.createElement("img");
+                    img.setAttribute("src", data.icon_url);
+
+                    icon.appendChild(img);
+                } else {
+                    icon.classList.add('color');
+                    icon.classList.add(data.color);
+                    icon.innerHTML = data.icon;
+                }
+
+                icon.dataset.resource = data.resource;
+            }
+
+            if(data.quoted) {
+                bubble.querySelector('div.bubble').classList.add('quoted');
+            }
+
+            /*icon.onclick = function(n) {
+                var textarea = document.querySelector('#chat_textarea');
+                textarea.value = this.dataset.resource + ', ' + textarea.value;
+                textarea.focus();
+            };*/
         }
 
         if(prepend){
@@ -633,6 +609,10 @@ var Chat = {
                 MovimUtils.hideElement(send_button);
             }
         }
+    },
+    getTextarea: function() {
+        var textarea = document.querySelector('#chat_textarea');
+        if(textarea) return textarea;
     }
 };
 
@@ -653,14 +633,12 @@ MovimWebsocket.attach(function() {
 
 if(typeof Upload != 'undefined') {
     Upload.attach(function(file) {
-        var textarea = document.querySelector('#chat_textarea');
-
-        Chat_ajaxSendMessage(textarea.dataset.jid, false, Boolean(textarea.dataset.muc), false, false, file);
+        Chat_ajaxSendMessage(Chat.getTextarea().dataset.jid, false, Boolean(Chat.getTextarea().dataset.muc), false, false, file);
     });
 }
 
 document.addEventListener('focus', function() {
-    var textarea = document.querySelector('#chat_textarea');
+    var textarea = Chat.getTextarea();
     if(textarea) textarea.focus();
 });
 
@@ -673,4 +651,3 @@ window.addEventListener('resize', function() {
 });
 
 var state = 0;
-

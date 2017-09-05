@@ -115,9 +115,9 @@
     {/if}
 </header>
 
-<div id="{$jid|cleanupId}-discussion" class="contained" data-muc="{$muc}">
+<div id="{$jid|cleanupId}-discussion" class="contained {if="$muc"}muc{/if}" data-muc="{$muc}">
     <section id="{$jid|cleanupId}-messages">
-        <ul class="list {if="$muc"}thin simple{else}middle{/if}" id="{$jid|cleanupId}-conversation"></ul>
+        <ul class="list middle" id="{$jid|cleanupId}-conversation"></ul>
         <div class="placeholder icon chat">
             <h1>{$c->__('chat.new_title')}</h1>
             <h4>{$c->___('chat.new_text')}</h4>
@@ -140,7 +140,7 @@
             {/if}
             <span class="control icon gray {if="$c->supported('upload')"}hide{else}show{/if}"
                   data-jid="{$jid}"
-                  onclick="Chat.sendMessage(this.dataset.jid, {if="$muc"}true{else}false{/if})">
+                  onclick="Chat.sendMessage()">
                 <i class="zmdi zmdi-mail-send"></i>
             </span>
             <form>

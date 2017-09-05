@@ -77,20 +77,20 @@ class Chat extends \Movim\Widget\Base
         $message = $packet->content;
         $cd = new \Modl\ContactDAO;
 
+        if($message->isEmpty()) return;
+
         if($message->session == $message->jidto && !$history
         && $message->jidfrom != $message->jidto) {
             $from = $message->jidfrom;
 
-            $notify = true;
             $contact = $cd->getRosterItem($from);
             if($contact == null) {
-                $notify = false;
                 $contact = $cd->get($from);
             }
 
             if($contact != null
-            && $notify
-            && !preg_match('#^\?OTR#', $message->body)
+            && $message->isTrusted()
+            && !$message->isOTR()
             && $message->type != 'groupchat'
             && !$message->edited) {
                 $avatar = $contact->getPhoto('s');
@@ -124,7 +124,7 @@ class Chat extends \Movim\Widget\Base
             $n->ajaxClear('chat|'.$from);
         }
 
-        if(!preg_match('#^\?OTR#', $message->body)) {
+        if(!$message->isOTR()) {
             $this->rpc('Chat.appendMessagesWrapper', $this->prepareMessage($message, $from));
         }
     }
@@ -216,20 +216,11 @@ class Chat extends \Movim\Widget\Base
 
             $this->rpc('MovimUtils.addClass', '#chat_widget', 'fixed');
             $this->rpc('MovimTpl.fill', '#chat_widget', $html);
-            $this->rpc('Chat.focus', $jid);
+            $this->rpc('Chat.focus');
             $this->rpc('MovimTpl.showPanel');
 
             $this->prepareMessages($jid);
         }
-    }
-
-    /**
-     * @brief Get a Drawer view of a contact
-     */
-    function ajaxGetContact($jid)
-    {
-        $c = new ContactActions;
-        $c->ajaxGetDrawer($jid);
     }
 
     /**
@@ -266,6 +257,15 @@ class Chat extends \Movim\Widget\Base
         } else {
             $this->rpc('Rooms_ajaxAdd', $room);
         }
+    }
+
+    /**
+     * @brief Get a Drawer view of a contact
+     */
+    function ajaxGetContact($jid)
+    {
+        $c = new ContactActions;
+        $c->ajaxGetDrawer($jid);
     }
 
     /**
@@ -350,7 +350,7 @@ class Chat extends \Movim\Widget\Base
 
         /* Is it really clean ? */
         if(!$p->getMuc()) {
-            if(!preg_match('#^\?OTR#', $m->body)) {
+            if(!$m->isOTR()) {
                 $md = new \Modl\MessageDAO;
                 $md->set($m);
             }
@@ -437,7 +437,7 @@ class Chat extends \Movim\Widget\Base
             Notification::append(false, $this->__('message.history', count($messages)));
 
             foreach($messages as $message) {
-                if(!preg_match('#^\?OTR#', $message->body)) {
+                if(!$message->isOTR()) {
                     $this->prepareMessage($message);
                 }
             }
@@ -596,7 +596,7 @@ class Chat extends \Movim\Widget\Base
         $md = new \Modl\MessageDAO;
 
         if($muc) {
-            $messages = $md->getRoom(echapJid($jid), 0, $this->_pagination * 4);
+            $messages = $md->getRoom(echapJid($jid), 0, $this->_pagination);
         } else {
             $messages = $md->getContact(echapJid($jid), 0, $this->_pagination);
         }
@@ -621,17 +621,17 @@ class Chat extends \Movim\Widget\Base
 
         $view->assign('contact', $contact);
         $view->assign('me', false);
+        $view->assign('muc', $muc);
         $left = $view->draw('_chat_bubble', true);
 
         $view->assign('contact', $me);
         $view->assign('me', true);
+        $view->assign('muc', $muc);
         $right = $view->draw('_chat_bubble', true);
-
-        $room = $view->draw('_chat_bubble_room', true);
 
         $date = $view->draw('_chat_date', true);
 
-        $this->rpc('Chat.setBubbles', $left, $right, $room, $date);
+        $this->rpc('Chat.setBubbles', $left, $right, $date);
         $this->rpc('Chat.appendMessagesWrapper', $this->_wrapper);
         $this->rpc('MovimTpl.scrollPanel');
         $this->rpc('Chat.clearReplace');
@@ -732,16 +732,27 @@ class Chat extends \Movim\Widget\Base
         if ($message->type == 'groupchat') {
             $message->color = stringToColor($message->session . $message->resource . $message->jidfrom . $message->type);
 
-            if (!empty($message->body)) {
-                array_push($this->_wrapper[$date], $message);
+            $cd = new \Modl\ContactDAO;
+            $contact = $cd->getPresence($message->jidfrom, $message->resource);
+
+            if($contact) {
+                $url = $contact->getPhoto('s');
+
+                if($url) {
+                    $message->icon_url = $url;
+                }
             }
-        } else {
-            $msgkey = '<' . $message->jidfrom . '>' . substr($message->published, 11, 5);
 
-            $counter = count($this->_wrapper[$date]);
-
-            $this->_wrapper[$date][$counter.$msgkey] = $message;
+            $message->icon = firstLetterCapitalize($message->resource);
         }
+
+        $msgkey = '<' . $message->jidfrom;
+        $msgkey .= ($message->type == 'groupchat') ? $message->resource : '';
+        $msgkey .= '>' . substr($message->published, 11, 5);
+
+        $counter = count($this->_wrapper[$date]);
+
+        $this->_wrapper[$date][$counter.$msgkey] = $message;
 
         if ($message->type == 'invitation') {
             $view = $this->tpl();
@@ -787,5 +798,6 @@ class Chat extends \Movim\Widget\Base
 
     function display()
     {
+        $this->view->assign('pagination', $this->_pagination);
     }
 }

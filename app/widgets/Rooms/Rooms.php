@@ -154,9 +154,7 @@ class Rooms extends \Movim\Widget\Base
     {
         if(!$this->validateRoom($form->to->value)) return;
 
-        $cd = new \Modl\ContactDAO;
-        if(!empty($form->invite->value)
-        && !empty($cd->getRoster($form->invite->value))) {
+        if(!empty($form->invite->value)) {
             $i = new Invite;
             $i->setTo($form->to->value)
               ->setId(Uuid::uuid4())
@@ -201,9 +199,13 @@ class Rooms extends \Movim\Widget\Base
     /**
      * @brief Autocomplete users in MUC
      */
-    function ajaxMucUsersAutocomplete($room) {
+    function ajaxMucUsersAutocomplete($room)
+    {
         $usersForAutocomplete = $this->getUsersList($room);
-        $this->rpc("Chat.onAutocomplete", $usersForAutocomplete);
+
+        if($usersForAutocomplete) {
+            $this->rpc("Chat.onAutocomplete", $usersForAutocomplete);
+        }
     }
 
     /**

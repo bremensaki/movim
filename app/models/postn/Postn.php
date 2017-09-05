@@ -296,6 +296,16 @@ class Postn extends Model
         }
 
         $this->setAttachments($entry->entry->link, $extra);
+
+        if($this->isComment()) {
+            $pd = new \Modl\PostnDAO;
+            $p = $pd->getParent($this->origin, substr($this->node, 30));
+            if($p) {
+                $this->parentorigin = $p->origin;
+                $this->parentnode   = $p->node;
+                $this->parentnodeid = $p->nodeid;
+            }
+        }
     }
 
     private function setAttachments($links, $extra = false)
@@ -319,10 +329,11 @@ class Postn extends Model
             && Validator::url()->validate($enc['href'])) $this->open = true;
 
             if((string)$attachment->attributes()->title == 'comments') {
-                $substr = explode('?',substr((string)$attachment->attributes()->href, 5));
-                if(count($substr) > 1) {
-                    $this->commentorigin = reset($substr);
-                    $this->commentnodeid = substr((string)$substr[1], 36);
+                $url = parse_url(urldecode((string)$attachment->attributes()->href));
+
+                if($url) {
+                    $this->commentorigin = $url['path'];
+                    $this->commentnodeid = substr($url['query'], 36);
                 }
             }
         }
