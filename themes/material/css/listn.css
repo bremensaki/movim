@@ -370,6 +370,12 @@ ul li div.bubble p {
     white-space: pre-wrap;
 }
 
+ul li div.bubble p.code {
+    display: inline-block;
+    margin: 0.5rem 0;
+    margin-bottom: 0;
+}
+
 ul li.oppose div.bubble {
     margin-right: 9rem;
     float: right;
@@ -432,48 +438,6 @@ ul li.oppose div.bubble:not(.sticker):not(.file):before {
     left: calc(100% - 10.5rem);
     top: 0.75rem;
     border-top-color: #f5f5f5;
-}
-
-/* Navigation */
-
-ul.navigation {
-    display:flex;
-    justify-content:center;
-}
-
-ul.navigation li {
-    text-align: center;
-    flex: 1;
-    padding: 0.75rem;
-    opacity: 0.5;
-    position: relative;
-}
-
-ul.navigation li:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    opacity: 1;
-    cursor: pointer;
-}
-
-ul.navigation li.active {
-    opacity: 1;
-}
-
-ul.navigation li > span.primary {
-    line-height: 3.5rem;
-}
-
-ul.navigation li > p {
-    display: block;
-    list-style-type: none;
-    font-size: 1.5rem;
-}
-
-ul.navigation li > span.counter {
-    right: calc(50% - 3rem);
-    font-size: 1.5rem;
-    line-height: 1.5rem;
-    min-width: 1.5rem;
 }
 
 /* Date separator */

@@ -282,7 +282,7 @@ class Chat extends \Movim\Widget\Base
         if($file != false) {
             $body = $file->uri;
         } else {
-            $body = (string)htmlentities(trim($message), ENT_XML1, 'UTF-8', false);
+            $body = (string)htmlentities(trim($message), ENT_XML1, 'UTF-8');
         }
 
         if($body == '' || $body == '/me')
@@ -391,7 +391,7 @@ class Chat extends \Movim\Widget\Base
 
         if(!isset($m->sticker)
         && !isset($m->file)) {
-            $this->rpc('Chat.setTextarea', $m->body);
+            $this->rpc('Chat.setTextarea',htmlspecialchars_decode($m->body));
         }
     }
 
