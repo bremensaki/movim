@@ -97,13 +97,15 @@
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/Vcard4/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from ../app/widgets/Visio/locales.ini
+#. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../locales/locales.ini
 msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-21 18:03+0200\n"
-"PO-Revision-Date: 2017-07-21 16:04+0000\n"
+"POT-Creation-Date: 2017-09-29 11:38+0200\n"
+"PO-Revision-Date: 2017-09-29 09:39+0000\n"
 "Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: Polish (http://www.transifex.com/movim/movim/language/pl/)\n"
 "Language: pl\n"
@@ -111,7 +113,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Generator: Translate Toolkit 2.0.0\n"
+"X-Generator: Translate Toolkit 2.2.5\n"
 
 #: [about]thanks
 msgid "Thanks"
@@ -302,10 +304,6 @@ msgstr "Szczegółowość logów"
 msgid "Server Timezone"
 msgstr "Strefa Czasowa Serwera"
 
-#: [general]limit
-msgid "User folder size limit (in bytes)"
-msgstr "Limit rozmiaru folderu użytkownika (w bajtach)"
-
 #: [websocket]title
 msgid "WebSocket Configuration"
 msgstr "Konfiguracja WebSocket"
@@ -329,10 +327,6 @@ msgstr "Publiczne WebSockets"
 #: [credentials]title
 msgid "Administration Credential"
 msgstr "Upoważnienia Administratora"
-
-#: [credentials]info
-msgid "Change the default credentials admin/password"
-msgstr "Zmień domyślne upoważnienia admin/hasło"
 
 #: [credentials]re_password
 msgid "Retype password"
@@ -655,6 +649,10 @@ msgstr "Zobacz profil"
 msgid "Clear the history"
 msgstr "Wyczyść historię"
 
+#: [chat]edit_previous
+msgid "Edit last message"
+msgstr ""
+
 #: [chatroom]members
 msgid "Members"
 msgstr "Członkowie"
@@ -732,17 +730,17 @@ msgstr "Serwery społeczności"
 msgid "This server doesn't exists"
 msgstr "Serwer nie istnieje"
 
-#: [communitiesserver]created [groups]created
-msgid "Group created successfully"
-msgstr "Pomyślnie utworzono Grupę"
+#: [communitiesserver]created
+msgid "Community created successfully"
+msgstr ""
 
 #: [communitiesserver]empty_server
-msgid "There is no Groups yet on this server."
-msgstr "Dotychczas brak grup na tym serwerze"
+msgid "There is no Communities yet on this server."
+msgstr ""
 
-#: [communitiesserver]add [groups]add
-msgid "Create a new Group on %s"
-msgstr "Stwórz nową grupę na %s"
+#: [communitiesserver]add
+msgid "Create a new community on %s"
+msgstr ""
 
 #: [communitiesserver]name
 msgid "Community name"
@@ -752,34 +750,34 @@ msgstr "Nazwa społeczności"
 msgid "My Little Pony - Fan Club"
 msgstr "Fanklub Kucyków Pony"
 
-#: [communitiesserver]name_error [groups]name_error
-msgid "Please provide a valid group name (4 characters minimum)"
-msgstr "Proszę podać właściwą nazwę grupy (minimum 4 znaki)"
+#: [communitiesserver]name_error
+msgid "Please provide a valid community name (4 characters minimum)"
+msgstr ""
 
-#: [communitiesserver]no_creation [groups]no_creation
-msgid "You cannot create a new Group on this server"
-msgstr "Nie możesz założyć nowej Grupy na tym serwerze"
+#: [communitiesserver]no_creation
+msgid "You cannot create a new community on this server"
+msgstr ""
 
 #: [communityaffiliation]subscriptions [group]subscriptions
 #: [statistics]subscriptions
 msgid "Subscriptions"
 msgstr "Subskrypcje"
 
-#: [communityaffiliation]deleted [groups]deleted
-msgid "Group deleted successfully"
-msgstr "Pomyślnie usunięto Grupę"
+#: [communityaffiliation]deleted
+msgid "Community deleted successfully"
+msgstr ""
 
-#: [communityaffiliation]delete_title [group]delete_title
-msgid "Delete the group"
-msgstr "Usuń grupę"
+#: [communityaffiliation]delete_title
+msgid "Delete the community"
+msgstr ""
 
-#: [communityaffiliation]delete_text [group]delete_text
-msgid "You are going to delete the following group. Please confirm your action."
-msgstr "Zamierzasz usunąć następującą grupę. Potwierdź swoje zamiary."
+#: [communityaffiliation]delete_text
+msgid "You are going to delete the following community. Please confirm your action."
+msgstr ""
 
-#: [communityaffiliation]delete_clean_text [group]delete_clean_text
-msgid "It seems that this group doesn't exists anymore. Do you want to remove it from your subscriptions?"
-msgstr "Najwyraźniej ta grupa już nie istnieje. Chcesz ją usunąć z twoich subskrypcji?"
+#: [communityaffiliation]delete_clean_text
+msgid "It seems that this community doesn't exists anymore. Do you want to remove it from your subscriptions?"
+msgstr ""
 
 #: [communityaffiliation]owner
 msgid "Owner"
@@ -1097,6 +1095,18 @@ msgstr "Coś złego wydarzyło się tej grupie"
 msgid "Group configuration saved"
 msgstr "Konfiguracja grupy zapisana"
 
+#: [group]delete_title
+msgid "Delete the group"
+msgstr "Usuń grupę"
+
+#: [group]delete_text
+msgid "You are going to delete the following group. Please confirm your action."
+msgstr "Zamierzasz usunąć następującą grupę. Potwierdź swoje zamiary."
+
+#: [group]delete_clean_text
+msgid "It seems that this group doesn't exists anymore. Do you want to remove it from your subscriptions?"
+msgstr "Najwyraźniej ta grupa już nie istnieje. Chcesz ją usunąć z twoich subskrypcji?"
+
 #: [group]counter
 msgid "%s groups on this server"
 msgstr "%s grup na serwerze"
@@ -1125,9 +1135,29 @@ msgstr "Listę wszystkich zasubskrybowanych grup znajdziesz w Moich Subskrypcjac
 msgid "Contact post"
 msgstr "Wpis Kontaktu"
 
+#: [groups]add
+msgid "Create a new Group on %s"
+msgstr "Stwórz nową grupę na %s"
+
 #: [groups]name
 msgid "Group name"
 msgstr "Nazwa Grupy"
+
+#: [groups]created
+msgid "Group created successfully"
+msgstr "Pomyślnie utworzono Grupę"
+
+#: [groups]deleted
+msgid "Group deleted successfully"
+msgstr "Pomyślnie usunięto Grupę"
+
+#: [groups]name_error
+msgid "Please provide a valid group name (4 characters minimum)"
+msgstr "Proszę podać właściwą nazwę grupy (minimum 4 znaki)"
+
+#: [groups]no_creation
+msgid "You cannot create a new Group on this server"
+msgstr "Nie możesz założyć nowej Grupy na tym serwerze"
 
 #: [help]faq
 msgid "Frequently Asked Questions"
@@ -1160,6 +1190,30 @@ msgstr "Czerwony, wszyscy w sieci XMPP widzą twoje informacje"
 #: [banner]black
 msgid "Black, the whole Internet can see your information"
 msgstr "Czarny, cały Internet widzi twoje informacje"
+
+#: [apps]question
+msgid "Did you already tried Movim on the other platforms?"
+msgstr ""
+
+#: [apps]phone
+msgid "Apps for your phone"
+msgstr ""
+
+#: [apps]android
+msgid "Try out our official Android app"
+msgstr ""
+
+#: [apps]recommend
+msgid "We also recommend"
+msgstr ""
+
+#: [apps]computer
+msgid "Apps for your computer"
+msgstr ""
+
+#: [apps]computer_text
+msgid "Our official apps are available on our website"
+msgstr ""
 
 #: [wiki]question
 msgid "Looking for some documentation ?"
@@ -1932,6 +1986,10 @@ msgstr "Społeczności, feed'y newsów oraz profile zostały chwilowo wyłączon
 #: [degraded]text_3
 msgid "Please contact your server administrator to see if this feature can be enabled."
 msgstr "Proszę powiadomić administratora twojego serwera w sprawie włączenia tej funkcji."
+
+#: [visio]calling
+msgid "…is calling you"
+msgstr ""
 
 #: [global]no_js
 msgid "You don't have javascript enabled.  Good luck with that."

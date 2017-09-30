@@ -21,7 +21,7 @@ class Rooms extends \Movim\Widget\Base
         $this->addcss('rooms.css');
         $this->registerEvent('message', 'onMessage');
         $this->registerEvent('bookmark_get_handle', 'onGetBookmark');
-        $this->registerEvent('bookmark_set_handle', 'onBookmark', 'chat');
+        $this->registerEvent('bookmark_set_handle', 'onBookmark');
         $this->registerEvent('presence_muc_handle', 'onConnected', 'chat');
         $this->registerEvent('presence_unavailable_handle', 'onDisconnected', 'chat');
         $this->registerEvent('presence_muc_errorconflict', 'onConflict');
@@ -79,7 +79,7 @@ class Rooms extends \Movim\Widget\Base
         $this->rpc('MovimTpl.hidePanel');
     }
 
-    function onConnected()
+    function onConnected($packet)
     {
         $this->refreshRooms();
     }
@@ -201,10 +201,15 @@ class Rooms extends \Movim\Widget\Base
      */
     function ajaxMucUsersAutocomplete($room)
     {
-        $usersForAutocomplete = $this->getUsersList($room);
+        $users = $this->getUsersList($room);
 
-        if($usersForAutocomplete) {
-            $this->rpc("Chat.onAutocomplete", $usersForAutocomplete);
+        if($users) {
+            $resources = [];
+            foreach($users as $user) {
+                array_push($resources, $user->resource);
+            }
+
+            $this->rpc("Chat.onAutocomplete", $resources);
         }
     }
 
@@ -240,8 +245,19 @@ class Rooms extends \Movim\Widget\Base
             $nickname = $s->get('username');
         }
 
-        $p->setNickname($nickname);
+        $cd = new \Modl\CapsDAO;
+        $jid = explodeJid($room);
+        $caps = $cd->get($jid['server']);
 
+        if($caps && ($caps->isMAM() || $caps->isMAM2())) {
+            $p->enableMAM();
+
+            if($caps->isMAM2()) {
+                $p->enableMAM2();
+            }
+        }
+
+        $p->setNickname($nickname);
         $p->request();
     }
 

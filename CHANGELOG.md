@@ -1,7 +1,7 @@
 Movim Changelog
 ================
 
-v0.12 (trunk)
+v0.12 – Lovejoy (trunk)
 ---------------------------
  * Add autojoin support for chatrooms
  * New Contact page
@@ -29,8 +29,17 @@ v0.12 (trunk)
  * Redesign of the Community main page
  * Refactor and cleanup the management of the comments internaly
  * Autocomplete nicknames in MUC using tabulation (by pztrn)
+ * Add picture preview when posting links in MUC
+ * Redesign the MUC bubbles to unify the style with the simple chats
+ * Enable history for MUC
+ * Pictures can be previewed before upload
+ * Do not send the message when carriage return is pressed on mobile
+ * More colors!
+ * Protect pictures URLs with a HTTP HEAD check
+ * Add Miho sticker pack
+ * Add support of MAM (up to mam:2) for the MUCs
 
-v0.11
+v0.11 – Tuttle
 ---------------------------
  * Navigation improvement
  * Add previous/next post shortcut in the footer of each posts
@@ -57,7 +66,7 @@ v0.11
  * Improve the Stickers picker
  * Refactor and cleanup the session management
 
-v0.10
+v0.10 – Holmes
 ---------------------------
  * Resize and compress large pictures in Upload
  * Refactor MovimWebsocket and fix disconnection issues
@@ -94,7 +103,7 @@ v0.10
  * Improve image handling in posts
  * Improve overall performances
 
-v0.9
+v0.9 – Tchouri
 ---------------------------
  * New User Interface for the whole project
  * Removed BOSH connections and introduce pure XMPP TLS connections
@@ -116,7 +125,7 @@ v0.9
  * Internet Explorer 11 support
  * PHP7 Support
 
-v0.8.1
+v0.8.1 – Polar Aurora
 ---------------------------
  * Add charts in the Statistics
  * Add a Caps support table
@@ -133,7 +142,7 @@ v0.8.1
  * Improve the posts CSS
  * Add a fancy XEP visualisator
 
-v0.8.0
+v0.8.0 – Polar Aurora
 ---------------------------
 
  * Refactor the whole Movim sourcecode + clean old code
@@ -165,7 +174,7 @@ v0.8.0
  * Move from XML to JSON for the browser-server requests
  * Update the locales
 
-v0.7.2
+v0.7.2 – Sandstorm
 ---------------------------
 
  * Rewrite Modl to Modl2 with dynamic database update, PDO support (MySQL and PostgreSQL)
@@ -178,7 +187,7 @@ v0.7.2
  * Add a new log system
  * Various minor bug fixed
 
-v0.7.1
+v0.7.1 – Sandstorm
 ---------------------------
 
  * Huge speed optimisation
@@ -187,7 +196,7 @@ v0.7.1
  * Chat fix
  * Smiley updated
 
-v0.7.0
+v0.7.0 – Sandstorm
 ---------------------------
 
  * Media hosting and implementation (picture) @edhelas
@@ -198,12 +207,12 @@ v0.7.0
  * URL rewriting @edhelas
  * Multi User Chat @edhelas
 
-v0.6.1
+v0.6.1 – Cumulus
 ---------------------------
 
  * Fix SSL certificate problem
 
-v0.6.0
+v0.6.0 – Cumulus
 ---------------------------
 
  * Create a new installer @kilian @edhelas
@@ -244,7 +253,7 @@ v0.6.0
  * Support of the XEP-0115 Entity Capabilities, which enables the client to communicate its features and the extent of its XMPP support to the server
  * Implementation of DIGEST-MD5 and CRAM-MD5 as more secure log-in mechanisms
 
-v0.5.0
+v0.5.0 – Snowball
 ---------------------------
 
  * Parse all the Movim messages to make them more “user-friendly” (smileys, links, bb-code like) @Etenil

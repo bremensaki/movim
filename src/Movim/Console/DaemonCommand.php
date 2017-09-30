@@ -84,6 +84,16 @@ class DaemonCommand extends Command
         $core = new Core($loop, $baseuri, $input);
         $app  = new HttpServer(new WsServer($core));
 
+        $cd = new \Modl\ConfigDAO;
+        $config = $cd->get();
+
+        if(empty($config->username) || empty($config->password)) {
+            $output->writeln('<comment>Please set a username and password for the admin panel ('.$baseuri.'?admin)</comment>');
+
+            $output->writeln('<info>To set those credentials run</info>');
+            $output->writeln('<info>php mud.php config --username=USERNAME --password=PASSWORD</info>');
+        }
+
         $socket = new Reactor(
             $input->getOption('interface').':'.$input->getOption('port'),
             $loop

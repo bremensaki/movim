@@ -30,8 +30,11 @@
                     id="embed"
                     name="embed"
                     onchange="if(this.value != '') { PublishBrief_ajaxEmbedLoading(); PublishBrief_ajaxEmbedTest(this.value); }"
-                    {if="$url"}value="{$url}"{/if}
-                    {if="!empty($draft->links)"}value="{$draft->links[0]}"{/if}
+                    {if="!empty($draft->links) && !empty($draft->links[0])"}
+                         value="{$draft->links[0]}"
+                    {elseif="$url"}
+                        value="{$url}"
+                    {/if}
                 >
             </form>
         </li>
@@ -40,6 +43,7 @@
     <ul class="list middle">
         <li>
             <span class="primary icon gray bubble active privacy color"
+                  title="{$c->__('post.public')}"
                   onclick="PublishBrief.togglePrivacy()">
                 <i class="zmdi zmdi-portable-wifi"></i>
             </span>

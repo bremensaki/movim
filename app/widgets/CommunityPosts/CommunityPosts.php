@@ -11,31 +11,16 @@ include_once WIDGETS_PATH.'Post/Post.php';
 
 class CommunityPosts extends \Movim\Widget\Base
 {
-    private $_paging = 10;
+    private $_paging = 5;
 
     function load()
     {
-        $this->registerEvent('pubsub_getitem_handle', 'onItem');
-        $this->registerEvent('pubsub_getitemsid_handle', 'onItemsId');
-        //$this->registerEvent('pubsub_getitems_handle', 'onItems');
+        //$this->registerEvent('pubsub_getitemsid_handle', 'onItemsId');
+        $this->registerEvent('pubsub_getitems_handle', 'onItemsId');
         $this->registerEvent('pubsub_getitems_error', 'onItemsError');
         $this->registerEvent('pubsub_getitemsid_error', 'onItemsError');
 
         $this->addjs('communityposts.js');
-    }
-
-    function onItem($packet)
-    {
-        list($origin, $node, $id) = array_values($packet->content);
-
-        $pd = new \Modl\PostnDAO;
-        $p = $pd->get($origin, $node, $id);
-
-        if($p && $p->isComment()) $p = $p->getParent();
-
-        if($p) {
-            $this->rpc('MovimTpl.fill', '#'.cleanupId($p->nodeid), $this->preparePost($p));
-        }
     }
 
     /*function onItems($packet)
@@ -46,16 +31,16 @@ class CommunityPosts extends \Movim\Widget\Base
 
     function onItemsId($packet)
     {
-        list($origin, $node, $ids) = array_values($packet->content);
+        list($origin, $node, $ids, $first, $last, $count, $paginated)
+            = array_values($packet->content);
 
-        $ids = array_slice($ids, 0, $this->_paging);
-        $this->displayItems($origin, $node, $ids);
+        $this->displayItems($origin, $node, $ids, $first, $last, $count, $paginated);
     }
 
     function onItemsError($packet)
     {
         list($origin, $node) = array_values($packet->content);
-        Notification::append(false, $this->__('group.empty'));
+        Notification::append(false, $this->__('communityposts.empty'));
 
         if($node != 'urn:xmpp:microblog:0') {
             $sd = new \Modl\SubscriptionDAO;
@@ -73,14 +58,23 @@ class CommunityPosts extends \Movim\Widget\Base
         }
     }
 
-    private function displayItems($origin, $node, $ids = false, $public = false)
+    private function displayItems(
+        $origin,
+        $node,
+        $ids = false,
+        $first = false,
+        $last = false,
+        $count = false,
+        $paginated = false)
     {
         if(!$this->validateServerNode($origin, $node)) return;
 
-        $html = $this->prepareCommunity($origin, $node, 0, $ids, $public);
+        $html = $this->prepareCommunity($origin, $node, 0, $ids, $first, $last, $count);
 
         $slugify = new Slugify;
-        $this->rpc('MovimTpl.fill', '#communityposts.'.$slugify->slugify($origin.'_'.$node), $html);
+        $this->rpc(
+            ($paginated) ? 'MovimTpl.append' : 'MovimTpl.fill',
+            '#communityposts.'.$slugify->slugify($origin.'_'.$node), $html);
         $this->rpc('MovimUtils.enhanceArticlesContent');
     }
 
@@ -90,7 +84,7 @@ class CommunityPosts extends \Movim\Widget\Base
         $c->ajaxGetDrawer($jid);
     }
 
-    function ajaxGetItems($origin, $node)
+    function ajaxGetItems($origin, $node, $before = 'empty')
     {
         if(!$this->validateServerNode($origin, $node)) return;
 
@@ -98,21 +92,24 @@ class CommunityPosts extends \Movim\Widget\Base
         /*if($node == 'urn:xmpp:microblog:0') {
             $r = new GetItems;
         } else {*/
-            $r = new GetItemsId;
+            $r = new GetItems;
         //}
 
-        $r->setTo($origin)
-          ->setNode($node);
+        if(!isset($before)) $before = 'empty';
 
-        $r->request();
+        $r->setTo($origin)
+          ->setNode($node)
+          ->setPaging($this->_paging)
+          ->setBefore($before)
+          ->request();
     }
 
-    function ajaxGetHistory($origin, $node, $page)
+    /*function ajaxGetHistory($origin, $node, $page)
     {
         $html = $this->prepareCommunity($origin, $node, $page);
         $this->rpc('MovimTpl.append', '#communityposts', $html);
         $this->rpc('MovimUtils.enhanceArticlesContent');
-    }
+    }*/
 
     function ajaxClear()
     {
@@ -137,20 +134,31 @@ class CommunityPosts extends \Movim\Widget\Base
         return $pw->preparePost($p, true, false, true);
     }
 
-    private function prepareCommunity($origin, $node, $page = 0, $ids = false, $public = false)
+    private function prepareCommunity(
+        $origin,
+        $node,
+        $page = 0,
+        $ids = false,
+        $first = false,
+        $last = false,
+        $count = false)
     {
         $pd = new \Modl\PostnDAO;
 
-        /*if($ids == false) {*/
-        if($public) {
+        /*if($public) {
             $posts = $pd->getPublic($origin, $node, $page*$this->_paging, $this->_paging);
+        } else*/
+        if($ids == false) {
+            return $this->prepareEmpty();
         } else {
-            $posts = $pd->getNodeUnfiltered($origin, $node, $page*$this->_paging, $this->_paging);
-        }
-        /*
-        } else {
+            foreach($ids as $key => $id) {
+                if(empty($id)) {
+                    unset($ids[$key]);
+                }
+            }
+
             $posts = $pd->getIds($origin, $node, $ids);
-        }*/
+        }
 
         $id = new \Modl\InfoDAO;
         $info = $id->get($origin, $node);
@@ -170,9 +178,10 @@ class CommunityPosts extends \Movim\Widget\Base
             }
         }
 
-        foreach($ids as $key => $id) {
-            if(empty($id)) {
-                unset($ids[$key]);
+        if(is_array($posts)) {
+            foreach($posts as $key => $post) {
+                $posts[$post->nodeid] = $post;
+                unset($posts[$key]);
             }
         }
 
@@ -186,6 +195,10 @@ class CommunityPosts extends \Movim\Widget\Base
         $view->assign('subscription', $subscription);
         $view->assign('paging', $this->_paging);
         $view->assign('nsfwMessage', $nsfwMessage);
+
+        $view->assign('first', $first);
+        $view->assign('last', $last);
+        $view->assign('count', $count);
 
         $html = $view->draw('_communityposts', true);
 

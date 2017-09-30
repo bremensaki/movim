@@ -26,7 +26,22 @@ class Visio extends \Movim\Widget\Base
         $s = Session::start();
         $s->set('sdp', $jts->generate());
 
-        $this->rpc('VisioLink.openVisio', $from);
+        $cd = new \Modl\ContactDAO;
+        $contact = $cd->get(cleanJid($from));
+
+        $avatar = $contact->getPhoto('s');
+        if($avatar == false) $avatar = null;
+
+        Notification::append(
+            'call',
+            $contact->getTrueName(),
+            $this->__('visio.calling'),
+            $avatar,
+            25,
+            null,
+            null,
+            "VisioLink.openVisio('".$from."')"
+        );
     }
 
     function ajaxGetSDP()
@@ -36,6 +51,11 @@ class Visio extends \Movim\Widget\Base
             $this->rpc('Visio.onSDP', $s->get('sdp'), 'offer');
             $s->remove('sdp');
         }
+    }
+
+    function ajaxAskInit()
+    {
+        $this->rpc('Visio.init');
     }
 
     function onAccept($stanza)
@@ -135,5 +155,7 @@ class Visio extends \Movim\Widget\Base
 
     function display()
     {
+        $cd = new \Modl\ContactDAO;
+        $this->view->assign('contact', $cd->get($this->get('f')));
     }
 }

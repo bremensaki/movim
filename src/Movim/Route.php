@@ -31,12 +31,13 @@ class Route extends Base
                 'node'          => ['s', 'n', 'i'],
                 'news'          => ['s', 'n', 'i'],
                 'post'          => ['s', 'n', 'i'],
+                'picture'       => ['url'],
                 'popuptest'     => false,
                 'publish'       => ['s', 'n', 'i', 'sh'],
                 'room'          => ['r'],
                 'share'         => ['url'],
                 'tag'           => ['t', 'i'],
-                'visio'         => false,
+                'visio'         => ['f', 's'],
             ];
     }
 
@@ -51,10 +52,12 @@ class Route extends Base
 
         $this->_page = array_shift($request);
 
-        if(isset($this->_routes[$this->_page]))
+        if(isset($this->_routes[$this->_page])) {
             $route = $this->_routes[$this->_page];
+        }
 
-        if(count($request) && isset($route)) {
+        if(count($request)
+        && is_array($route)) {
             $i = 0;
             foreach($route as $key) {
                 if (isset($request[$i])) {

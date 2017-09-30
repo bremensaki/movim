@@ -6,9 +6,13 @@ var Upload = {
     file : null,
 
     init : function() {
-        var file = document.getElementById('file').files[0];
-        Upload.name = file.name;
-        Upload.preview(file);
+        if(Upload.file) {
+            Upload_ajaxSend({
+                name: Upload.name,
+                size: Upload.file.size,
+                type: Upload.file.type
+            });
+        }
     },
 
     attach : function(func) {
@@ -28,10 +32,16 @@ var Upload = {
         }
     },
 
-    preview : function(file) {
+    preview : function() {
+        var file = document.getElementById('file').files[0];
+        Upload.name = file.name;
+        Upload.check(file);
+    },
+
+    check : function(file) {
         if (!file.type.match(/image.*/)) {
             console.log("Not a picture !");
-            Upload.initiate(file);
+            Upload.prepare(file);
         } else {
             var reader = new FileReader();
             reader.readAsDataURL(file);
@@ -53,7 +63,7 @@ var Upload = {
             var width = image.naturalWidth;
             var height = image.naturalHeight;
 
-            var ratio = (limit*limit)/(width*height);
+            var ratio = Math.min(limit / width, limit / height);
 
             if(ratio < 1 || file.size > SMALL_PICTURE_LIMIT) {
                 if(ratio < 1) {
@@ -93,29 +103,31 @@ var Upload = {
 
                     canvas.toBlob(
                         function (blob) {
-                            Upload.initiate(blob);
+                            Upload.prepare(blob);
                         },
                         'image/jpeg',
                         0.85
                     );
                 } else {
-                    Upload.initiate(file);
+                    Upload.prepare(file);
                 }
             } else {
-                Upload.initiate(file);
+                Upload.prepare(file);
             }
+
         }
         image.src = src;
     },
 
-    initiate : function(file) {
+    prepare : function(file) {
         Upload.file = file;
 
-        Upload_ajaxSend({
-            name: Upload.name,
-            size: file.size,
-            type: file.type
-        });
+        var preview = document.querySelector('#upload img.preview_picture');
+        if (Upload.file.type.match(/image.*/)) {
+            preview.src = URL.createObjectURL(Upload.file);
+        } else {
+            preview.src = '';
+        }
     },
 
     request : function(get, put) {

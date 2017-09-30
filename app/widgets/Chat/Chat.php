@@ -279,6 +279,19 @@ class Chat extends \Movim\Widget\Base
     {
         $this->rpc('Chat.sendedMessage');
 
+        if(filter_var($message, FILTER_VALIDATE_URL)) {
+            $headers = requestHeaders($message);
+
+            if($headers['http_code'] == 200
+            && typeIsPicture($headers['content_type'])) {
+                $file = new \stdClass;
+                $file->name = $message;
+                $file->type = $headers['content_type'];
+                $file->size = $headers['download_content_length'];
+                $file->uri  = $message;
+            }
+        }
+
         if($file != false) {
             $body = $file->uri;
         } else {
@@ -648,25 +661,23 @@ class Chat extends \Movim\Widget\Base
 
         // Attached file
         if (isset($message->file)) {
-            if (!$message->isTrusted()) {
-                $message->file = null;
-            } else {
-                if($message->body == $message->file['uri']) {
-                    $message->body = null;
-                }
-
-                if(typeIsPicture($message->file['type'])
-                && $message->file['size'] <= SMALL_PICTURE_LIMIT) {
-                    $message->picture = $message->file['uri'];
-                }
-
-                if(typeIsAudio($message->file['type'])
-                && $message->file['size'] <= SMALL_PICTURE_LIMIT) {
-                    $message->audio = $message->file['uri'];
-                }
-
-                $message->file['size'] = sizeToCleanSize($message->file['size']);
+            if($message->body == $message->file['uri']) {
+                $message->body = null;
             }
+
+            // We proxify pictures links even if they are advertized as small ones
+            if(typeIsPicture($message->file['type'])
+            && $message->file['size'] <= SMALL_PICTURE_LIMIT) {
+                $message->thumb   = $this->route('picture', urlencode($message->file['uri']));
+                $message->picture = $message->file['uri'];
+            }
+
+            if(typeIsAudio($message->file['type'])
+            && $message->file['size'] <= SMALL_PICTURE_LIMIT) {
+                $message->audio = $message->file['uri'];
+            }
+
+            $message->file['size'] = sizeToCleanSize($message->file['size']);
         }
 
         if (isset($message->html)) {
@@ -704,6 +715,7 @@ class Chat extends \Movim\Widget\Base
 
         if (isset($message->picture)) {
             $message->sticker = [
+                'thumb' => $message->thumb,
                 'url' => $message->picture,
                 'picture' => true
             ];
@@ -730,7 +742,7 @@ class Chat extends \Movim\Widget\Base
         }
 
         if ($message->type == 'groupchat') {
-            $message->color = stringToColor($message->session . $message->resource . $message->jidfrom . $message->type);
+            $message->color = stringToColor($message->session . $message->resource . $message->type);
 
             $cd = new \Modl\ContactDAO;
             $contact = $cd->getPresence($message->jidfrom, $message->resource);
@@ -741,6 +753,8 @@ class Chat extends \Movim\Widget\Base
                 if($url) {
                     $message->icon_url = $url;
                 }
+
+                $message->mine = ($contact->mucjid == $message->session);
             }
 
             $message->icon = firstLetterCapitalize($message->resource);

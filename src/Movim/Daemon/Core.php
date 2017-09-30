@@ -16,6 +16,9 @@ class Core implements MessageComponentInterface
     public $loop;
     public $baseuri;
 
+    public $single = ['visio'];
+    public $singlelocks = [];
+
     public function __construct($loop, $baseuri, InputInterface $input)
     {
         $this->input = $input;
@@ -82,6 +85,18 @@ class Core implements MessageComponentInterface
     {
         $sid = $this->getSid($conn);
         if($sid != null) {
+            $path = $this->getPath($conn);
+
+            if(in_array($path, $this->single)) {
+                if(array_key_exists($sid, $this->singlelocks)
+                && array_key_exists($path, $this->singlelocks[$sid])) {
+                    $this->singlelocks[$sid][$path]++;
+                    $conn->close(1008);
+                } else {
+                    $this->singlelocks[$sid][$path] = 1;
+                }
+            }
+
             if(!array_key_exists($sid, $this->sessions)) {
                 $language = $this->getLanguage($conn);
                 $offset = $this->getOffset($conn);
@@ -111,9 +126,21 @@ class Core implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         $sid = $this->getSid($conn);
-        if($sid != null && isset($this->sessions[$sid])) {
-            $this->sessions[$sid]->detach($this->loop, $conn);
 
+        if($sid != null && isset($this->sessions[$sid])) {
+            $path = $this->getPath($conn);
+
+            if(in_array($path, $this->single)) {
+                if(array_key_exists($sid, $this->singlelocks)
+                && array_key_exists($path, $this->singlelocks[$sid])) {
+                    $this->singlelocks[$sid][$path]--;
+                    if($this->singlelocks[$sid][$path] == 0) {
+                        unset($this->singlelocks[$sid][$path]);
+                    }
+                }
+            }
+
+            $this->sessions[$sid]->detach($this->loop, $conn);
             if($this->sessions[$sid]->process == null) {
                 unset($this->sessions[$sid]);
             }
@@ -184,6 +211,12 @@ class Core implements MessageComponentInterface
     {
         parse_str($conn->httpRequest->getUri()->getQuery(), $arr);
         return (isset($arr['offset'])) ? invertSign(((int)$arr['offset'])*60) : 0;
+    }
+
+    private function getPath(ConnectionInterface $conn)
+    {
+        parse_str($conn->httpRequest->getUri()->getQuery(), $arr);
+        return (isset($arr['path'])) ? $arr['path'] : false;
     }
 
     private function getSid(ConnectionInterface $conn)
