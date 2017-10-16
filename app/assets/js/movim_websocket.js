@@ -19,8 +19,8 @@ WebSocket.prototype.register = function(host) {
 
 var MovimWebsocket = {
     connection: null,
-    attached: new Array(),
-    registered: new Array(),
+    attached: [],
+    registered: [],
     attempts: 1,
     pong: false,
     closed: false,
@@ -41,10 +41,10 @@ var MovimWebsocket = {
     },
 
     init : function() {
-        if(SECURE_WEBSOCKET) {
-            var uri = 'wss://' + BASE_HOST + '/ws/';
+        if(document.location.protocol == 'https:') {
+            var uri = 'wss://' + window.location.host + '/ws/';
         } else {
-            var uri = 'ws://' + BASE_HOST + '/ws/';
+            var uri = 'ws://' + window.location.host + '/ws/';
         }
 
         if(this.connection
@@ -70,7 +70,6 @@ var MovimWebsocket = {
 
         this.connection.onmessage = function(e) {
             data = pako.ungzip(MovimUtils.base64Decode(e.data), { to: 'string' });
-
             var obj = JSON.parse(data);
 
             if(obj != null) {
@@ -93,7 +92,6 @@ var MovimWebsocket = {
 
                 MovimWebsocket.handle(obj);
             }
-
         };
 
         this.connection.onclose = function(e) {
@@ -172,7 +170,7 @@ var MovimWebsocket = {
     },
 
     clearAttached : function() {
-        this.attached = new Array();
+        this.attached = [];
     },
 
     handle : function(funcalls) {
@@ -183,7 +181,13 @@ var MovimWebsocket = {
                     try {
                         window[funcall.func].apply(null, funcall.params);
                     } catch(err) {
-                        console.log("Error caught: " + err.toString() + " - " + funcall.func + ":" + JSON.stringify(funcall.params));
+                        console.log("Error caught: "
+                            + err.toString()
+                            + " - "
+                            + funcall.func
+                            + ":"
+                            + JSON.stringify(funcall.params)
+                        );
                     }
                 } else if(funcall.func != null) {
                     var funcs  = funcall.func.split('.');
@@ -230,7 +234,7 @@ window.onbeforeunload = function() {
     MovimWebsocket.connection.close()
 };
 
-movim_add_onload(function() {
+document.addEventListener("DOMContentLoaded", function(event) {
     // And we start it
     MovimWebsocket.init();
 });
