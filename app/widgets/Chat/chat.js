@@ -103,7 +103,7 @@ var Chat = {
                 Chat.edit = false;
                 Chat_ajaxCorrect(jid, text);
             } else {
-                Chat_ajaxSendMessage(jid, text, muc);
+                Chat_ajaxHttpSendMessage(jid, text, muc);
             }
         }
     },
@@ -113,16 +113,16 @@ var Chat = {
 
         document.querySelector(".chat_box span.send").classList.remove('sending');
 
-        Chat.clearReplace();
         var textarea = Chat.getTextarea();
         localStorage.removeItem(textarea.dataset.jid + '_message');
+        Chat.clearReplace();
         Chat.toggleAction();
     },
     clearReplace: function()
     {
         Chat.edit = false;
         var textarea = Chat.getTextarea();
-        textarea.value = '';
+        textarea.value = localStorage.getItem(textarea.dataset.jid + '_message');
         MovimUtils.textareaAutoheight(textarea);
     },
     editPrevious: function()
@@ -132,25 +132,13 @@ var Chat = {
             Chat_ajaxLast(textarea.dataset.jid);
         }
     },
-    counter: function(counter)
-    {
-        console.log(counter);
-    },
     focus: function()
     {
         Chat.sended = false;
+        Chat.clearReplace();
+        Chat.toggleAction();
 
         var textarea = Chat.getTextarea();
-
-        setTimeout(function() {
-            var textarea = Chat.getTextarea();
-            textarea.value = localStorage.getItem(textarea.dataset.jid + '_message');
-
-            MovimUtils.textareaAutoheight(textarea);
-
-            Chat.toggleAction();
-        }, 0); // Fix Me
-
         textarea.onkeydown = function(event) {
             if (this.dataset.muc
             && event.keyCode == 9) {
@@ -192,7 +180,6 @@ var Chat = {
 
         textarea.onkeyup = function(event) {
             localStorage.setItem(this.dataset.jid + '_message', this.value);
-
             setTimeout(function()
             {
                 var textarea = document.querySelector('#chat_textarea');
@@ -283,10 +270,10 @@ var Chat = {
         return true;
     },
     appendMessagesWrapper : function(page, prepend) {
+        var discussion = document.querySelector('#chat_widget div.contained');
+
         if(page && Chat.checkDiscussion(page)) {
             var scrolled = MovimTpl.isPanelScrolled();
-
-            var discussion = document.querySelector('#chat_widget div.contained');
 
             if(discussion == null) return;
 
@@ -334,6 +321,12 @@ var Chat = {
                     textarea.dataset.jid,
                     lastMessage.id
                 );
+            }
+        } else if(discussion !== null) {
+            let messages = document.querySelector('#chat_widget .contained');
+            if(discussion.querySelector('ul').innerHTML === '') {
+                discussion.querySelector('ul').classList.remove('spin');
+                discussion.querySelector('.placeholder').classList.add('show');
             }
         }
     },
@@ -660,7 +653,7 @@ MovimWebsocket.attach(function() {
 
 if(typeof Upload != 'undefined') {
     Upload.attach(function(file) {
-        Chat_ajaxSendMessage(Chat.getTextarea().dataset.jid, false, Boolean(Chat.getTextarea().dataset.muc), false, false, file);
+        Chat_ajaxHttpSendMessage(Chat.getTextarea().dataset.jid, false, Boolean(Chat.getTextarea().dataset.muc), false, false, file);
     });
 }
 

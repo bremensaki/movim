@@ -95,6 +95,7 @@
 
 #chat_widget li div.bubble.sticker.file img:not(.emoji):not(.hfr) {
     max-height: 170px;
+    object-fit: cover;
 }
 
 #chat_widget ul:after {
@@ -121,14 +122,18 @@
     background-image: url('img/chat.svg');
 }
 
+#chat_widget .contained ul li {
+    animation: fadein 0.3s;
+}
+
 #chat_widget ul ~ .placeholder {
     display: none;
 }
 
-#chat_widget ul:empty ~ .placeholder {
+#chat_widget ul:empty ~ .placeholder.show {
     display: block;
+    animation: fadein 1s;
 }
-
 
 table.emojis td {
     width: 10%;

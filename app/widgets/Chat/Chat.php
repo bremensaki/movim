@@ -213,8 +213,8 @@ class Chat extends \Movim\Widget\Base
 
             $this->rpc('MovimUtils.addClass', '#chat_widget', 'fixed');
             $this->rpc('MovimTpl.fill', '#chat_widget', $html);
-            $this->rpc('Chat.focus');
             $this->rpc('MovimTpl.showPanel');
+            $this->rpc('Chat.focus');
 
             $this->prepareMessages($jid);
         }
@@ -272,7 +272,7 @@ class Chat extends \Movim\Widget\Base
      * @param string $message
      * @return void
      */
-    function ajaxSendMessage($to, $message = false, $muc = false, $resource = false, $replace = false, $file = false)
+    function ajaxHttpSendMessage($to, $message = false, $muc = false, $resource = false, $replace = false, $file = false)
     {
         $this->rpc('Chat.sendedMessage');
 
@@ -385,7 +385,7 @@ class Chat extends \Movim\Widget\Base
         $m = $md->getLastItem($to);
 
         if($m) {
-            $this->ajaxSendMessage($to, $message, false, false, $m);
+            $this->ajaxHttpSendMessage($to, $message, false, false, $m);
         }
     }
 
@@ -652,7 +652,6 @@ class Chat extends \Movim\Widget\Base
         $notif->ajaxClear('chat|'.$jid);
 
         $this->rpc('MovimTpl.scrollPanel');
-        $this->rpc('Chat.clearReplace');
     }
 
     function prepareMessage(&$message, $jid = null)

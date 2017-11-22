@@ -108,8 +108,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-29 11:38+0200\n"
-"PO-Revision-Date: 2017-09-20 08:02+0000\n"
+"POT-Creation-Date: 2017-10-23 23:33+0200\n"
+"PO-Revision-Date: 2017-10-18 19:27+0000\n"
 "Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: French (France) (http://www.transifex.com/movim/movim/language/fr_FR/)\n"
 "Language: fr_FR\n"
@@ -526,7 +526,7 @@ msgstr "Ce contenu est privé, veuillez vous connecter pour le consulter"
 msgid "Conferences"
 msgstr "Conférences"
 
-#: [title]groups [group]empty_title [page]groups
+#: [title]groups [group]empty_title
 msgid "Groups"
 msgstr "Groupes"
 
@@ -544,7 +544,6 @@ msgid "Name"
 msgstr "Nom"
 
 #: [chatroom]nickname [general]nickname [chatrooms]nickname
-#: [accounts]accounts_nickname
 msgid "Nickname"
 msgstr "Pseudonyme"
 
@@ -815,6 +814,10 @@ msgstr "%s souscrits"
 msgid "%s posts"
 msgstr "%s billets"
 
+#: [communitydata]public
+msgid "Public page"
+msgstr "Page publique"
+
 #: [communityheader]subscribe [group]subscribe
 msgid "Subscribe"
 msgstr "S’abonner"
@@ -858,10 +861,6 @@ msgstr "Vous allez vous désinscrire de cette communauté"
 #: [communityheader]sure [group]sure
 msgid "Are you sure ?"
 msgstr "Êtes-vous sûr ?"
-
-#: [communityposts]empty
-msgid "This community seems empty"
-msgstr "Cette communauté semble vide"
 
 #: [communityposts]nsfw_title
 msgid "Adult content blocked"
@@ -1935,22 +1934,6 @@ msgstr "Votre profil est maintenant public"
 msgid "Your profile is now restricted"
 msgstr "Votre profil est maintenant restreint"
 
-#: [accounts]accounts_title
-msgid "Accounts"
-msgstr "Comptes"
-
-#: [accounts]twitter
-msgid "Twitter"
-msgstr "Twitter"
-
-#: [accounts]skype
-msgid "Skype"
-msgstr "Skype"
-
-#: [accounts]yahoo
-msgid "Yahoo Account"
-msgstr "Compte Yahoo"
-
 #: [privacy]my_profile
 msgid "Go to my profile page"
 msgstr "Aller sur mon profil"
@@ -1993,7 +1976,19 @@ msgstr "Merci de contacter l'administrateur de vôtre serveur pour vérifier si 
 
 #: [visio]calling
 msgid "…is calling you"
-msgstr ""
+msgstr "…vous appelle"
+
+#: [visio]ringing
+msgid "…ringing"
+msgstr "…en attente"
+
+#: [visio]in_call
+msgid "in call"
+msgstr "en communication"
+
+#: [visio]failed
+msgid "failed"
+msgstr "la mise en communication a échoué"
 
 #: [global]no_js
 msgid "You don't have javascript enabled.  Good luck with that."
@@ -2039,10 +2034,6 @@ msgstr "Avatar"
 msgid "Chats"
 msgstr "Discussions"
 
-#: [page]public_groups
-msgid "Public Groups"
-msgstr "Groupes publics"
-
 #: [page]post
 msgid "Post"
 msgstr "Article"
@@ -2074,10 +2065,6 @@ msgstr "Galerie"
 #: [page]visio
 msgid "Visio-conference"
 msgstr "Vidéoconférence"
-
-#: [page]pods
-msgid "Pods"
-msgstr "Pods"
 
 #: [page]share
 msgctxt "[page]share"
@@ -2269,23 +2256,6 @@ msgstr "Samedi"
 msgid "Sunday"
 msgstr "Dimanche"
 
-#: [gender]nil
-msgctxt "[gender]nil"
-msgid "None"
-msgstr "Aucun"
-
-#: [gender]male
-msgid "Male"
-msgstr "Homme"
-
-#: [gender]female
-msgid "Female"
-msgstr "Femme"
-
-#: [gender]other
-msgid "Other"
-msgstr "Autre"
-
 #: [client]bot
 msgid "Bot"
 msgstr "Robot"
@@ -2305,59 +2275,6 @@ msgstr "Web"
 #: [client]registered
 msgid "Registered"
 msgstr "Inscrit"
-
-#: [marital]nil
-msgctxt "[marital]nil"
-msgid "None"
-msgstr "Aucun"
-
-#: [marital]single
-msgid "Single"
-msgstr "Célibataire"
-
-#: [marital]relationship
-msgid "In a relationship"
-msgstr "En couple"
-
-#: [marital]married
-msgid "Married"
-msgstr "Marié(e)"
-
-#: [marital]divorced
-msgid "Divorced"
-msgstr "Divorcé(e)"
-
-#: [marital]widowed
-msgid "Widowed"
-msgstr "Veuf(ve)"
-
-#: [marital]cohabiting
-msgid "Cohabiting"
-msgstr "En concubinage"
-
-#: [marital]union
-msgid "Civil Union"
-msgstr "Union civile"
-
-#: [flag]white
-msgid "Not shared"
-msgstr "Non partagé"
-
-#: [flag]green
-msgid "Shared with one contact"
-msgstr "Partagé avec un contact"
-
-#: [flag]orange
-msgid "Shared with all contacts"
-msgstr "Partagé avec tous les contacts"
-
-#: [flag]red
-msgid "Shared with the XMPP network"
-msgstr "Partagé avec le réseau XMPP"
-
-#: [flag]black
-msgid "Shared with the whole Internet"
-msgstr "Partagé avec tout Internet"
 
 #: [presence]online
 msgid "Online"
@@ -2795,10 +2712,6 @@ msgstr "jour"
 msgid "Title"
 msgstr "Titre"
 
-#: [post]whats_new
-msgid "What's new ?"
-msgstr "Quoi de neuf ?"
-
 #: [post]place
 msgid "Place"
 msgstr "Lieu"
@@ -2823,14 +2736,6 @@ msgstr "Aucun contenu"
 msgid "No comments yet"
 msgstr "Pas de commentaires pour le moment"
 
-#: [post]no_comments_stream
-msgid "No comments stream"
-msgstr "Pas de flux de commentaires"
-
-#: [post]no_load
-msgid "Your feed cannot be loaded."
-msgstr "Votre flux n’est pas accessible."
-
 #: [post]older
 msgid "Get older posts"
 msgstr "Récupérer les anciens billets"
@@ -2842,14 +2747,6 @@ msgstr "%s nouveaux billets"
 #: [post]comment_error
 msgid "Comment publication error"
 msgstr "Erreur à la publication du commentaire"
-
-#: [post]comments_older
-msgid "Show the older comments"
-msgstr "Afficher les commentaires plus anciens"
-
-#: [post]comments_loading
-msgid "Loading comments..."
-msgstr "Chargement des commentaires…"
 
 #: [post]comments_get
 msgid "Get the comments"
@@ -2866,10 +2763,6 @@ msgstr "Partager avec"
 #: [post]share_everyone
 msgid "Everyone"
 msgstr "Tout le monde"
-
-#: [post]share_your_contacts
-msgid "Your contacts"
-msgstr "Vos contacts"
 
 #: [post]updated
 msgid "Updated"
@@ -2898,3 +2791,92 @@ msgstr "L’API est indisponible pour le moment, réessayez plus tard."
 #: [field]type_here
 msgid "Type here"
 msgstr "Rédigez votre message ici"
+
+#~ msgid "Accounts"
+#~ msgstr "Comptes"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Skype"
+#~ msgstr "Skype"
+
+#~ msgid "Yahoo Account"
+#~ msgstr "Compte Yahoo"
+
+#~ msgid "Public Groups"
+#~ msgstr "Groupes publics"
+
+#~ msgid "Pods"
+#~ msgstr "Pods"
+
+#~ msgctxt "[gender]nil"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#~ msgid "Male"
+#~ msgstr "Homme"
+
+#~ msgid "Female"
+#~ msgstr "Femme"
+
+#~ msgid "Other"
+#~ msgstr "Autre"
+
+#~ msgctxt "[marital]nil"
+#~ msgid "None"
+#~ msgstr "Aucun"
+
+#~ msgid "Single"
+#~ msgstr "Célibataire"
+
+#~ msgid "In a relationship"
+#~ msgstr "En couple"
+
+#~ msgid "Married"
+#~ msgstr "Marié(e)"
+
+#~ msgid "Divorced"
+#~ msgstr "Divorcé(e)"
+
+#~ msgid "Widowed"
+#~ msgstr "Veuf(ve)"
+
+#~ msgid "Cohabiting"
+#~ msgstr "En concubinage"
+
+#~ msgid "Civil Union"
+#~ msgstr "Union civile"
+
+#~ msgid "Not shared"
+#~ msgstr "Non partagé"
+
+#~ msgid "Shared with one contact"
+#~ msgstr "Partagé avec un contact"
+
+#~ msgid "Shared with all contacts"
+#~ msgstr "Partagé avec tous les contacts"
+
+#~ msgid "Shared with the XMPP network"
+#~ msgstr "Partagé avec le réseau XMPP"
+
+#~ msgid "Shared with the whole Internet"
+#~ msgstr "Partagé avec tout Internet"
+
+#~ msgid "What's new ?"
+#~ msgstr "Quoi de neuf ?"
+
+#~ msgid "No comments stream"
+#~ msgstr "Pas de flux de commentaires"
+
+#~ msgid "Your feed cannot be loaded."
+#~ msgstr "Votre flux n’est pas accessible."
+
+#~ msgid "Show the older comments"
+#~ msgstr "Afficher les commentaires plus anciens"
+
+#~ msgid "Loading comments..."
+#~ msgstr "Chargement des commentaires…"
+
+#~ msgid "Your contacts"
+#~ msgstr "Vos contacts"

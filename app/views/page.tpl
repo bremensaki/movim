@@ -2,12 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title><?php $this->title();?></title>
+    <title><?php $this->title(); ?></title>
 
     <meta name="theme-color" content="#1C1D5B" />
-    <meta http-equiv="Content-Security-Policy" content="font-src 'self'; child-src https://youtube.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    <meta http-equiv="Content-Security-Policy" content="font-src <?php echo BASE_URI; ?>; frame-src *.youtube.com; script-src <?php echo BASE_URI; ?> 'unsafe-inline' 'unsafe-eval'">
 
-    <?php $this->meta();?>
+    <?php $this->meta(); ?>
 
     <meta name="application-name" content="Movim">
     <link rel="shortcut icon" href="<?php $this->linkFile('img/favicon.ico');?>" />
@@ -15,6 +15,7 @@
     <link rel="icon" type="image/png" href="<?php $this->linkFile('img/app/96.png');?>" sizes="96x96">
     <link rel="icon" type="image/png" href="<?php $this->linkFile('img/app/128.png');?>" sizes="128x128">
     <script src="<?php echo BASE_URI; ?>app/assets/js/favico.js"></script>
+    <script src="<?php echo \Movim\Route::urlize('system'); ?>"></script>
 
     <meta name="viewport" content="width=device-width, user-scalable=no">
 

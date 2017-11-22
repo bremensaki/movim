@@ -26,19 +26,6 @@ class Utils
 }
 
 /**
- * Return the list of gender
- */
-function getGender()
-{
-    return [
-        'N' => __('gender.nil'),
-        'M' => __('gender.male'),
-        'F' => __('gender.female'),
-        'O' => __('gender.other')
-    ];
-}
-
-/**
  * Return the list of client types
  */
 function getClientTypes()
@@ -370,22 +357,6 @@ function getCountries()
     ];
 }
 
-/**
- * Return the list of marital status
- */
-function getMarital() {
-    return [
-            'none'          => __('marital.nil'),
-            'single'        => __('marital.single'),
-            'relationship'  => __('marital.relationship'),
-            'married'       => __('marital.married'),
-            'divorced'      => __('marital.divorced'),
-            'widowed'       => __('marital.widowed'),
-            'cohabiting'    => __('marital.cohabiting'),
-            'union'         => __('marital.union')
-        ];
-}
-
 function getPresences() {
     return [
             1 => __('presence.online'),
@@ -544,6 +515,8 @@ function generateKey($size)
     return $hash;
 }
 
+define('DEFAULT_HTTP_USER_AGENT', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0');
+
 /*
  * @desc Request a simple url
  */
@@ -556,7 +529,7 @@ function requestURL($url, $timeout = 10, $post = false, $json = false)
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0');
+    curl_setopt($ch, CURLOPT_USERAGENT, DEFAULT_HTTP_USER_AGENT);
 
     if($json) {
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
@@ -583,9 +556,8 @@ function requestURL($url, $timeout = 10, $post = false, $json = false)
 
     if($rs['errno'] == 0) {
         return $rs['content'];
-    } else {
-        return false;
     }
+    return false;
 }
 
 /*
@@ -601,7 +573,7 @@ function requestHeaders($url, $timeout = 2)
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
     curl_setopt($ch, CURLOPT_HEADER, 1);
     curl_setopt($ch, CURLOPT_NOBODY, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0');
+    curl_setopt($ch, CURLOPT_USERAGENT, DEFAULT_HTTP_USER_AGENT);
 
     $rs = [];
 
