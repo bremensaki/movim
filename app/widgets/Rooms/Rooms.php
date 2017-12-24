@@ -117,11 +117,14 @@ class Rooms extends \Movim\Widget\Base
 
         $id = new \Modl\InfoDAO;
         $cd = new \Modl\ConferenceDAO;
+        $cd = new \Modl\CapsDAO;
 
         $view->assign('info', $id->getConference($room));
         $view->assign('id', $room);
         $view->assign('conference', $cd->get($room));
         $view->assign('username', $this->user->getUser());
+
+        $this->rpc('Rooms.setDefaultServices', $cd->getMUC($this->user->getServer()));
 
         Dialog::fill($view->draw('_rooms_add', true));
     }
@@ -227,6 +230,11 @@ class Rooms extends \Movim\Widget\Base
     function ajaxJoin($room, $nickname = false)
     {
         if(!$this->validateRoom($room)) return;
+
+        if((new \Movim\Picture)->isOld($room . '_muc')) {
+            $v = new Moxl\Xec\Action\Vcard\Get;
+            $v->setTo(echapJid($room))->isMuc()->request();
+        }
 
         $r = new Request;
         $r->setTo($room)
@@ -382,13 +390,8 @@ class Rooms extends \Movim\Widget\Base
             $resource = $session->get('username');
         }
 
-        $presence = $pd->getPresence($room, $resource);
-
-        if($presence != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($pd->getMyPresenceRoom($room) != null
+             || $pd->getPresence($room, $resource) != null);
     }
 
     /**
@@ -436,8 +439,7 @@ class Rooms extends \Movim\Widget\Base
     private function validateRoom($room)
     {
         $validate_server = Validator::stringType()->noWhitespace()->length(6, 80);
-        if(!$validate_server->validate($room)) return false;
-        else return true;
+        return ($validate_server->validate($room));
     }
 
     /**
@@ -448,11 +450,6 @@ class Rooms extends \Movim\Widget\Base
     private function validateResource($resource)
     {
         $validate_resource = Validator::stringType()->length(2, 40);
-        if(!$validate_resource->validate($resource)) return false;
-        else return true;
-    }
-
-    function display()
-    {
+        return ($validate_resource->validate($resource));
     }
 }

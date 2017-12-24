@@ -8,6 +8,12 @@ v0.13 (trunk)
  * Cleanup some existing buffers
  * Add a pure HTTP ajax endpoint for some futur requests that needs it
  * Add some slight animations in the UI
+ * Add a nightmode
+ * Cleanup and refactorize some CSS (colors, forms)
+ * Improve the connectivity UX status of chatrooms
+ * Publish the chat messages using Ajax
+ * Improve the configuration of Communities
+ * Update the OpenSans font
 
 v0.12.1
 ---------------------------

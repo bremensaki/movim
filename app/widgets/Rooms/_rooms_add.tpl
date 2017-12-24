@@ -9,7 +9,7 @@
         <div>
             <input
                 {if="isset($conference)"}
-                    value="{$conference->conference}" disabled
+                    value="{$conference->node}" disabled
                 {elseif="isset($id)"}
                     value="{$id}" disabled
                 {/if}
@@ -20,9 +20,15 @@
                     placeholder="chatroom@server.com"
                 {/if}
                 type="email"
+                list="suggestions"
+                oninput="Rooms.suggest()"
                 required />
             <label>{$c->__('chatrooms.id')}</label>
         </div>
+
+        <datalist id="suggestions">
+        </datalist>
+
         <div>
             <input
                 {if="isset($conference)"}
@@ -48,8 +54,8 @@
         </div>
         <div>
             <ul class="list thick">
-                <li>
-                    <span class="primary">
+                <li class="wide">
+                    <span class="control">
                         <div class="checkbox">
                             <input
                                 {if="isset($conference) && $conference->autojoin"}

@@ -38,12 +38,14 @@
         $this->addCss('fonts.css');
         $this->addCss('title.css');
         $this->addCss('typo.css');
+        $this->addCss('scrollbar.css');
         $this->addCss('material-design-iconic-font.min.css');
 
         $this->scripts();
     ?>
     </head>
-    <body dir="<?php $this->dir();?>">
+    <body dir="<?php $this->dir();?>"
+          class="<?php if(!$this->public && (new \Movim\User)->getConfig('nightmode')) { ?>nightmode<?php } ?>">
         <noscript>
             <style type="text/css">
                 nav {display:none;} #content {display: none;}
