@@ -35,6 +35,8 @@
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityAffiliations/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from ../app/widgets/CommunityConfig/locales.ini
+#. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityData/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityHeader/locales.ini
@@ -104,8 +106,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-23 23:33+0200\n"
-"PO-Revision-Date: 2017-03-30 18:46+0000\n"
+"POT-Creation-Date: 2017-12-24 15:12+0200\n"
+"PO-Revision-Date: 2017-12-24 14:26+0000\n"
 "Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: Arabic (http://www.transifex.com/movim/movim/language/ar/)\n"
 "Language: ar\n"
@@ -113,7 +115,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Translate Toolkit 2.0.0rc3\n"
+"X-Generator: Translate Toolkit 2.2.5\n"
 
 #: [about]thanks
 msgid "Thanks"
@@ -256,7 +258,7 @@ msgstr "لم يستطع Modl أن يتصل بقاعدة البيانات"
 msgid "Movim is connected to the database"
 msgstr "إن موفيم متصل بقاعدة البيانات"
 
-#: [db]update
+#: [db]update [compatibility]db
 msgid "The database need to be updated"
 msgstr "إن قاعدة البيانات في حاجة إلى تحديث"
 
@@ -353,7 +355,7 @@ msgctxt "[information]title"
 msgid "Information Message"
 msgstr ""
 
-#: [information]description
+#: [information]description [communityconfig]description
 msgid "Description"
 msgstr "الوصف"
 
@@ -416,10 +418,6 @@ msgstr ""
 
 #: [compatibility]rights
 msgid "Read and write rights for the webserver in Movim's %s directory"
-msgstr ""
-
-#: [compatibility]db
-msgid "The database need to be updated, go to the database panel to fix this"
 msgstr ""
 
 #: [compatibility]websocket
@@ -584,6 +582,10 @@ msgstr ""
 msgid "Message Published"
 msgstr ""
 
+#: [message]error
+msgid "Your message could not be sent, please try again later"
+msgstr ""
+
 #: [message]encrypted
 msgid "Encrypted message"
 msgstr ""
@@ -738,9 +740,8 @@ msgid "There is no Communities yet on this server."
 msgstr ""
 
 #: [communitiesserver]add
-#, fuzzy
 msgid "Create a new community on %s"
-msgstr "أنشئ حسابًا جديدًا"
+msgstr ""
 
 #: [communitiesserver]name
 msgid "Community name"
@@ -751,9 +752,8 @@ msgid "My Little Pony - Fan Club"
 msgstr ""
 
 #: [communitiesserver]name_error
-#, fuzzy
 msgid "Please provide a valid community name (4 characters minimum)"
-msgstr "المرجو إدخال كلمة سر صحيحة (6 أحرف على الأقل)"
+msgstr ""
 
 #: [communitiesserver]no_creation
 msgid "You cannot create a new community on this server"
@@ -769,9 +769,8 @@ msgid "Community deleted successfully"
 msgstr ""
 
 #: [communityaffiliation]delete_title
-#, fuzzy
 msgid "Delete the community"
-msgstr "الحصول على تعليقات"
+msgstr ""
 
 #: [communityaffiliation]delete_text
 msgid "You are going to delete the following community. Please confirm your action."
@@ -794,6 +793,7 @@ msgid "Publisher"
 msgstr ""
 
 #: [communityaffiliation]publishers
+#: [communityconfig]publish_model_publishers_title
 msgid "Publishers"
 msgstr ""
 
@@ -805,6 +805,30 @@ msgstr ""
 msgid "Role correctly set"
 msgstr ""
 
+#: [communityconfig]publication
+msgid "Publication"
+msgstr ""
+
+#: [communityconfig]publish_model_open_title
+msgid "Open"
+msgstr ""
+
+#: [communityconfig]publish_model_open_text
+msgid "Everyone can publish"
+msgstr ""
+
+#: [communityconfig]publish_model_publishers_text
+msgid "The publishers can publish"
+msgstr ""
+
+#: [communityconfig]publish_model_subscribers_title
+msgid "Subscribers"
+msgstr ""
+
+#: [communityconfig]publish_model_subscribers_text
+msgid "The subscribers can publish"
+msgstr ""
+
 #: [communitydata]sub [groups]sub
 msgid "%s subscribers"
 msgstr ""
@@ -814,9 +838,8 @@ msgid "%s posts"
 msgstr ""
 
 #: [communitydata]public
-#, fuzzy
 msgid "Public page"
-msgstr "مجموعات عامة"
+msgstr ""
 
 #: [communityheader]subscribe [group]subscribe
 msgid "Subscribe"
@@ -924,6 +947,14 @@ msgstr ""
 
 #: [config]nsfw_text
 msgid "Will allow you to read the posts tagged with the #nsfw tag"
+msgstr ""
+
+#: [config]night_mode
+msgid "Night Mode"
+msgstr ""
+
+#: [config]night_mode_text
+msgid "Use dark colors to rest your eyes"
 msgstr ""
 
 #: [cssurl]label
@@ -1078,6 +1109,18 @@ msgstr ""
 msgid "This contact is in your contact list but there is no subscriptions between the two accounts"
 msgstr ""
 
+#: [general]legend
+msgid "General Information"
+msgstr ""
+
+#: [client]title
+msgid "Client Information"
+msgstr ""
+
+#: [subscription]nil_text
+msgid "This contact is in your contact list but there is no subscription between the two accounts"
+msgstr ""
+
 #: [group]unsubscribe_text
 msgid "You are going to unsubscribe from this Group"
 msgstr ""
@@ -1195,7 +1238,7 @@ msgid "Black, the whole Internet can see your information"
 msgstr "الأسود يعني أن الإنترنت بأسرها تمكنها مطالعة المعلومات"
 
 #: [apps]question
-msgid "Did you already tried Movim on the other platforms?"
+msgid "Have you already tried Movim on other platforms?"
 msgstr ""
 
 #: [apps]phone
@@ -1207,9 +1250,8 @@ msgid "Try out our official Android app"
 msgstr ""
 
 #: [apps]recommend
-#, fuzzy
 msgid "We also recommend"
-msgstr "أضف تعليق"
+msgstr ""
 
 #: [apps]computer
 msgid "Apps for your computer"
@@ -1351,14 +1393,6 @@ msgstr "تعذّر استيثاق XMPP"
 msgid "My address"
 msgstr "عنوان بريدي"
 
-#: [form]create_one
-msgid "Create one !"
-msgstr ""
-
-#: [form]no_account
-msgid "No account yet ?"
-msgstr ""
-
 #: [form]whitelist_info
 msgid "You can login with accounts from these servers"
 msgstr ""
@@ -1412,9 +1446,8 @@ msgid "Contacts"
 msgstr ""
 
 #: [menu]add_post
-#, fuzzy
 msgid "Write a new post…"
-msgstr "أنشئ حسابًا جديدًا"
+msgstr ""
 
 #: [notifs]title [onboarding]notifications_title
 msgid "Notifications"
@@ -1669,18 +1702,16 @@ msgid "Add some text"
 msgstr ""
 
 #: [publishbrief]placeholder
-#, fuzzy
 msgid "What's new?"
-msgstr "ما الجديد؟"
+msgstr ""
 
 #: [publishbrief]post
 msgid "Write a post"
 msgstr ""
 
 #: [publishbrief]add_link
-#, fuzzy
 msgid "Add a link"
-msgstr "أضف تعليق"
+msgstr ""
 
 #: [rooms]add
 msgid "Add a chatroom"
@@ -2226,6 +2257,10 @@ msgstr ""
 
 #: [button]enable
 msgid "Enable"
+msgstr ""
+
+#: [button]sign_up
+msgid "Sign Up"
 msgstr ""
 
 #: [day]title
@@ -2795,48 +2830,3 @@ msgstr ""
 #: [field]type_here
 msgid "Type here"
 msgstr ""
-
-#~ msgid "Public Groups"
-#~ msgstr "مجموعات عامة"
-
-#~ msgid "Male"
-#~ msgstr "ذكر"
-
-#~ msgid "Female"
-#~ msgstr "أنثى"
-
-#~ msgid "Other"
-#~ msgstr "غير ذلك"
-
-#~ msgid "Single"
-#~ msgstr "عَزَب"
-
-#~ msgid "In a relationship"
-#~ msgstr "مرتبط"
-
-#~ msgid "Married"
-#~ msgstr "متزوّج"
-
-#~ msgid "Divorced"
-#~ msgstr "مطلّق"
-
-#~ msgid "Widowed"
-#~ msgstr "أرمل"
-
-#~ msgid "Cohabiting"
-#~ msgstr "مُساكِن"
-
-#~ msgid "Civil Union"
-#~ msgstr "علاقة مدنية"
-
-#~ msgid "What's new ?"
-#~ msgstr "ما الجديد؟"
-
-#~ msgid "Your feed cannot be loaded."
-#~ msgstr "تعذّر تنزيل تلقيمتك"
-
-#~ msgid "Your contacts"
-#~ msgstr "اتصالاتكم"
-
-#~ msgid "Delete my account"
-#~ msgstr "حذف حسابي"

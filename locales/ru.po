@@ -3,13 +3,14 @@
 # Alexander Popov <alex.wayfer@gmail.com>, 2016
 # Alexander Radchenko <radchenkosasha@gmail.com>, 2016
 # Alexey Murz Korepov <murznn@gmail.com>, 2017
-# Yan B <its@dark0ff.ru>, 2017
+# yanislavb <its@dark0ff.ru>, 2017
+# yanislavb <its@dark0ff.ru>, 2017
 # Jaussoin Timothée <edhelas@movim.eu>, 2017
 # MMurzik MMurzik <c4431454@trbvn.com>, 2016
 # Qim Armnov <hoakimartamonov@gmail.com>, 2016
 # Stanislav N. <pztrn@pztrn.name>, 2016-2017
-# Yan B <its@dark0ff.ru>, 2017
-# Yan B <its@dark0ff.ru>, 2017
+# yanislavb <its@dark0ff.ru>, 2017
+# yanislavb <its@dark0ff.ru>, 2017
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/About/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
@@ -42,6 +43,8 @@
 #. extracted from ../app/widgets/CommunitiesServer/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityAffiliations/locales.ini
+#. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from ../app/widgets/CommunityConfig/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityData/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
@@ -112,8 +115,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-23 23:33+0200\n"
-"PO-Revision-Date: 2017-10-23 21:34+0000\n"
+"POT-Creation-Date: 2017-12-24 15:12+0200\n"
+"PO-Revision-Date: 2017-12-24 14:26+0000\n"
 "Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: Russian (http://www.transifex.com/movim/movim/language/ru/)\n"
 "Language: ru\n"
@@ -264,7 +267,7 @@ msgstr "Modl не смог подключиться к базе данных"
 msgid "Movim is connected to the database"
 msgstr "Movim подключился к базе данных"
 
-#: [db]update
+#: [db]update [compatibility]db
 msgid "The database need to be updated"
 msgstr "База данных нуждается в обновление"
 
@@ -361,7 +364,7 @@ msgctxt "[information]title"
 msgid "Information Message"
 msgstr "Информационное сообщение"
 
-#: [information]description
+#: [information]description [communityconfig]description
 msgid "Description"
 msgstr "Описание"
 
@@ -425,10 +428,6 @@ msgstr "Минимально необходима: 5.3.0"
 #: [compatibility]rights
 msgid "Read and write rights for the webserver in Movim's %s directory"
 msgstr "Нужны права чтения и записи для вебсервера в директории %s"
-
-#: [compatibility]db
-msgid "The database need to be updated, go to the database panel to fix this"
-msgstr "База данных нуждается в обновлении,  чтобы выполнить его, перейдите на панель настроек базы данных"
 
 #: [compatibility]websocket
 msgid "WebSocket connection error, check if the Movim Daemon is running and is reachable"
@@ -591,6 +590,10 @@ msgstr "Имя"
 #: [message]published
 msgid "Message Published"
 msgstr "Сообщение опубликовано"
+
+#: [message]error
+msgid "Your message could not be sent, please try again later"
+msgstr ""
 
 #: [message]encrypted
 msgid "Encrypted message"
@@ -799,6 +802,7 @@ msgid "Publisher"
 msgstr "Автор"
 
 #: [communityaffiliation]publishers
+#: [communityconfig]publish_model_publishers_title
 msgid "Publishers"
 msgstr "Авторы"
 
@@ -810,6 +814,30 @@ msgstr "Роли"
 msgid "Role correctly set"
 msgstr "Роли установлены верно."
 
+#: [communityconfig]publication
+msgid "Publication"
+msgstr ""
+
+#: [communityconfig]publish_model_open_title
+msgid "Open"
+msgstr ""
+
+#: [communityconfig]publish_model_open_text
+msgid "Everyone can publish"
+msgstr ""
+
+#: [communityconfig]publish_model_publishers_text
+msgid "The publishers can publish"
+msgstr ""
+
+#: [communityconfig]publish_model_subscribers_title
+msgid "Subscribers"
+msgstr ""
+
+#: [communityconfig]publish_model_subscribers_text
+msgid "The subscribers can publish"
+msgstr ""
+
 #: [communitydata]sub [groups]sub
 msgid "%s subscribers"
 msgstr "%s подписчиков"
@@ -820,7 +848,7 @@ msgstr "%s публикаций"
 
 #: [communitydata]public
 msgid "Public page"
-msgstr ""
+msgstr "Публичная страница"
 
 #: [communityheader]subscribe [group]subscribe
 msgid "Subscribe"
@@ -929,6 +957,14 @@ msgstr "Отображать контект \"для взрослых\""
 #: [config]nsfw_text
 msgid "Will allow you to read the posts tagged with the #nsfw tag"
 msgstr "Это разрешит вам читать посты с тегом #nsfw"
+
+#: [config]night_mode
+msgid "Night Mode"
+msgstr ""
+
+#: [config]night_mode_text
+msgid "Use dark colors to rest your eyes"
+msgstr ""
 
 #: [cssurl]label
 msgid "Custom CSS URL for your blog"
@@ -1082,6 +1118,18 @@ msgstr "Пригласить"
 msgid "This contact is in your contact list but there is no subscriptions between the two accounts"
 msgstr "Контакт находится в Вашем контакт-листе, однако он не авторизован между аккаунтами"
 
+#: [general]legend
+msgid "General Information"
+msgstr ""
+
+#: [client]title
+msgid "Client Information"
+msgstr ""
+
+#: [subscription]nil_text
+msgid "This contact is in your contact list but there is no subscription between the two accounts"
+msgstr ""
+
 #: [group]unsubscribe_text
 msgid "You are going to unsubscribe from this Group"
 msgstr "Вы собираетесь отписаться от этой группы"
@@ -1199,8 +1247,8 @@ msgid "Black, the whole Internet can see your information"
 msgstr "Черный: весь Интернет может видеть вашу информацию"
 
 #: [apps]question
-msgid "Did you already tried Movim on the other platforms?"
-msgstr "Вы уже пробовали Movim на других платформах?"
+msgid "Have you already tried Movim on other platforms?"
+msgstr ""
 
 #: [apps]phone
 msgid "Apps for your phone"
@@ -1353,14 +1401,6 @@ msgstr "XMPP-аутентификация не прошла"
 #: [form]username
 msgid "My address"
 msgstr "Мой адрес"
-
-#: [form]create_one
-msgid "Create one !"
-msgstr "Создайте учетную запись!"
-
-#: [form]no_account
-msgid "No account yet ?"
-msgstr "Еще нет учетной записи?"
 
 #: [form]whitelist_info
 msgid "You can login with accounts from these servers"
@@ -1984,15 +2024,15 @@ msgstr "... звонит Вам"
 
 #: [visio]ringing
 msgid "…ringing"
-msgstr ""
+msgstr "...звонит"
 
 #: [visio]in_call
 msgid "in call"
-msgstr ""
+msgstr "звонит"
 
 #: [visio]failed
 msgid "failed"
-msgstr ""
+msgstr "не удалось"
 
 #: [global]no_js
 msgid "You don't have javascript enabled.  Good luck with that."
@@ -2227,6 +2267,10 @@ msgstr "Не сейчас"
 #: [button]enable
 msgid "Enable"
 msgstr "Включить"
+
+#: [button]sign_up
+msgid "Sign Up"
+msgstr ""
 
 #: [day]title
 msgid "Day"

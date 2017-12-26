@@ -48,6 +48,8 @@
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityAffiliations/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from ../app/widgets/CommunityConfig/locales.ini
+#. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityData/locales.ini
 #. #-#-#-#-#  locales.po (PACKAGE VERSION)  #-#-#-#-#
 #. extracted from ../app/widgets/CommunityHeader/locales.ini
@@ -117,8 +119,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: movim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-23 23:33+0200\n"
-"PO-Revision-Date: 2017-10-23 21:34+0000\n"
+"POT-Creation-Date: 2017-12-24 15:12+0200\n"
+"PO-Revision-Date: 2017-12-24 14:26+0000\n"
 "Last-Translator: Jaussoin Timothée <edhelas@movim.eu>\n"
 "Language-Team: German (http://www.transifex.com/movim/movim/language/de/)\n"
 "Language: de\n"
@@ -269,7 +271,7 @@ msgstr "Modl konnte sich nicht mit der Datenbank verbinden"
 msgid "Movim is connected to the database"
 msgstr "Movim ist mit der Datenbank verbunden"
 
-#: [db]update
+#: [db]update [compatibility]db
 msgid "The database need to be updated"
 msgstr "Die Datenbank muss aktualisiert werden"
 
@@ -366,7 +368,7 @@ msgctxt "[information]title"
 msgid "Information Message"
 msgstr "Informationsnachricht"
 
-#: [information]description
+#: [information]description [communityconfig]description
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -430,10 +432,6 @@ msgstr "Benötigt: 5.3.0"
 #: [compatibility]rights
 msgid "Read and write rights for the webserver in Movim's %s directory"
 msgstr "Lese- und Schreibrechte für den Webserver in Movims %s Verzeichnis"
-
-#: [compatibility]db
-msgid "The database need to be updated, go to the database panel to fix this"
-msgstr "Die Datenbank muss aktualisiert werden. Bitte zur Datenbankverwaltung gehen, um das zu reparieren."
 
 #: [compatibility]websocket
 msgid "WebSocket connection error, check if the Movim Daemon is running and is reachable"
@@ -596,6 +594,10 @@ msgstr "Name"
 #: [message]published
 msgid "Message Published"
 msgstr "Nachricht veröffentlicht"
+
+#: [message]error
+msgid "Your message could not be sent, please try again later"
+msgstr ""
 
 #: [message]encrypted
 msgid "Encrypted message"
@@ -804,6 +806,7 @@ msgid "Publisher"
 msgstr "Herausgeber"
 
 #: [communityaffiliation]publishers
+#: [communityconfig]publish_model_publishers_title
 msgid "Publishers"
 msgstr "Herausgeber"
 
@@ -815,6 +818,30 @@ msgstr "Rollen"
 msgid "Role correctly set"
 msgstr "Rolle richtig gesetzt"
 
+#: [communityconfig]publication
+msgid "Publication"
+msgstr ""
+
+#: [communityconfig]publish_model_open_title
+msgid "Open"
+msgstr ""
+
+#: [communityconfig]publish_model_open_text
+msgid "Everyone can publish"
+msgstr ""
+
+#: [communityconfig]publish_model_publishers_text
+msgid "The publishers can publish"
+msgstr ""
+
+#: [communityconfig]publish_model_subscribers_title
+msgid "Subscribers"
+msgstr ""
+
+#: [communityconfig]publish_model_subscribers_text
+msgid "The subscribers can publish"
+msgstr ""
+
 #: [communitydata]sub [groups]sub
 msgid "%s subscribers"
 msgstr "%s Abonnenten"
@@ -825,7 +852,7 @@ msgstr "%s Beiträge"
 
 #: [communitydata]public
 msgid "Public page"
-msgstr ""
+msgstr "Öffentliche Seite"
 
 #: [communityheader]subscribe [group]subscribe
 msgid "Subscribe"
@@ -934,6 +961,14 @@ msgstr "Erwachseneninhalt anzeigen"
 #: [config]nsfw_text
 msgid "Will allow you to read the posts tagged with the #nsfw tag"
 msgstr "Erlaubt Ihnen, Posts mit dem Tag #nsfw zu sehen"
+
+#: [config]night_mode
+msgid "Night Mode"
+msgstr ""
+
+#: [config]night_mode_text
+msgid "Use dark colors to rest your eyes"
+msgstr ""
 
 #: [cssurl]label
 msgid "Custom CSS URL for your blog"
@@ -1087,6 +1122,18 @@ msgstr "Einladen"
 msgid "This contact is in your contact list but there is no subscriptions between the two accounts"
 msgstr "Dieser Kontakt ist in Ihrer Kontaktliste, aber es existieren noch keine Abonnements zwischen diesen beiden Konten."
 
+#: [general]legend
+msgid "General Information"
+msgstr ""
+
+#: [client]title
+msgid "Client Information"
+msgstr ""
+
+#: [subscription]nil_text
+msgid "This contact is in your contact list but there is no subscription between the two accounts"
+msgstr ""
+
 #: [group]unsubscribe_text
 msgid "You are going to unsubscribe from this Group"
 msgstr "Sie sind dabei, diese Gemeinschaft abzubestellen"
@@ -1204,8 +1251,8 @@ msgid "Black, the whole Internet can see your information"
 msgstr "Schwarz, das vollständige Internet kann Ihre Information sehen"
 
 #: [apps]question
-msgid "Did you already tried Movim on the other platforms?"
-msgstr "Haben Sie schon Movim auf anderen Plattformen ausprobiert?"
+msgid "Have you already tried Movim on other platforms?"
+msgstr ""
 
 #: [apps]phone
 msgid "Apps for your phone"
@@ -1358,14 +1405,6 @@ msgstr "XMPP-Legitimierung ist fehlgeschlagen"
 #: [form]username
 msgid "My address"
 msgstr "Adresse"
-
-#: [form]create_one
-msgid "Create one !"
-msgstr "Eines erstellen!"
-
-#: [form]no_account
-msgid "No account yet ?"
-msgstr "Noch kein Konto?"
 
 #: [form]whitelist_info
 msgid "You can login with accounts from these servers"
@@ -1989,15 +2028,15 @@ msgstr "…ruft Sie an"
 
 #: [visio]ringing
 msgid "…ringing"
-msgstr ""
+msgstr "…klingelt"
 
 #: [visio]in_call
 msgid "in call"
-msgstr ""
+msgstr "im Gespräch"
 
 #: [visio]failed
 msgid "failed"
-msgstr ""
+msgstr "fehlgeschlagen"
 
 #: [global]no_js
 msgid "You don't have javascript enabled.  Good luck with that."
@@ -2232,6 +2271,10 @@ msgstr "Nicht jetzt"
 #: [button]enable
 msgid "Enable"
 msgstr "Aktivieren"
+
+#: [button]sign_up
+msgid "Sign Up"
+msgstr ""
 
 #: [day]title
 msgid "Day"
